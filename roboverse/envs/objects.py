@@ -16,9 +16,7 @@ This file will likely be deprecated in the future.
 def table():
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     table_id = p.loadURDF('table/table.urdf',
-                        #   basePosition=[.75, -.2, -1],
-                          basePosition=[.65, -.2, -1],
-
+                          basePosition=[.75, -.2, -1],
                           baseOrientation=[0, 0, 0.707107, 0.707107],
                           globalScaling=1.0)
     return table_id

@@ -1,7 +1,7 @@
 import gym
 from roboverse.assets.shapenet_object_lists \
     import GRASP_TRAIN_OBJECTS, GRASP_TEST_OBJECTS, PICK_PLACE_TRAIN_OBJECTS, \
-    PICK_PLACE_TEST_OBJECTS, TRAIN_CONTAINERS, TEST_CONTAINERS, PICK_PLACE_DEMO_CONTAINERS, PICK_PLACE_DEMO_OBJECTS
+    PICK_PLACE_TEST_OBJECTS, TRAIN_CONTAINERS, TEST_CONTAINERS
 
 ENVIRONMENT_SPECS = (
     {
@@ -196,8 +196,6 @@ ENVIRONMENT_SPECS = (
                    'possible_containers': TEST_CONTAINERS,
                    }
     },
-
-
     {
         'id': 'Widow250PickTray-v0',
         'entry_point': 'roboverse.envs.widow250_pickplace:Widow250PickPlaceEnv',
@@ -327,25 +325,6 @@ ENVIRONMENT_SPECS = (
 
                    }
     },
-    {
-        'id': 'Widow250MultiShedPutInBowlRandomBowlPositionTest-v0',
-        'entry_point': 'roboverse.envs.widow250_pickplace:Widow250PickPlaceMultiObjectEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-
-                   'possible_objects': PICK_PLACE_DEMO_OBJECTS,
-
-                   'num_objects': 2,
-                   'load_tray': False,
-                   'object_position_low': (.5, .18, -.30),
-                   'object_position_high': (.7, .27, -.30),
-
-                   'container_name': 'bowl_small',
-
-
-                   }
-    },
-
     {
         'id': 'Widow250PutInTray-v0',
         'entry_point': 'roboverse.envs.widow250_pickplace:Widow250PickPlaceEnv',
@@ -958,7 +937,7 @@ ENVIRONMENT_SPECS = (
     {
         'id': 'Widow250DoubleDrawerCloseOpenNeutral-v0',
         'entry_point': 'roboverse.envs.widow250_drawer:Widow250DoubleDrawerEnv',
-        'kwargs': {'drawer_pos': (0.35, 0.2, -.35),
+        'kwargs': {'drawer_pos': (0.47, 0.2, -.35),
                    'reward_type': 'opening',
                    'control_mode': 'discrete_gripper',
 
@@ -966,8 +945,8 @@ ENVIRONMENT_SPECS = (
                    'object_scales': (0.75,),
                    'target_object': 'ball',
                    'load_tray': False,
-                   'start_opened': True,
-                   'start_top_opened': False,
+                   'start_opened': False,
+                   'start_top_opened': True,
                    'use_neutral_action': True,
                    }
     },
@@ -1037,185 +1016,6 @@ ENVIRONMENT_SPECS = (
                    'object_position_low': (.65, .1, -.30),
                    'target_object': "shed",
                    'load_tray': False,
-                   }
-    },
-    {
-        'id': 'Widow250MultiShedPutInMultiBowlTest-v0',
-        'entry_point': 'roboverse.envs.widow250_pickplace:Widow250PickPlaceMultiObjectMultiContainerEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-                   'load_tray': False,
-                   'num_objects': 2,
-                   'possible_objects': PICK_PLACE_DEMO_OBJECTS,
-                   'possible_containers': PICK_PLACE_DEMO_CONTAINERS,
-
-
-                   }
-    },
-    {
-        'id': 'Widow250DrawerPickPlaceOpenGraspNeutral-v0',
-        'entry_point': 'roboverse.envs.widow250_drawer:Widow250DrawerEnv',
-        'kwargs': {'drawer_pos': (0.47, 0.2, -.35),
-                   'reward_type': 'grasping',
-                   'control_mode': 'discrete_gripper',
-
-                   'object_names': ('ball',),
-                   'object_scales': (0.75,),
-                   'target_object': 'ball',
-                   'load_tray': False,
-                   'start_opened': False,
-                   'use_neutral_action': True,
-                   'blocking_object_in_tray': False,
-                   }
-    },
-
-
-
-
-    {
-        'id': 'Widow250TableMultiObjectMultiContainerTrain-v0',
-        'entry_point': 'roboverse.envs.widow250_tableclean'
-                       ':Widow250TableMultiObjectMultiContainerEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-
-                   'load_tray': False,
-                   'num_objects': 2,
-                   'num_containers': 2,
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
-                   'possible_containers': TRAIN_CONTAINERS,
-
-                   }
-    },
-
-    {
-        'id': 'Widow250TableMultiObjectMultiContainerTest-v0',
-        'entry_point': 'roboverse.envs.widow250_tableclean'
-                       ':Widow250TableMultiObjectMultiContainerEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-                    'drawer_pos': (0.27, 0.27, -.35),
-                    # 'drawer_pos': (0.35, 0.2, -.35),
-                    'start_opened': False,
-
-                    'object_names': ('gatorade', 'pepsi_bottle', 'shed', 'glass_half_gallon'),
-
-                    'object_scales': (0.75, 0.75, 0.75, 0.7),
-                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
-
-                    'object_position_high': (0.65, .9, -.35), # (.7, .27, -.35)
-                    'object_position_low': (.55, .1, -.35),
-
-                    'min_distance_drawer': 0.14,
-                    'min_distance_container': 0.08,
-                    'min_distance_obj': 0.08,
-
-                   'load_tray': False,
-                   'num_objects': 2,
-                   'num_containers': 2,
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
-                   'possible_containers': TRAIN_CONTAINERS,
-
-                   }
-    },
-
-
-    {
-        'id': 'Widow250DrawerTestPos-v0',
-        'entry_point': 'roboverse.envs.widow250_drawer:Widow250DrawerEnv',
-        'kwargs': {'drawer_pos': (0.3, 0.25, -.35),
-                   'reward_type': 'grasping',
-                   'control_mode': 'discrete_gripper',
-                   'start_opened': True,
-                   'object_names': ('ball',),
-                   'object_scales': (0.75,),
-                   'target_object': 'ball',
-                   'load_tray': False,
-                   }
-    },
-    {
-        'id': 'Widow250TableCleanTest-v0',
-        'entry_point': 'roboverse.envs.widow250_tableclean'
-                       ':Widow250TableEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-
-                   'load_tray': False,
-                #    'num_objects': 2,
-                #    'num_containers': 2,
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
-
-                   }
-    },
-    {
-        'id': 'Widow250TableCleanTest-v1',
-        'entry_point': 'roboverse.envs.widow250_tableclean'
-                       ':Widow250TableEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-
-                   'load_tray': True,
-                #    'num_objects': 2,
-                #    'num_containers': 2,
-
-
-                    'drawer_pos': (0.32, 0.24, -.35),
-                    # 'drawer_pos': (0.35, 0.2, -.35),
-                    'start_opened': False,
-                    'num_objects': 4,
-                    'object_names': ('gatorade', 'pepsi_bottle', 'shed', 'glass_half_gallon'),
-                    'object_targets': ('drawer_inside', 'container', 'tray', 'container'),
-                    'object_scales': (0.75, 0.75, 0.75, 0.7),
-                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
-
-                    'object_position_high': (0.65, .9, -.35), # (.7, .27, -.35)
-                    'object_position_low': (.55, .1, -.35),
-
-                    'min_distance_drawer': 0.16,
-                    'min_distance_container': 0.08,
-                    'min_distance_obj': 0.08,
-
-
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
-
-                   }
-    },
-    {
-        'id': 'Widow250TableCleanTest-v2',
-        'entry_point': 'roboverse.envs.widow250_tableclean'
-                       ':Widow250TableEnv',
-        'kwargs': {'reward_type': 'pick_place',
-                   'control_mode': 'discrete_gripper',
-
-                   'load_tray': True,
-                #    'num_objects': 2,
-                #    'num_containers': 2,
-
-
-                    'drawer_pos': (0.32, 0.24, -.35),
-                    # 'drawer_pos': (0.35, 0.2, -.35),
-                    'start_opened': False,
-                    'num_objects': 3,
-                    'object_names': ('shed', 'gatorade', 'pepsi_bottle',  ),
-                    'object_targets': ('drawer_inside', 'container', 'tray'),
-                    'object_scales': (0.75, 0.75, 0.75),
-                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
-
-                    'object_position_high': (0.65, .9, -.35), # (.7, .27, -.35)
-                    'object_position_low': (.55, .1, -.35),
-                    'xyz_action_scale': 0.4,
-                    'min_distance_drawer': 0.16,
-                    'min_distance_container': 0.08,
-                    'min_distance_obj': 0.08,
-
-
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
-
                    }
     },
 )

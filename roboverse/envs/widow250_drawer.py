@@ -14,7 +14,7 @@ class Widow250DrawerEnv(Widow250Env):
                  drawer_pos=(0.5, 0.2, -.35),
                  drawer_quat=(0, 0, 0.707107, 0.707107),
                  left_opening=True,  # False is not supported
-                 start_opened=True,
+                 start_opened=False,
                  blocking_object_in_tray=True,
                  **kwargs):
         self.drawer_pos = drawer_pos
@@ -43,7 +43,6 @@ class Widow250DrawerEnv(Widow250Env):
             self.object_position_low, self.object_position_high,
             self.num_objects,
         )
-
         self.original_object_positions = object_positions
 
         self.objects["drawer"] = object_utils.load_object(
@@ -95,20 +94,9 @@ class Widow250DrawerEnv(Widow250Env):
         info['drawer_x_pos'] = self.get_drawer_pos()[0]
         info['drawer_opened_percentage'] = \
             self.get_drawer_opened_percentage()
-        info['drawer_closed_percentage'] = \
-            1 - self.get_drawer_opened_percentage()
-
         info['drawer_opened_success'] = info["drawer_opened_percentage"] > \
             self.drawer_opened_success_thresh
-
-        info['drawer_closed_success'] = info["drawer_opened_percentage"] < \
-            self.drawer_closed_success_thresh
-            
         return info
-
-    def is_drawer_closed(self):
-        info = self.get_info()
-        return info['drawer_closed_success']
 
     def get_drawer_handle_pos(self):
         handle_pos = object_utils.get_drawer_handle_pos(
@@ -293,11 +281,6 @@ class Widow250DoubleDrawerEnv(Widow250DrawerEnv):
 if __name__ == "__main__":
     env = roboverse.make('Widow250DoubleDrawerCloseOpenNeutral-v0',
                          gui=True, transpose_image=False)
-
-    # env = Widow250DoubleDrawerEnv(
-    #     gui=True,
-    #     drawer_pos=(0.47, 0.2, -.35)
-    # )
     import time
     env.reset()
     # import IPython; IPython.embed()
