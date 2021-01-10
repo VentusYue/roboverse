@@ -29,3 +29,14 @@ To test if things are working by visualizing a scripted robot policy, run the fo
 
 ## Credit
 Primary developers: [Avi Singh](https://www.avisingh.org/), Albert Yu, Jonathan Yang, [Michael Janner](https://people.eecs.berkeley.edu/~janner/), Huihan Liu, Gaoyue Zhou
+
+## Table clean Environment 
+To run the table clean environment, run the following command:
+'python scripts/scripted_collect.py -n 100 -t 300 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_opened_success --noise=0.1 --gui'
+
+To modify the configs, check:
+'roboverse/envs/regieration.py', Widow250TableCleanTest, 
+
+To modify the sequence of pick place/drawer open/close, check table_clean
+
+This env is still under development, the success rate is low, I will keep updating it

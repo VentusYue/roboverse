@@ -10,19 +10,30 @@ TRAIN_CONTAINERS = [
 ]
 
 TEST_CONTAINERS = [
-    'pan_tefal',
-    'marble_cube',
+    # 'pan_tefal',
+    # 'marble_cube',
     'basket',
-    'checkerboard_table',
+    # 'checkerboard_table',
 ]
 
 CONTAINER_CONFIGS = {
+    # 'plate': {
+    #     'container_position_low': (.50, 0.22, -.30),
+    #     'container_position_high': (.70, 0.26, -.30),
+    #     'container_position_default': (.50, 0.22, -.30),
+    #     'container_orientation': (0, 0, 0.707107, 0.707107),
+    #     'container_scale': 0.6, #0.46
+    #     'container_position_z': -0.37,
+    #     'place_success_height_threshold': -0.32,
+    #     'place_success_radius_threshold': 0.04,
+    #     'min_distance_from_object': 0.11,
+    # },
     'plate': {
-        'container_position_low': (.50, 0.22, -.30),
-        'container_position_high': (.70, 0.26, -.30),
+        'container_position_low': (0.8, 0.2, -.30),
+        'container_position_high': (0.8, 0.3, -.30),
         'container_position_default': (.50, 0.22, -.30),
         'container_orientation': (0, 0, 0.707107, 0.707107),
-        'container_scale': 0.46,
+        'container_scale': 0.6, #0.46
         'container_position_z': -0.37,
         'place_success_height_threshold': -0.32,
         'place_success_radius_threshold': 0.04,
@@ -60,7 +71,7 @@ CONTAINER_CONFIGS = {
         'place_success_radius_threshold': 0.04,
         'container_orientation': (0, 0, 0.707107, 0.707107),
         'container_scale': 0.07,
-        'min_distance_from_object': 0.11,
+        'min_distance_from_object': 0.2,
     },
     'tray': {
         'container_position_low': (.5, 0.25, -.30),
@@ -378,7 +389,19 @@ PICK_PLACE_TEST_OBJECTS = [
     'curved_handle_cup',
     'baseball_cap',
     'elliptical_capsule',
+    # 'ball',
 ]
+
+PICK_PLACE_DEMO_OBJECTS = [
+    'shed',
+    # 'ball',
+]
+
+PICK_PLACE_DEMO_CONTAINERS = [
+    'bowl_small',
+    'basket',
+]
+
 
 OBJECT_ORIENTATIONS = {
     'conic_cup': (0, 0, 1, 0),

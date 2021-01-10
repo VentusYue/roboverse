@@ -2,7 +2,7 @@ from roboverse.envs.widow250 import Widow250Env
 from roboverse.bullet import object_utils
 import roboverse.bullet as bullet
 from roboverse.envs import objects
-from .multi_object import MultiObjectEnv, MultiObjectMultiContainerEnv
+from roboverse.envs.multi_object import MultiObjectEnv, MultiObjectMultiContainerEnv
 from roboverse.assets.shapenet_object_lists import CONTAINER_CONFIGS
 import os.path as osp
 
@@ -35,7 +35,6 @@ class Widow250PickPlaceEnv(Widow250Env):
 
         self.place_success_height_threshold = container_config['place_success_height_threshold']
         self.place_success_radius_threshold = container_config['place_success_radius_threshold']
-
         self.start_object_in_gripper = start_object_in_gripper
         super(Widow250PickPlaceEnv, self).__init__(**kwargs)
 
