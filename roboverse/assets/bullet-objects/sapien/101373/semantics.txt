@@ -1,2 +1,0 @@
-link_0 hinge rotor
-link_1 static fan_frame

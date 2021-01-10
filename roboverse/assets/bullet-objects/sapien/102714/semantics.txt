@@ -1,3 +1,0 @@
-link_0 slider lid
-link_1 hinge lever
-link_2 free kettle_body

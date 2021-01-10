@@ -1,3 +1,0 @@
-link_0 slider button
-link_1 hinge wheel
-link_2 free mouse_body

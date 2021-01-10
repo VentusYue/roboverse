@@ -1,2 +1,0 @@
-link_0 hinge lever
-link_1 static switch_frame
