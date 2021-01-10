@@ -13,7 +13,7 @@ SHAPENET_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects/ShapeNetCore')
 BASE_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects')
 BULLET3_ASSET_PATH = os.path.join(BASE_ASSET_PATH, 'bullet3')
 
-MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 200
+MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 50000
 SHAPENET_SCALE = 0.5
 
 
@@ -80,6 +80,68 @@ def generate_object_positions_single(
 
     return large_object_position, small_object_positions
 
+def distance_xy(object1, object2):
+    return np.linalg.norm(object1[0:2] - object2[0:2])
+
+def generate_multiple_object_positions(
+        object_position_low, object_position_high,
+        container_position_low, container_position_high,
+        drawer_pos,
+        num_objects=1,
+        min_distance_drawer = 0.1,
+        min_distance_container=0.1,
+        min_distance_obj=0.07
+    ):
+    max_attempts = MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS
+    attempts = 0
+    while True:
+        attempts+=1
+
+        while True:
+            container_position = np.random.uniform(
+                low=container_position_low, high=container_position_high)
+            if distance_xy(container_position, drawer_pos) > min_distance_drawer:
+                break
+
+        object_positions = []
+        for _ in range(num_objects):
+            while True:
+                object_position = np.random.uniform(
+                    low=object_position_low, high=object_position_high
+                )
+                if distance_xy(object_position, drawer_pos) > min_distance_drawer:
+                    object_positions.append(object_position)
+                    break
+        
+        distance_between_objects = []
+        for i in range(num_objects):
+            for j in range(num_objects):
+                if i != j:
+                    distance_between_objects.append(distance_xy(object_positions[i], object_positions[j]))
+        
+        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)}")
+        if min(distance_between_objects) < min_distance_obj:
+            continue
+        
+        distance_greater_than_container = True
+        for i in range(num_objects):
+            if distance_xy(object_positions[i], container_position) < min_distance_container:
+                distance_greater_than_container = False
+                print(distance_xy(object_positions[i], container_position))
+                break
+
+
+        if distance_greater_than_container:
+            print("successfully generated objects")
+            return container_position, object_positions
+        
+        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
+        if attempts > max_attempts:
+            raise ValueError('Min distance could not be assured')
+
+    
+
+
 
 def generate_object_positions_v2(
         small_object_position_low, small_object_position_high,
@@ -103,7 +165,6 @@ def generate_object_positions_v2(
         valid_1 = np.linalg.norm(small_object_positions[0] - small_object_positions[1]) > min_distance_small_obj
         valid_2 = np.linalg.norm(small_object_positions[0] - large_object_position) > min_distance_large_obj
         valid_3 = np.linalg.norm(small_object_positions[1] - large_object_position) > min_distance_large_obj
-
         valid = valid_1 and valid_2 and valid_3
         if i > max_attempts:
             raise ValueError('Min distance could not be assured')
@@ -137,9 +198,8 @@ def generate_object_positions(object_position_low, object_position_high,
         if (min_distance_so_far > min_distance).any():
             object_positions = np.concatenate(
                 (object_positions, object_position_candidate), axis=0)
-
         if i > max_attempts:
-            raise ValueError('Min distance could not be assured')
+            raise ValueError(f'Min distance could not be assured, max_attemps: {max_attempts}')
 
     return object_positions
 
@@ -161,6 +221,7 @@ shapenet_obj_path_map, shapenet_path_scaling_map = import_shapenet_metadata()
 
 
 def load_object(object_name, object_position, object_quat, scale=1.0):
+    print(f"load {object_name}")
     if object_name in shapenet_obj_path_map.keys():
         return load_shapenet_object(object_name, object_position,
                                     object_quat=object_quat, scale=scale)
@@ -170,7 +231,6 @@ def load_object(object_name, object_position, object_quat, scale=1.0):
                                   baseOrientation=object_quat,
                                   globalScaling=scale)
     else:
-        print(object_name)
         raise NotImplementedError
 
 

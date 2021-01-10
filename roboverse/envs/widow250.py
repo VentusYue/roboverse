@@ -5,7 +5,7 @@ from roboverse.bullet.serializable import Serializable
 import roboverse.bullet as bullet
 from roboverse.envs import objects
 from roboverse.bullet import object_utils
-from .multi_object import MultiObjectEnv
+from roboverse.envs.multi_object import MultiObjectEnv
 
 END_EFFECTOR_INDEX = 8
 RESET_JOINT_VALUES = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.036, -0.036]
@@ -35,11 +35,13 @@ class Widow250Env(gym.Env, Serializable):
                  observation_img_dim=48,
                  transpose_image=True,
 
+                #  object_names=('bowl_small', 'gatorade'),
                  object_names=('beer_bottle', 'gatorade'),
+
                  object_scales=(0.75, 0.75),
                  object_orientations=((0, 0, 1, 0), (0, 0, 1, 0)),
-                 object_position_high=(.7, .27, -.30),
-                 object_position_low=(.5, .18, -.30),
+                 object_position_high=(.7, .27, -.35), # (.7, .27, -.35)
+                 object_position_low=(.5, .18, -.35),
                  target_object='gatorade',
                  load_tray=True,
 
@@ -88,7 +90,6 @@ class Widow250Env(gym.Env, Serializable):
         self.neutral_gripper_open = neutral_gripper_open
 
         self.gui = gui
-
         # TODO(avi): This hard-coding should be removed
         self.fc_input_key = 'state'
         self.cnn_input_key = 'image'
@@ -118,8 +119,8 @@ class Widow250Env(gym.Env, Serializable):
             self.object_scales[object_name] = object_scale
 
         self.in_vr_replay = in_vr_replay
-        self._load_meshes()
 
+        self._load_meshes()
         self.movable_joints = bullet.get_movable_joints(self.robot_id)
         self.end_effector_index = END_EFFECTOR_INDEX
         self.reset_joint_values = RESET_JOINT_VALUES
@@ -279,6 +280,7 @@ class Widow250Env(gym.Env, Serializable):
         gripper_binary_state = [float(self.is_gripper_open)]
         ee_pos, ee_quat = bullet.get_link_state(
             self.robot_id, self.end_effector_index)
+        # import pdb;pdb.set_trace()
         object_position, object_orientation = bullet.get_object_position(
             self.objects[self.target_object])
         if self.observation_mode == 'pixels':
@@ -372,14 +374,14 @@ if __name__ == "__main__":
     for i in range(20):
         print(i)
         obs, rew, done, info = env.step(
-            np.asarray([-0.05, 0., 0., 0., 0., 0.5, 0.]))
+            np.asarray([-0.05, 0., 0., 0., 0., 0.5, 0., 0.]))
         print("reward", rew, "info", info)
         time.sleep(0.1)
 
     env.reset()
     time.sleep(1)
     for _ in range(25):
-        env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6]))
+        env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
         time.sleep(0.1)
 
     env.reset()
