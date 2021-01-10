@@ -35,14 +35,14 @@ Download extra objects from: https://drive.google.com/file/d/1LO479WorPHhRZnw9U5
 
 To test the table clean environment, run the following command:
 
-'python scripts/scripted_collect.py -n 100 -t 300 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_opened_success --noise=0.1 --gui'
+`python scripts/scripted_collect.py -n 100 -t 300 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_opened_success --noise=0.1 --gui`
 
 To modify the configs, check:
 
-'roboverse/envs/regieration.py', Widow250TableCleanTest, 
+`roboverse/envs/regieration.py, Widow250TableCleanTest`
 
 To modify the sequence of pick place/drawer open/close, check:
 
-'roboverse/policies/table_clean.py'
+`roboverse/policies/table_clean.py`
 
 This env is still under development
