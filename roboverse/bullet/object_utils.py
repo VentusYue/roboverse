@@ -13,7 +13,7 @@ SHAPENET_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects/ShapeNetCore')
 BASE_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects')
 BULLET3_ASSET_PATH = os.path.join(BASE_ASSET_PATH, 'bullet3')
 
-MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 50000
+MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 500000
 SHAPENET_SCALE = 0.5
 
 
@@ -83,6 +83,13 @@ def generate_object_positions_single(
 def distance_xy(object1, object2):
     return np.linalg.norm(object1[0:2] - object2[0:2])
 
+def sort_x_positions(object_positions):
+    n = len(object_positions)
+    ind = np.argsort(object_positions, axis=0)[::-1][:, 0]
+    ordered_positions = [object_positions[i] for i in ind]
+    return ordered_positions
+
+
 def generate_multiple_object_positions(
         object_position_low, object_position_high,
         container_position_low, container_position_high,
@@ -119,7 +126,7 @@ def generate_multiple_object_positions(
                 if i != j:
                     distance_between_objects.append(distance_xy(object_positions[i], object_positions[j]))
         
-        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)}")
+        # print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)}")
         if min(distance_between_objects) < min_distance_obj:
             continue
         
@@ -127,15 +134,16 @@ def generate_multiple_object_positions(
         for i in range(num_objects):
             if distance_xy(object_positions[i], container_position) < min_distance_container:
                 distance_greater_than_container = False
-                print(distance_xy(object_positions[i], container_position))
+                # print(distance_xy(object_positions[i], container_position))
                 break
 
 
         if distance_greater_than_container:
-            print("successfully generated objects")
+            object_positions = sort_x_positions(object_positions)
+            # print("successfully generated objects")
             return container_position, object_positions
         
-        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
+        # print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
         if attempts > max_attempts:
             raise ValueError('Min distance could not be assured')
 

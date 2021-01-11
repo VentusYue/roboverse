@@ -42,8 +42,10 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 min_distance_drawer=0.14,
                 min_distance_container=0.08,
                 min_distance_obj=0.08,
+                # tray_position = (.8, 0.0, -.37),
                 tray_position = (.8, 0.0, -.37),
-                xyz_action_scale = 0.4,
+
+                xyz_action_scale = 0.3,
                 **kwargs):
         
         self.tray_position = tray_position
@@ -135,6 +137,7 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                                                      self.container_scale)  
         
         bullet.step_simulation(self.num_sim_steps_reset)
+        
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
             self.objects[object_name] = object_utils.load_object(

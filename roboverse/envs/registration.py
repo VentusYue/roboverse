@@ -1162,7 +1162,7 @@ ENVIRONMENT_SPECS = (
                 #    'num_containers': 2,
 
 
-                    'drawer_pos': (0.32, 0.24, -.35),
+                    'drawer_pos': (0.2, 0.24, -.35),
                     # 'drawer_pos': (0.35, 0.2, -.35),
                     'start_opened': False,
                     'num_objects': 4,
@@ -1175,8 +1175,8 @@ ENVIRONMENT_SPECS = (
                     'object_position_low': (.55, .1, -.35),
 
                     'min_distance_drawer': 0.16,
-                    'min_distance_container': 0.08,
-                    'min_distance_obj': 0.08,
+                    'min_distance_container': 0.1,
+                    'min_distance_obj': 0.1,
 
 
 
@@ -1196,7 +1196,7 @@ ENVIRONMENT_SPECS = (
                 #    'num_containers': 2,
 
 
-                    'drawer_pos': (0.32, 0.24, -.35),
+                    'drawer_pos': (0.32, 0.21, -.35),
                     # 'drawer_pos': (0.35, 0.2, -.35),
                     'start_opened': False,
                     'num_objects': 3,
@@ -1205,12 +1205,12 @@ ENVIRONMENT_SPECS = (
                     'object_scales': (0.75, 0.75, 0.75),
                     'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
 
-                    'object_position_high': (0.65, .9, -.35), # (.7, .27, -.35)
-                    'object_position_low': (.55, .1, -.35),
-                    'xyz_action_scale': 0.4,
-                    'min_distance_drawer': 0.16,
-                    'min_distance_container': 0.08,
-                    'min_distance_obj': 0.08,
+                    'object_position_high': (0.72, .9, -.35), # (.7, .27, -.35)
+                    'object_position_low': (.62, .1, -.35),
+                    'xyz_action_scale': 0.7,
+                    'min_distance_drawer': 0.2,
+                    'min_distance_container': 0.11,
+                    'min_distance_obj': 0.11,
 
 
 
