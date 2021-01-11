@@ -6,9 +6,12 @@ import roboverse
 from roboverse.policies import policies
 import argparse
 from tqdm import tqdm
+import h5py
 
 from roboverse.utils import get_timestamp
 EPSILON = 0.1
+
+SAVE_IMAGES = True      # if False, saves dummy image to save disk space
 
 # TODO(avi): Clean this up
 NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'
@@ -76,6 +79,41 @@ def collect_one_traj(env, policy, num_timesteps, noise,
     return traj, success, num_steps
 
 
+def dump2h5(traj, path):
+    """Dumps a collected trajectory to HDF5 file."""
+    # convert to numpy arrays
+    states = np.array([o['state'] for o in traj['observations']])
+    images = np.array([o['image'] for o in traj['observations']])
+    actions = np.array(traj['actions'])
+    rewards = np.array(traj['rewards'])
+    terminals = np.array(traj['terminals'])
+
+    # create HDF5 file
+    f = h5py.File(path, "w")
+    f.create_dataset("traj_per_file", data=1)
+
+    # store trajectory info in traj0 group
+    traj_data = f.create_group("traj0")
+    traj_data.create_dataset("states", data=states)
+    if SAVE_IMAGES:
+        traj_data.create_dataset("images", data=images, dtype=np.uint8)
+    else:
+        traj_data.create_dataset("images", data=np.zeros((images.shape[0], 2, 2, 3), dtype=np.uint8))
+    traj_data.create_dataset("actions", data=actions)
+    traj_data.create_dataset("rewards", data=rewards)
+
+    if np.sum(terminals) == 0:
+        terminals[-1] = True
+
+    # build pad-mask that indicates how long sequence is
+    is_terminal_idxs = np.nonzero(terminals)[0]
+    pad_mask = np.zeros((len(terminals),))
+    pad_mask[:is_terminal_idxs[0]] = 1.
+    traj_data.create_dataset("pad_mask", data=pad_mask)
+
+    f.close()
+
+
 def main(args):
 
     timestamp = get_timestamp()
@@ -114,6 +152,7 @@ def main(args):
             if args.gui:
                 print("num_timesteps: ", num_steps)
             data.append(traj)
+            dump2h5(traj, os.path.join(data_save_path, 'rollout_{}.h5'.format(num_saved)))
             num_success += 1
             num_saved += 1
             progress_bar.update(1)
