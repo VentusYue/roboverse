@@ -302,7 +302,7 @@ class PickPlaceTarget:
             self.drop_point = list(self.env.inside_drawer_position) 
         else:
             raise NotImplementedError
-        self.drop_point[2] = -0.2
+        self.drop_point[2] = -0.15
         self.place_attempted = False
         self.done = False
 

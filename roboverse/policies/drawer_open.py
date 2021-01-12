@@ -9,7 +9,7 @@ class DrawerOpen:
         self.env = env
         self.xyz_action_scale = xyz_action_scale
         self.gripper_dist_thresh = 0.06
-        self.gripper_xy_dist_thresh = 0.04
+        self.gripper_xy_dist_thresh = 0.03
         self.ending_height_thresh = 0.2
         self.return_base_thresh = 0.4
         
@@ -34,19 +34,19 @@ class DrawerOpen:
         done = False
         if (gripper_handle_xy_dist > self.gripper_xy_dist_thresh
                 and not self.env.is_drawer_open()):
-            print('xy - approaching handle')
+            # print('xy - approaching handle')
             action_xyz = (handle_pos - ee_pos) * self.xyz_action_scale
             action_xyz = list(action_xyz[:2]) + [0.]  # don't droop down.
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif (gripper_handle_dist > self.gripper_dist_thresh
                 and not self.env.is_drawer_open()):
-            print("moving down toward handle")
+            # print("moving down toward handle")
             action_xyz = (handle_pos - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif not self.env.is_drawer_open():
-            print("opening drawer")
+            # print("opening drawer")
             x_command = (-1) ** (1 - self.env.left_opening)
             action_xyz = np.array([x_command, 0, 0])
             # action = np.asarray([0., 0., 0.7])
@@ -89,7 +89,7 @@ class DrawerClose:
         self.env = env
         self.xyz_action_scale = xyz_action_scale
         self.gripper_dist_thresh = 0.06
-        self.gripper_xy_dist_thresh = 0.02
+        self.gripper_xy_dist_thresh = 0.03
         self.ending_z = -0.25
         self.top_drawer_offset = np.array([0, 0, 0.02])
 
@@ -121,7 +121,7 @@ class DrawerClose:
 
         top_drawer_push_target_pos = (
             top_drawer_pos + np.array([0.2, 0.1, 0.05]))
-        print(f"top_drawer_push_target_pos: {top_drawer_push_target_pos}")
+        # print(f"top_drawer_push_target_pos: {top_drawer_push_target_pos}")
         is_gripper_ready_to_push = (
             ee_pos[0] > top_drawer_push_target_pos[0] and
             ee_pos[2] < top_drawer_push_target_pos[2] 

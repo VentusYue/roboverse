@@ -3,7 +3,10 @@
 .idea/
 data/
 scripts/scratch.py
-roboverse/assets
+roboverse/assets/*
+!roboverse/assets/bullet-objects/table
+!roboverse/assets/bullet-objects/drawer
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
