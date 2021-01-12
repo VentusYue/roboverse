@@ -2,8 +2,10 @@
 
 .idea/
 data/
+.history/
 scripts/scratch.py
-roboverse/assets/*
+roboverse/assets/bullet-objects/*
+roboverse/assets/interbotix_descriptions
 !roboverse/assets/bullet-objects/table
 !roboverse/assets/bullet-objects/drawer
 
