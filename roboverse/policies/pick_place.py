@@ -39,7 +39,7 @@ class PickPlace:
         gripper_pickpoint_dist = np.linalg.norm(self.pick_point - ee_pos)
         gripper_droppoint_dist = np.linalg.norm(self.drop_point - ee_pos)
         done = False
-
+        # import pdb; pdb.set_trace()
         if self.place_attempted:
             # Avoid pick and place the object again after one attempt
             action_xyz = [0., 0., 0.]
@@ -266,6 +266,7 @@ class PickPlaceTarget:
         self.pick_point_noise = pick_point_noise
         self.drop_point_noise = drop_point_noise
         self.done = False
+        self.place_attempted = False
         self.object_name = object_name
         self.object_target = object_target
         if self.object_target == 'container':
@@ -311,16 +312,46 @@ class PickPlaceTarget:
         object_pos, _ = bullet.get_object_position(
             self.env.objects[self.object_to_target])
         object_lifted = object_pos[2] > self.pick_height_thresh_noisy
+        
         gripper_pickpoint_dist = np.linalg.norm(self.pick_point - ee_pos)
         gripper_droppoint_dist = np.linalg.norm(self.drop_point - ee_pos)
+        gripper_drop_point_dist_z = (self.drop_point - ee_pos)[2]
+        origin_dist = self.env.ee_pos_init - ee_pos 
+        # import pdb; pdb.set_trace()
         done = False
-
+        # print(origin_dist, np.linalg.norm(origin_dist))
         if self.place_attempted:
             # Avoid pick and place the object again after one attempt
-            action_xyz = [0., 0., 0.]
-            action_angles = [0., 0., 0.]
-            action_gripper = [0.]
-            done = True
+
+            # first lift arm keep xy unchanged
+            # if origin_dist[2] 
+            if np.abs(gripper_drop_point_dist_z) < 0.01:
+                # print(gripper_drop_point_dist_z)
+                # print("lifted")
+                action_xyz = [0., 0., gripper_drop_point_dist_z * self.xyz_action_scale] 
+                action_angles = [0., 0., 0.]
+                action_gripper = [0.7]
+            else:
+                if np.linalg.norm(origin_dist) > self.return_origin_thresh:
+                    print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
+                    action_xyz = origin_dist 
+                    action_angles = [0., 0., 0.]
+                    action_gripper = [0.]
+                else:
+                    action_xyz = [0., 0., 0.]
+                    action_angles = [0., 0., 0.]
+                    action_gripper = [0.]
+                    done = True
+                    self.done = done
+            # return to origin
+
+            # else:
+            #     action_xyz = [0., 0., 0.]
+            #     action_angles = [0., 0., 0.]
+            #     action_gripper = [0.]
+
+
+            # done = True
         elif gripper_pickpoint_dist > 0.02 and self.env.is_gripper_open:
             # move near the object
             action_xyz = (self.pick_point - ee_pos) * self.xyz_action_scale
@@ -351,13 +382,13 @@ class PickPlaceTarget:
             action_gripper = [0.7]
             self.place_attempted = True
         
-        if done:
-            if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
-                self.done = done
-            else:
-                action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
-                # print(ee_pos, self.env.ee_pos_init)
-                # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
+        # if done and self.place_attempted:
+        #     if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
+        #         self.done = done
+        #     else:
+        #         action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
+        #         # print(ee_pos, self.env.ee_pos_init)
+        #         # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
         
         agent_info = dict(place_attempted=self.place_attempted, done=self.done)
         neutral_action = [0.]

@@ -8,14 +8,13 @@ from .drawer_open import DrawerOpen, DrawerClose
 
 class TableClean:
     def __init__(self, env, pick_height_thresh=-0.31, xyz_action_scale=5.0,
-                 pick_point_noise=0.00, drop_point_noise=0.00, return_origin_thresh=0.05):
+                 pick_point_noise=0.00, drop_point_noise=0.00, return_origin_thresh=0.2, return_origin_thresh_drawer=0.1):
         self.env = env
         self.done = False
         self.object_names= env.object_names
         self.object_targets = env.object_targets
         self.num_objects = env.num_objects
         self.xyz_action_scale = self.env.xyz_action_scale
-
         self.pick_policies = []
         self.pick_drawer_policies = []
         for object_name, object_target in zip(self.object_names, self.object_targets):
@@ -32,7 +31,7 @@ class TableClean:
                         drop_point_noise=drop_point_noise,
                         object_name=object_name,
                         object_target=object_target,
-                        return_origin_thresh=return_origin_thresh
+                        return_origin_thresh=return_origin_thresh_drawer
                 )
                 pick_drawer_policy['drawer_open_policy'] = DrawerOpen(env, 
                         xyz_action_scale=xyz_action_scale,

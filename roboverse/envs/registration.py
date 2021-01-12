@@ -1125,10 +1125,10 @@ ENVIRONMENT_SPECS = (
     {
         'id': 'Widow250DrawerTestPos-v0',
         'entry_point': 'roboverse.envs.widow250_drawer:Widow250DrawerEnv',
-        'kwargs': {'drawer_pos': (0.3, 0.25, -.35),
+        'kwargs': {'drawer_pos': (0.25, 0.25, -.35),
                    'reward_type': 'grasping',
                    'control_mode': 'discrete_gripper',
-                   'start_opened': True,
+                   'start_opened': False,
                    'object_names': ('ball',),
                    'object_scales': (0.75,),
                    'target_object': 'ball',
@@ -1196,7 +1196,7 @@ ENVIRONMENT_SPECS = (
                 #    'num_containers': 2,
 
 
-                    'drawer_pos': (0.32, 0.21, -.35),
+                    'drawer_pos': (0.3, 0.23, -.35),
                     # 'drawer_pos': (0.35, 0.2, -.35),
                     'start_opened': False,
                     'num_objects': 3,
@@ -1211,11 +1211,33 @@ ENVIRONMENT_SPECS = (
                     'min_distance_drawer': 0.2,
                     'min_distance_container': 0.11,
                     'min_distance_obj': 0.11,
-
+                    'tray_position': (.9, 0.0, -.37),
 
 
                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
+                   }
+    },
+
+    {
+        'id': 'TestWidow250PickPlaceTray-v0',
+        'entry_point': 'roboverse.envs.widow250_pickplace:Widow250PickPlaceEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+
+                   'object_names': ('shed',),
+                   'object_scales': (0.7,),
+                   'target_object': 'shed',
+                   'load_tray': False,
+                   'object_position_low': (.49, .18, -.30),
+                   'object_position_high': (.75, .27, -.30),
+
+                   'container_name': 'tray',
+                   'fixed_container_position': True,
+                   'start_object_in_gripper': False,
+
+                   'use_neutral_action': True,
+                   'neutral_gripper_open': False,
                    }
     },
 )

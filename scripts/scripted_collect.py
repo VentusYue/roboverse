@@ -14,7 +14,9 @@ EPSILON = 0.1
 SAVE_IMAGES = True      # if False, saves dummy image to save disk space
 
 # TODO(avi): Clean this up
+# NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'
 NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'
+
 
 
 def add_transition(traj, observation, action, reward, info, agent_info, done,

@@ -47,7 +47,7 @@ class Widow250PickPlaceEnv(Widow250Env):
         TODO(avi) This needs to be cleaned up, generate function should only
                   take in (x,y) positions instead.
         """
-        assert self.container_position_low[2] == self.object_position_low[2]
+        # assert self.container_position_low[2] == self.object_position_low[2]
 
         if self.num_objects == 2:
             self.container_position, self.original_object_positions = \

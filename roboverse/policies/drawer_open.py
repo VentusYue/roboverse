@@ -32,7 +32,7 @@ class DrawerOpen:
         gripper_handle_dist = np.linalg.norm(handle_pos - ee_pos)
         gripper_handle_xy_dist = np.linalg.norm(handle_pos[:2] - ee_pos[:2])
         done = False
-
+        
         if (gripper_handle_xy_dist > self.gripper_xy_dist_thresh
                 and not self.env.is_drawer_open()):
             # print('xy - approaching handle')
@@ -60,6 +60,7 @@ class DrawerOpen:
                 action_angles = [0., 0., 0.]
                 action_gripper = [0.]
                 done = True
+                self.done = True
             else:
                 self.drawer_never_opened = False
                 action_xyz = np.array([0, 0, 0.7])  # force upward action
@@ -70,13 +71,13 @@ class DrawerOpen:
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
 
-        if done:
-            if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
-                self.done = done
-            else:
-                action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
-                # print(ee_pos, self.env.ee_pos_init)
-                # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
+        # if done:
+        #     if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
+        #         self.done = done
+        #     else:
+        #         action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
+        #         # print(ee_pos, self.env.ee_pos_init)
+        #         # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
         
         agent_info = dict(done=self.done)
         action = np.concatenate((action_xyz, action_angles, action_gripper))
@@ -116,11 +117,15 @@ class DrawerClose:
         gripper_handle_dist = np.linalg.norm(handle_pos - ee_pos)
         gripper_handle_xy_dist = np.linalg.norm(handle_pos[:2] - ee_pos[:2])
         top_drawer_pos = self.env.get_drawer_pos("drawer")
+        # top_drawer_push_target_pos = (
+        #     top_drawer_pos + np.array([0.15, 0., 0.05]))
+
         top_drawer_push_target_pos = (
-            top_drawer_pos + np.array([0.15, 0, 0.05]))
+            top_drawer_pos + np.array([0.2, 0.1, 0.05]))
+        print(f"top_drawer_push_target_pos: {top_drawer_push_target_pos}")
         is_gripper_ready_to_push = (
             ee_pos[0] > top_drawer_push_target_pos[0] and
-            ee_pos[2] < top_drawer_push_target_pos[2]
+            ee_pos[2] < top_drawer_push_target_pos[2] 
         )
         done = False
         neutral_action = [0.0]
@@ -128,7 +133,7 @@ class DrawerClose:
                 not self.reached_pushing_region and
                 not is_gripper_ready_to_push):
             # print("move up and left")
-            action_xyz = [0.15, -0.2, -0.15]
+            action_xyz = [0.15, -0.1, -0.15]
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif not self.env.is_drawer_closed():
@@ -138,7 +143,7 @@ class DrawerClose:
             action_xyz[0] *= 3
             action_xyz[1] *= 0.6
             action_angles = [0., 0., 0.]
-            action_gripper = [0.0]
+            action_gripper = [-0.7] #0.
             self.begin_closing = True
         if self.env.is_drawer_closed() and self.begin_closing:
             action_xyz = [0., 0., 0.]

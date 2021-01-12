@@ -14,7 +14,15 @@ RESET_JOINT_INDICES = [0, 1, 2, 3, 4, 5, 7, 10, 11]
 GUESS = 3.14  # TODO(avi) This is a guess, need to verify what joint this is
 JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
                      -0.037]
+
 JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+
+# JOINT_LIMIT_LOWER = [-3.14, -3.14, -3.14, -3.14, -2.14, -3.14, -3.14, 0.015,
+#                      -0.037]
+
+# JOINT_LIMIT_UPPER = [3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 0.037, -0.015]
+
+
 JOINT_RANGE = []
 for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
     JOINT_RANGE.append(upper - lower)
@@ -60,8 +68,11 @@ class Widow250Env(gym.Env, Serializable):
                  abc_action_scale=20.0,
                  gripper_action_scale=20.0,
 
-                 ee_pos_high=(0.8, .4, -0.1),
-                 ee_pos_low=(.4, -.2, -.34),
+                 ee_pos_high=(1.2, .5, -0.1),
+                 ee_pos_low=(.2, -.3, -.34),
+
+                # ee_pos_high=(1.2, .4, -0.1),
+                #  ee_pos_low=(.2, -.2, -.34),
                  camera_target_pos=(0.6, 0.2, -0.28),
                  camera_distance=0.29,
                  camera_roll=0.0,
@@ -247,6 +258,7 @@ class Widow250Env(gym.Env, Serializable):
                                 self.ee_pos_high)
         target_gripper_state = np.clip(target_gripper_state, GRIPPER_LIMITS_LOW,
                                        GRIPPER_LIMITS_HIGH)
+        # import pdb; pdb.set_trace()
 
         bullet.apply_action_ik(
             target_ee_pos, target_ee_quat, target_gripper_state,

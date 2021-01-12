@@ -4,6 +4,7 @@ python scripts/scripted_collect.py -n 100 -t 30 -e Widow250DoubleDrawerOpenNeutr
 # pickplace
 python scripts/scripted_collect.py -n 100 -t 30 -e Widow250PickPlace-v0 -pl pickplace -a place_success_target --noise=0.1 --gui
 
+python scripts/scripted_collect.py -n 100 -t 30 -e Widow250PlaceTray-v0 -pl pickplace -a place_success_target --noise=0.1 --gui
 
 python scripts/scripted_collect.py -n 100 -t 30 -e Widow250SinglePutInBowl-v0 -pl pickplace_open -a place_success_target --noise=0.1 --gui
 
@@ -49,3 +50,9 @@ python scripts/scripted_collect.py -n 100 -t 150 -e Widow250TableCleanTest-v1 -p
 
 
 python scripts/scripted_collect.py -n 100 -t 300 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_opened_success --noise=0.1 --gui
+
+# test pickplace
+python scripts/scripted_collect.py -n 100 -t 40 -e TestWidow250PickPlaceTray-v0 -pl pickplace -a place_success_target --noise=0.1 --gui
+
+# test drawer
+python scripts/scripted_collect.py -n 100 -t 50 -e Widow250DrawerTestPos-v0 -pl drawer_open -a drawer_opened_success --noise=0.1 --gui
