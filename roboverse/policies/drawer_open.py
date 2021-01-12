@@ -32,22 +32,21 @@ class DrawerOpen:
         gripper_handle_dist = np.linalg.norm(handle_pos - ee_pos)
         gripper_handle_xy_dist = np.linalg.norm(handle_pos[:2] - ee_pos[:2])
         done = False
-        
         if (gripper_handle_xy_dist > self.gripper_xy_dist_thresh
                 and not self.env.is_drawer_open()):
-            # print('xy - approaching handle')
+            print('xy - approaching handle')
             action_xyz = (handle_pos - ee_pos) * self.xyz_action_scale
             action_xyz = list(action_xyz[:2]) + [0.]  # don't droop down.
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif (gripper_handle_dist > self.gripper_dist_thresh
                 and not self.env.is_drawer_open()):
-            # moving down toward handle
+            print("moving down toward handle")
             action_xyz = (handle_pos - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif not self.env.is_drawer_open():
-            # print("opening drawer")
+            print("opening drawer")
             x_command = (-1) ** (1 - self.env.left_opening)
             action_xyz = np.array([x_command, 0, 0])
             # action = np.asarray([0., 0., 0.7])
@@ -90,7 +89,7 @@ class DrawerClose:
         self.env = env
         self.xyz_action_scale = xyz_action_scale
         self.gripper_dist_thresh = 0.06
-        self.gripper_xy_dist_thresh = 0.04
+        self.gripper_xy_dist_thresh = 0.02
         self.ending_z = -0.25
         self.top_drawer_offset = np.array([0, 0, 0.02])
 
