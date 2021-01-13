@@ -44,26 +44,41 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 min_distance_container=0.08,
                 min_distance_obj=0.08,
                 # tray_position = (.8, 0.0, -.37),
-                tray_position = (.8, 0.0, -.37),
-
+                load_tray = True,
+                tray_position = (.9, 0.0, -.37),
+                
+                tray_position_high=(0.9, 0., -.35), # (.7, .27, -.35)
+                tray_position_low=(0.8, -0.2, -.35),
+                
                 xyz_action_scale = 0.3,
                 random_shuffle_object = True,
                 random_shuffle_target = True,
+                random_tray = False,
                 **kwargs):
         
+        self.load_tray = load_tray
         self.tray_position = tray_position
+        self.random_tray = random_tray
+        self.tray_position_high = tray_position_high
+        self.tray_position_low = tray_position_low
+        if self.random_tray:
+            self.tray_position = np.random.uniform(
+                low=self.tray_position_low, high=self.tray_position_high)
         self.drawer_pos = drawer_pos
         self.drawer_quat = drawer_quat
         self.left_opening = left_opening
         self.start_opened = start_opened
-        self.drawer_opened_success_thresh = 0.95
-        self.drawer_closed_success_thresh = 0.05     
+        self.drawer_opened_success_thresh = 0.9
+        self.drawer_closed_success_thresh = 0.1     
         self.possible_objects = np.asarray(possible_objects) 
         self.random_shuffle_object = random_shuffle_object
+
         if self.random_shuffle_object:
             self.object_names = random.sample(object_names, len(object_names))
-            print(self.object_names)
+
             self.object_targets = object_targets
+            # print(self.object_names)
+            # print(self.object_targets)
         else:
             self.object_names = object_names
             self.object_targets = object_targets
@@ -73,8 +88,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.num_objects = num_objects
         self.xyz_action_scale = xyz_action_scale
         assert self.num_objects == len(object_names) == len(self.object_targets)
-
-
 
         self.inside_drawer_position = np.array(self.drawer_pos[:2] + (-.2,)) + np.array((0.12, 0, 0))
         self.top_drawer_position = np.array(self.drawer_pos[:2] + (0.1,))
@@ -99,7 +112,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         # super(Widow250TableEnv, self)._load_meshes()
 
         # TODO temporal defaults, need to change later
-
 
         self.table_id = objects.table()
         self.robot_id = objects.widow250()
@@ -171,6 +183,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.random_shuffle_object:
             self.object_names = random.sample(self.object_names, len(self.object_names))
             # print(f"reset: {self.object_names}")
+        if self.random_tray:
+            self.tray_position = np.random.uniform(
+                low=self.tray_position_low, high=self.tray_position_high)
 
         bullet.reset()
         bullet.setup_headless()

@@ -127,7 +127,7 @@
     <collision>
       <origin rpy="0 0 -3.14" xyz="0 0 -0.15"/>
       <geometry>
-        <mesh filename="../tray/tray_textured4_no_color.obj" scale="1.1 0.95 3.5"/>
+        <mesh filename="../tray/tray_textured4_no_color.obj" scale="1.1 0.95 1"/>
       </geometry>
     </collision>
   </link>

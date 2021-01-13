@@ -56,12 +56,29 @@ class TableClean:
         self.reset()
     
     def reset(self):
-        for pick_policy in self.pick_policies:
-            pick_policy.reset()
-        for pick_drawer_policy in self.pick_drawer_policies:
-            pick_drawer_policy['drawer_open_policy'].reset()
-            pick_drawer_policy['drawer_close_policy'].reset()
-            pick_drawer_policy['pick_policy'].reset()
+        self.object_names= self.env.object_names
+        self.object_targets = self.env.object_targets
+        num_drawer_target = 0
+        num_container_target = 0
+        for object_name, object_target in zip(self.object_names, self.object_targets):
+            if object_target == 'drawer_inside':
+                pick_drawer_policy = self.pick_drawer_policies[num_drawer_target]
+                pick_drawer_policy['pick_policy'].reset(object_name=object_name, object_target=object_target)
+                pick_drawer_policy['drawer_open_policy'].reset()
+                pick_drawer_policy['drawer_close_policy'].reset()
+                self.pick_drawer_policies.append(pick_drawer_policy)
+                # pick_drawer_policy['drawer_close_policy']
+                num_drawer_target += 1
+            else:
+                self.pick_policies[num_container_target].reset(object_name=object_name, object_target=object_target)
+                num_container_target += 1
+            
+        # for pick_policy in self.pick_policies:
+        #     pick_policy.reset()
+        # for pick_drawer_policy in self.pick_drawer_policies:
+        #     pick_drawer_policy['drawer_open_policy'].reset()
+        #     pick_drawer_policy['drawer_close_policy'].reset()
+        #     pick_drawer_policy['pick_policy'].reset()
 
         self.done = False
 

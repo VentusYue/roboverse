@@ -63,8 +63,16 @@ python scripts/scripted_collect.py -n 100 -t 50 -e Widow250DrawerTestPos-v0 -pl 
 # table clean 3 objects fixed
 python scripts/scripted_collect.py -n 100 -t 320 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
 
+
+# table clean 2 objects random 
+python scripts/scripted_collect.py -n 100 -t 250 -e Widow250TableCleanObjects2Random-v0 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+
+# table clean 2 objects random, random tray position
+python scripts/scripted_collect.py -n 100 -t 250 -e Widow250TableCleanObjects2RandomTray-v0 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+
 # table clean 3 objects random 
-python scripts/scripted_collect.py -n 100 -t 320 -e Widow250TableCleanObjects3Random-v0 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3Random-v2 -pl tableclean -a table_clean --noise=0.1 --gui
 
 
-python scripts/scripted_collect_parallel.py -p 10 -n 100 -t 320 -e Widow250TableCleanObjects3Random-v0 -pl tableclean -a drawer_closed_success --noise=0.1 -d data
+# table clean 3 objects random parallel
+python scripts/scripted_collect_parallel.py -p 10 -n 100 -t 350 -e Widow250TableCleanObjects3Random-v0 -pl tableclean -a table_clean --noise=0.1 -d data

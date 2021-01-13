@@ -283,8 +283,10 @@ class PickPlaceTarget:
         self.return_origin_thresh = return_origin_thresh
         self.reset()
 
-    def reset(self):
+    def reset(self, object_target='container', object_name='shed'):
         # self.dist_thresh = 0.06 + np.random.normal(scale=0.01)
+        self.object_target = object_target
+        self.object_name = object_name
         self.object_to_target = self.object_name
         self.pick_point = bullet.get_object_position(
             self.env.objects[self.object_to_target])[0]

@@ -18,7 +18,6 @@ SAVE_IMAGES = False      # if False, saves dummy image to save disk space
 NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'
 
 
-
 def add_transition(traj, observation, action, reward, info, agent_info, done,
                    next_observation, img_dim):
     observation["image"] = np.reshape(np.uint8(observation["image"] * 255.),
@@ -53,6 +52,8 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         agent_infos=[],
         env_infos=[],
     )
+    is_opened = False
+    is_closed = False
     for j in range(num_timesteps):
 
         action, agent_info = policy.get_action()
@@ -67,16 +68,28 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         next_observation, reward, done, info = env.step(action)
         add_transition(traj, observation,  action, reward, info, agent_info,
                        done, next_observation, img_dim)
+        
+        if accept_trajectory_key == 'table_clean':
+            info['table_clean'] = False
+            if info['drawer_opened_success']:
+                is_opened = True
+            if is_opened:
+                if info['drawer_closed_success']:
+                    is_closed = True
+            if is_opened and is_closed:
+                info['table_clean'] = True
+            # print(f"closed? {info['drawer_closed_success']} open? {info['drawer_opened_success']}")
 
         if info[accept_trajectory_key] and num_steps < 0:
             num_steps = j
+        if info[accept_trajectory_key]:
+            success = True
 
         rewards.append(reward)
         if done or agent_info['done']:
             break
+        
 
-    if info[accept_trajectory_key]:
-        success = True
 
     return traj, success, num_steps
 
@@ -133,8 +146,8 @@ def main(args):
 
     data = []
     assert args.policy_name in policies.keys(), f"The policy name must be one of: {policies.keys()}"
-    assert args.accept_trajectory_key in env.get_info().keys(), \
-        f"""The accept trajectory key must be one of: {env.get_info().keys()}"""
+    # assert args.accept_trajectory_key in env.get_info().keys(), \
+    #     f"""The accept trajectory key must be one of: {env.get_info().keys()}"""
     policy_class = policies[args.policy_name]
     policy = policy_class(env)
     num_success = 0

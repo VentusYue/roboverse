@@ -5,10 +5,9 @@ data/
 .history/
 scripts/scratch.py
 roboverse/assets/bullet-objects/*
-roboverse/assets/interbotix_descriptions
 !roboverse/assets/bullet-objects/table
 !roboverse/assets/bullet-objects/drawer
-
+!roboverse/assets/bullet-objects/ShapeNetCore
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
