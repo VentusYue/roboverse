@@ -57,27 +57,33 @@ if __name__ == "__main__":
         num_trajectories_per_thread += 1
 
     timestamp = get_timestamp()
-    save_directory = get_data_save_directory(args)
-    save_directory = osp.join(__file__, "../..", save_directory)
-    print(f"saving to: {save_directory}")
+    # save_directory = get_data_save_directory(args)
+    # save_directory = osp.join(__file__, "../..", save_directory, f"p{args.num_parallel_threads}")
+    # print(f"saving to: {save_directory}")
+    commands = []
     script_name = "scripted_collect.py"
-    command = ['python',
-               'scripts/{}'.format(script_name),
-               '--policy-name={}'.format(args.policy_name),
-               '-a{}'.format(args.accept_trajectory_key),
-               '-e{}'.format(args.env),
-               '-n {}'.format(num_trajectories_per_thread),
-               '-t {}'.format(args.num_timesteps),
-               '-o{}'.format(args.target_object),
-               '-d{}'.format(save_directory),
-               ]
+    for i in range(args.num_parallel_threads):
+        save_directory = get_data_save_directory(args)
+        save_directory = osp.join(__file__, "../..", save_directory, f"p{args.num_parallel_threads}")
+        print(f"saving to: {save_directory}")
+        command = ['python',
+                'scripts/{}'.format(script_name),
+                '--policy-name={}'.format(args.policy_name),
+                '-a{}'.format(args.accept_trajectory_key),
+                '-e{}'.format(args.env),
+                '-n {}'.format(num_trajectories_per_thread),
+                '-t {}'.format(args.num_timesteps),
+                '-o{}'.format(args.target_object),
+                '-d{}'.format(save_directory),
+                ]
+        commands.append(command)
 
     if args.save_all:
         command.append('--save-all')
 
     subprocesses = []
     for i in range(args.num_parallel_threads):
-        subprocesses.append(subprocess.Popen(command))
+        subprocesses.append(subprocess.Popen(commands[i]))
         time.sleep(1)
 
     exit_codes = [p.wait() for p in subprocesses]

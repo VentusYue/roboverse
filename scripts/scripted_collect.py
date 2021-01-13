@@ -198,7 +198,7 @@ if __name__ == "__main__":
     parser.add_argument("--save-all", action='store_true', default=False)
     parser.add_argument("--gui", action='store_true', default=False)
     parser.add_argument("-o", "--target-object", type=str)
-    parser.add_argument("-d", "--save-directory", type=str, default="")
+    parser.add_argument("-d", "--save-directory", type=str, default=""),
     parser.add_argument("--noise", type=float, default=0.1)
     args = parser.parse_args()
 

@@ -231,7 +231,7 @@ shapenet_obj_path_map, shapenet_path_scaling_map = import_shapenet_metadata()
 
 
 def load_object(object_name, object_position, object_quat, scale=1.0):
-    print(f"load {object_name}")
+    # print(f"load {object_name}")
     if object_name in shapenet_obj_path_map.keys():
         return load_shapenet_object(object_name, object_position,
                                     object_quat=object_quat, scale=scale)
@@ -290,9 +290,16 @@ BULLET_OBJECT_SPECS = dict(
         baseOrientation=(0, 0, 0.707107, 0.707107),
         globalScaling=0.07,
     ),
+    # drawer=dict(
+    #     fileName=os.path.join(
+    #         BASE_ASSET_PATH, 'drawer/drawer_with_tray_inside.urdf'),
+    #     basePosition=(.7, 0.2, -.35),
+    #     baseOrientation=(0, 0, 0.707107, 0.707107),
+    #     globalScaling=0.1,
+    # ),
     drawer=dict(
         fileName=os.path.join(
-            BASE_ASSET_PATH, 'drawer/drawer_with_tray_inside.urdf'),
+            BASE_ASSET_PATH, 'drawer/drawer_tableclean.urdf'),
         basePosition=(.7, 0.2, -.35),
         baseOrientation=(0, 0, 0.707107, 0.707107),
         globalScaling=0.1,
