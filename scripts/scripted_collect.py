@@ -19,12 +19,13 @@ NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'
 
 
 def add_transition(traj, observation, action, reward, info, agent_info, done,
-                   next_observation, img_dim):
-    observation["image"] = np.reshape(np.uint8(observation["image"] * 255.),
-                                      (img_dim, img_dim, 3))
+                   next_observation, img_dim, image_rendered=True):
+    if image_rendered:
+        observation["image"] = np.reshape(np.uint8(observation["image"] * 255.),
+                                        (img_dim, img_dim, 3))
+        next_observation["image"] = np.reshape(
+            np.uint8(next_observation["image"] * 255.), (img_dim, img_dim, 3))
     traj["observations"].append(observation)
-    next_observation["image"] = np.reshape(
-        np.uint8(next_observation["image"] * 255.), (img_dim, img_dim, 3))
     traj["next_observations"].append(next_observation)
     traj["actions"].append(action)
     traj["rewards"].append(reward)
@@ -35,7 +36,7 @@ def add_transition(traj, observation, action, reward, info, agent_info, done,
 
 
 def collect_one_traj(env, policy, num_timesteps, noise,
-                     accept_trajectory_key):
+                     accept_trajectory_key, image_rendered):
     num_steps = -1
     rewards = []
     success = False
@@ -67,7 +68,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         observation = env.get_observation()
         next_observation, reward, done, info = env.step(action)
         add_transition(traj, observation,  action, reward, info, agent_info,
-                       done, next_observation, img_dim)
+                       done, next_observation, img_dim, image_rendered)
         
         if accept_trajectory_key == 'table_clean':
             info['table_clean'] = False
@@ -94,11 +95,12 @@ def collect_one_traj(env, policy, num_timesteps, noise,
     return traj, success, num_steps
 
 
-def dump2h5(traj, path):
+def dump2h5(traj, path, image_rendered):
     """Dumps a collected trajectory to HDF5 file."""
     # convert to numpy arrays
     states = np.array([o['state'] for o in traj['observations']])
-    images = np.array([o['image'] for o in traj['observations']])
+    if image_rendered:
+        images = np.array([o['image'] for o in traj['observations']])
     actions = np.array(traj['actions'])
     rewards = np.array(traj['rewards'])
     terminals = np.array(traj['terminals'])
@@ -110,10 +112,10 @@ def dump2h5(traj, path):
     # store trajectory info in traj0 group
     traj_data = f.create_group("traj0")
     traj_data.create_dataset("states", data=states)
-    if SAVE_IMAGES:
+    if image_rendered:
         traj_data.create_dataset("images", data=images, dtype=np.uint8)
-    else:
-        traj_data.create_dataset("images", data=np.zeros((images.shape[0], 2, 2, 3), dtype=np.uint8))
+    # else:
+        # traj_data.create_dataset("images", data=np.zeros((images.shape[0], 2, 2, 3), dtype=np.uint8))
     traj_data.create_dataset("actions", data=actions)
     traj_data.create_dataset("rewards", data=rewards)
 
@@ -156,18 +158,18 @@ def main(args):
     accept_trajectory_key = args.accept_trajectory_key
 
     progress_bar = tqdm(total=args.num_trajectories)
-
     while num_saved < args.num_trajectories:
         num_attempts += 1
         traj, success, num_steps = collect_one_traj(
             env, policy, args.num_timesteps, args.noise,
-            accept_trajectory_key)
+            accept_trajectory_key, args.image_rendered)
 
         if success:
             if args.gui:
                 print("num_timesteps: ", num_steps)
             data.append(traj)
-            dump2h5(traj, os.path.join(data_save_path, 'rollout_{}.h5'.format(num_saved)))
+            dump2h5(traj, os.path.join(data_save_path, 'rollout_{}.h5'.format(num_saved)),
+                        args.image_rendered)
             num_success += 1
             num_saved += 1
             progress_bar.update(1)
@@ -200,6 +202,8 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--target-object", type=str)
     parser.add_argument("-d", "--save-directory", type=str, default=""),
     parser.add_argument("--noise", type=float, default=0.1)
+    parser.add_argument("-r", "--image-rendered", type=int, default=1)
+    
     args = parser.parse_args()
 
     main(args)

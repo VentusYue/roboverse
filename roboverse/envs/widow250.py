@@ -288,6 +288,7 @@ class Widow250Env(gym.Env, Serializable):
         return self.get_observation(), reward, done, info
 
     def get_observation(self):
+        # print(f"observation mode: {self.observation_mode}")
         gripper_state = self.get_gripper_state()
         gripper_binary_state = [float(self.is_gripper_open)]
         ee_pos, ee_quat = bullet.get_link_state(
@@ -306,7 +307,13 @@ class Widow250Env(gym.Env, Serializable):
                 'image': image_observation
             }
         else:
-            raise NotImplementedError
+            # raise NotImplementedError
+            observation = {
+                'object_position': object_position,
+                'object_orientation': object_orientation,
+                'state': np.concatenate(
+                    (ee_pos, ee_quat, gripper_state, gripper_binary_state)),
+            }
 
         return observation
 
@@ -360,7 +367,16 @@ class Widow250Env(gym.Env, Serializable):
             spaces = {'image': img_space, 'state': state_space}
             self.observation_space = gym.spaces.Dict(spaces)
         else:
-            raise NotImplementedError
+            # self.image_length = (self.observation_img_dim ** 2) * 3
+            # img_space = gym.spaces.Box(0, 1, (self.image_length,),
+            #                            dtype=np.float32)
+            robot_state_dim = 10  # XYZ + QUAT + GRIPPER_STATE
+            obs_bound = 100
+            obs_high = np.ones(robot_state_dim) * obs_bound
+            state_space = gym.spaces.Box(-obs_high, obs_high)
+            spaces = {'state': state_space}
+            self.observation_space = gym.spaces.Dict(spaces)
+            # raise NotImplementedError
 
     def get_gripper_state(self):
         joint_states, _ = bullet.get_joint_states(self.robot_id,
