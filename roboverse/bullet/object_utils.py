@@ -231,7 +231,7 @@ shapenet_obj_path_map, shapenet_path_scaling_map = import_shapenet_metadata()
 
 
 def load_object(object_name, object_position, object_quat, scale=1.0):
-    print(f"load {object_name}")
+    # print(f"load {object_name}")
     if object_name in shapenet_obj_path_map.keys():
         return load_shapenet_object(object_name, object_position,
                                     object_quat=object_quat, scale=scale)
