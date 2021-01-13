@@ -57,7 +57,7 @@ class PickPlace:
             # near the object enough, performs grasping action
             action_xyz = (self.pick_point  - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
-            action_gripper = [-0.7]
+            action_gripper = [-0.8]
         elif not object_lifted:
             # lifting objects above the height threshold for picking
             action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
@@ -320,11 +320,11 @@ class PickPlaceTarget:
         # import pdb; pdb.set_trace()
         done = False
         # print(origin_dist, np.linalg.norm(origin_dist))
+
         if self.place_attempted:
             # Avoid pick and place the object again after one attempt
 
             # first lift arm keep xy unchanged
-            # if origin_dist[2] 
             if np.abs(gripper_drop_point_dist_z) < 0.01:
                 # print(gripper_drop_point_dist_z)
                 # print("lifted")
@@ -343,17 +343,8 @@ class PickPlaceTarget:
                     action_gripper = [0.]
                     done = True
                     self.done = done
-            # return to origin
-
-            # else:
-            #     action_xyz = [0., 0., 0.]
-            #     action_angles = [0., 0., 0.]
-            #     action_gripper = [0.]
-
-
-            # done = True
         elif gripper_pickpoint_dist > 0.02 and self.env.is_gripper_open:
-            # move near the object
+            # print("move near the object")
             action_xyz = (self.pick_point - ee_pos) * self.xyz_action_scale
             xy_diff = np.linalg.norm(action_xyz[:2] / self.xyz_action_scale)
             if xy_diff > 0.03:
@@ -361,22 +352,22 @@ class PickPlaceTarget:
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
         elif self.env.is_gripper_open:
-            # near the object enough, performs grasping action
+            # print("near the object enough, performs grasping action")
             action_xyz = (self.pick_point  - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [-0.7]
         elif not object_lifted:
-            # lifting objects above the height threshold for picking
+            # print("lifting objects above the height threshold for picking")
             action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [0.]
         elif gripper_droppoint_dist > 0.02:
-            # lifted, now need to move towards the container
+            # print("lifted, now need to move towards the container")
             action_xyz = (self.drop_point - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [0.]
         else:
-            # already moved above the container; drop object
+            # print("already moved above the container; drop object")
             action_xyz = (0., 0., 0.)
             action_angles = [0., 0., 0.]
             action_gripper = [0.7]

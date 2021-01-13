@@ -11,7 +11,7 @@ import h5py
 from roboverse.utils import get_timestamp
 EPSILON = 0.1
 
-SAVE_IMAGES = True      # if False, saves dummy image to save disk space
+SAVE_IMAGES = False      # if False, saves dummy image to save disk space
 
 # TODO(avi): Clean this up
 # NFS_PATH = '/nfs/kun1/users/avi/imitation_datasets/'

@@ -23,7 +23,7 @@ class DrawerOpen:
         self.drawer_never_opened = True
         self.done = False
         offset_coeff = (-1) ** (1 - self.env.left_opening)
-        self.handle_offset = np.array([offset_coeff * 0.01, 0.0, -0.01])
+        self.handle_offset = np.array([offset_coeff * 0.01, 0.0, -0.0]) #-0.01
 
     def get_action(self):
         ee_pos, _ = bullet.get_link_state(
@@ -120,7 +120,7 @@ class DrawerClose:
         #     top_drawer_pos + np.array([0.15, 0., 0.05]))
 
         top_drawer_push_target_pos = (
-            top_drawer_pos + np.array([0.2, 0.1, 0.05]))
+            top_drawer_pos + np.array([0.18, 0.1, 0.08]))
         # print(f"top_drawer_push_target_pos: {top_drawer_push_target_pos}")
         is_gripper_ready_to_push = (
             ee_pos[0] > top_drawer_push_target_pos[0] and
@@ -128,6 +128,7 @@ class DrawerClose:
         )
         done = False
         neutral_action = [0.0]
+        # print(f"ee_pos{ee_pos}, top_drawer_push_target_pos: {top_drawer_push_target_pos}")
         if (not self.env.is_drawer_closed() and
                 not self.reached_pushing_region and
                 not is_gripper_ready_to_push):
@@ -138,13 +139,14 @@ class DrawerClose:
         elif not self.env.is_drawer_closed():
             # print("close top drawer")
             self.reached_pushing_region = True
-            action_xyz = (top_drawer_pos + self.top_drawer_offset - ee_pos) * 7.0
+            action_xyz = (top_drawer_pos  - ee_pos) * 7.0
             action_xyz[0] *= 3
             action_xyz[1] *= 0.6
             action_angles = [0., 0., 0.]
             action_gripper = [-0.7] #0.
             self.begin_closing = True
         if self.env.is_drawer_closed() and self.begin_closing:
+            # print("closed")
             action_xyz = [0., 0., 0.]
             action_angles = [0., 0., 0.]
             action_gripper = [0.]

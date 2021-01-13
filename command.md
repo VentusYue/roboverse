@@ -51,6 +51,9 @@ python scripts/scripted_collect.py -n 100 -t 150 -e Widow250TableCleanTest-v1 -p
 
 python scripts/scripted_collect.py -n 100 -t 300 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_opened_success --noise=0.1 --gui
 
+
+python scripts/scripted_collect.py -n 100 -t 320 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+
 # test pickplace
 python scripts/scripted_collect.py -n 100 -t 40 -e TestWidow250PickPlaceTray-v0 -pl pickplace -a place_success_target --noise=0.1 --gui
 
