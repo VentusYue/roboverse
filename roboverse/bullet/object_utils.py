@@ -145,7 +145,7 @@ def generate_multiple_object_positions(
             # print("successfully generated objects")
             return container_position, object_positions
 
-        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
+        # print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
         if attempts > max_attempts:
             raise ValueError('Min distance could not be assured')
 
