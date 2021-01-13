@@ -8,6 +8,7 @@ from roboverse.envs.multi_object import MultiObjectEnv, MultiObjectMultiContaine
 from roboverse.assets.shapenet_object_lists import CONTAINER_CONFIGS, TRAIN_OBJECTS
 import os.path as osp
 import numpy as np
+import random
 
 OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
                 'assets/bullet-objects/bullet_saved_states/objects_in_gripper/')
@@ -46,6 +47,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 tray_position = (.8, 0.0, -.37),
 
                 xyz_action_scale = 0.3,
+                random_shuffle_object = True,
+                random_shuffle_target = True,
                 **kwargs):
         
         self.tray_position = tray_position
@@ -56,11 +59,22 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.drawer_opened_success_thresh = 0.95
         self.drawer_closed_success_thresh = 0.05     
         self.possible_objects = np.asarray(possible_objects) 
-        self.object_names = object_names
-        self.object_targets = object_targets
+        self.random_shuffle_object = random_shuffle_object
+        if self.random_shuffle_object:
+            self.object_names = random.sample(object_names, len(object_names))
+            print(self.object_names)
+            self.object_targets = object_targets
+        else:
+            self.object_names = object_names
+            self.object_targets = object_targets
+
+
+
         self.num_objects = num_objects
         self.xyz_action_scale = xyz_action_scale
         assert self.num_objects == len(object_names) == len(self.object_targets)
+
+
 
         self.inside_drawer_position = np.array(self.drawer_pos[:2] + (-.2,)) + np.array((0.12, 0, 0))
         self.top_drawer_position = np.array(self.drawer_pos[:2] + (0.1,))
@@ -152,6 +166,22 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.objects["drawer"])
         return handle_pos
 
+
+    def reset(self):
+        if self.random_shuffle_object:
+            self.object_names = random.sample(self.object_names, len(self.object_names))
+            # print(f"reset: {self.object_names}")
+
+        bullet.reset()
+        bullet.setup_headless()
+        self._load_meshes()
+        bullet.reset_robot(
+            self.robot_id,
+            self.reset_joint_indices,
+            self.reset_joint_values)
+        self.is_gripper_open = True  # TODO(avi): Clean this up
+
+        return self.get_observation()
 
     # def get_inside_drawer_pos(self):
     #     obj_pos_high = np.array(self.drawer_pos[:2] + (-.2,)) \

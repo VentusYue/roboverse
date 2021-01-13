@@ -59,3 +59,12 @@ python scripts/scripted_collect.py -n 100 -t 40 -e TestWidow250PickPlaceTray-v0 
 
 # test drawer
 python scripts/scripted_collect.py -n 100 -t 50 -e Widow250DrawerTestPos-v0 -pl drawer_open -a drawer_opened_success --noise=0.1 --gui
+
+# table clean 3 objects fixed
+python scripts/scripted_collect.py -n 100 -t 320 -e Widow250TableCleanTest-v2 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+
+# table clean 3 objects random 
+python scripts/scripted_collect.py -n 100 -t 320 -e Widow250TableCleanObjects3Random-v0 -pl tableclean -a drawer_closed_success --noise=0.1 --gui
+
+
+python scripts/scripted_collect_parallel.py -p 10 -n 100 -t 320 -e Widow250TableCleanObjects3Random-v0 -pl tableclean -a drawer_closed_success --noise=0.1 -d data

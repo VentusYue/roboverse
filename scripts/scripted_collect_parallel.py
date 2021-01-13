@@ -5,7 +5,16 @@ import datetime
 import os
 
 from roboverse.utils import get_timestamp
+import numpy as np
+import os
+import os.path as osp
+import roboverse
+from roboverse.policies import policies
+from tqdm import tqdm
+import h5py
 
+
+SAVE_IMAGES = False 
 
 def get_data_save_directory(args):
     data_save_directory = args.data_save_directory
@@ -41,7 +50,7 @@ if __name__ == "__main__":
     parser.add_argument("--noise", type=float, default=0.1)
 
     args = parser.parse_args()
-
+    print(f"using {args.num_parallel_threads} threads")
     num_trajectories_per_thread = int(
         args.num_trajectories / args.num_parallel_threads)
     if args.num_trajectories % args.num_parallel_threads != 0:
@@ -49,7 +58,8 @@ if __name__ == "__main__":
 
     timestamp = get_timestamp()
     save_directory = get_data_save_directory(args)
-
+    save_directory = osp.join(__file__, "../..", save_directory)
+    print(save_directory)
     script_name = "scripted_collect.py"
     command = ['python',
                'scripts/{}'.format(script_name),
