@@ -9,6 +9,7 @@ roboverse/assets/bullet-objects/*
 !roboverse/assets/bullet-objects/drawer
 !roboverse/assets/bullet-objects/ShapeNetCore
 !roboverse/assets/bullet-objects/tray
+!roboverse/assets/bullet-objects/bullet3
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
