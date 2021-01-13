@@ -45,4 +45,13 @@ To modify the sequence of pick place/drawer open/close, check:
 
 `roboverse/policies/table_clean.py`
 
+## commands for environment collection 
+### table clean 3 objects random parallel
+'python scripts/scripted_collect_parallel.py -p 10 -n 100 -t 350 -e Widow250TableCleanObjects3Random-v2 -pl tableclean -a table_clean --noise=0.1 -d data'
+
+### table clean 2 objects random,
+'python scripts/scripted_collect_parallel.py -p 10 -n 100 -t 250 -e Widow250TableCleanObjects2RandomTray-v0 -pl tableclean -a table_clean --noise=0.1 -d data'
+
+For more commands, check command.md
+
 This env is still under development

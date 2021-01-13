@@ -59,7 +59,7 @@ if __name__ == "__main__":
     timestamp = get_timestamp()
     save_directory = get_data_save_directory(args)
     save_directory = osp.join(__file__, "../..", save_directory)
-    print(save_directory)
+    print(f"saving to: {save_directory}")
     script_name = "scripted_collect.py"
     command = ['python',
                'scripts/{}'.format(script_name),
