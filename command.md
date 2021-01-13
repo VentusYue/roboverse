@@ -44,4 +44,4 @@ python scripts/scripted_collect.py -n 100 -t 400 -e Widow250TableCleanObjects4Ra
 python scripts/scripted_collect_parallel.py -p 32 -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 -d data 
 
 # table clean 3 objects random parallel, no render image
-python scripts/scripted_collect_parallel.py -p 1 -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 -d data
+python scripts/scripted_collect_parallel.py -p 32 -n 50000 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 -d data
