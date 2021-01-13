@@ -1413,12 +1413,52 @@ ENVIRONMENT_SPECS = (
                     'object_scales': (0.75, 0.75, 0.75),
                     'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
 
-                    'object_position_high': (0.72, .9, -.35), # (.7, .27, -.35)
-                    'object_position_low': (.62, .1, -.35),
+                    'object_position_high': (0.75, .9, -.35), # (.7, .27, -.35)
+                    'object_position_low': (.56, .1, -.35),
                     'xyz_action_scale': 0.7,
                     'min_distance_drawer': 0.2,
                     'min_distance_container': 0.11,
                     'min_distance_obj': 0.11,
+                    'tray_position': (.9, 0.0, -.37),
+                    'random_tray': True,
+                    'tray_position_high': (0.9, 0., -.35), # (.7, .27, -.35)
+                    'tray_position_low': (0.8, -0.2, -.35),
+                    'random_shuffle_object': True,
+                    'random_shuffle_target': False,
+
+
+                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+
+                   }
+    },
+
+    {
+        'id': 'Widow250TableCleanObjects4Random-v0',
+        'entry_point': 'roboverse.envs.widow250_tableclean'
+                       ':Widow250TableEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+
+                   'load_tray': True,
+                #    'num_objects': 2,
+                #    'num_containers': 2,
+
+
+                    'drawer_pos': (0.3, 0.23, -.35),
+                    # 'drawer_pos': (0.35, 0.2, -.35),
+                    'start_opened': False,
+                    'num_objects': 4,
+                    'object_names': ('gatorade', 'shed', 'pepsi_bottle', 'shed' ),
+                    'object_targets': ('drawer_inside', 'container', 'tray', 'tray'),
+                    'object_scales': (0.75, 0.75, 0.75, 0.75),
+                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
+
+                    'object_position_high': (0.78, .9, -.35), # (.7, .27, -.35)
+                    'object_position_low': (.56, .1, -.35),
+                    'xyz_action_scale': 0.7,
+                    'min_distance_drawer': 0.2,
+                    'min_distance_container': 0.11,
+                    'min_distance_obj': 0.3,
                     'tray_position': (.9, 0.0, -.37),
                     'random_tray': True,
                     'tray_position_high': (0.9, 0., -.35), # (.7, .27, -.35)

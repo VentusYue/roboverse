@@ -13,7 +13,7 @@ SHAPENET_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects/ShapeNetCore')
 BASE_ASSET_PATH = os.path.join(ASSET_PATH, 'bullet-objects')
 BULLET3_ASSET_PATH = os.path.join(BASE_ASSET_PATH, 'bullet3')
 
-MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 500000
+MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS = 5000000
 SHAPENET_SCALE = 0.5
 
 
@@ -99,6 +99,7 @@ def generate_multiple_object_positions(
         min_distance_container=0.1,
         min_distance_obj=0.07
     ):
+
     max_attempts = MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS
     attempts = 0
     while True:
@@ -127,6 +128,7 @@ def generate_multiple_object_positions(
                     distance_between_objects.append(distance_xy(object_positions[i], object_positions[j]))
         
         # print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)}")
+        
         if min(distance_between_objects) < min_distance_obj:
             continue
         
@@ -142,8 +144,8 @@ def generate_multiple_object_positions(
             object_positions = sort_x_positions(object_positions)
             # print("successfully generated objects")
             return container_position, object_positions
-        
-        # print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
+
+        print(f"Attempt: {attempts}, min object distance: {min(distance_between_objects)},")
         if attempts > max_attempts:
             raise ValueError('Min distance could not be assured')
 
