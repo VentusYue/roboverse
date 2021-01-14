@@ -253,7 +253,6 @@ class PickPlaceOld:
 
 
 class PickPlaceTarget:
-
     def __init__(self, env, pick_height_thresh=-0.31, xyz_action_scale=7.0,
                  pick_point_noise=0.00, drop_point_noise=0.00, 
                  return_origin_thresh=0.1,
@@ -335,7 +334,7 @@ class PickPlaceTarget:
                 action_gripper = [0.7]
             else:
                 if np.linalg.norm(origin_dist) > self.return_origin_thresh:
-                    # print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
+                    print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
                     action_xyz = origin_dist 
                     action_angles = [0., 0., 0.]
                     action_gripper = [0.]

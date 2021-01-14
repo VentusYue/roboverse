@@ -40,28 +40,28 @@
       <!-- right -->
       <origin rpy="0 0 0" xyz="0 -.6 0"/>
       <geometry>
-        <box size="1.4 .05 1.4"/>
+        <box size="1.4 .05 1.31"/>
       </geometry>
     </visual>
     <visual>
       <!-- left -->
       <origin rpy="0 0 0" xyz="0 .6 0"/>
       <geometry>
-        <box size="1.4 .05 1.4"/>
+        <box size="1.4 .05 1.31"/>
       </geometry>
     </visual>
     <visual>
       <!-- front -->
       <origin rpy="0 0 0" xyz=".7 0 0"/>
       <geometry>
-        <box size=".05 1.2 1.4"/>
+        <box size=".05 1.2 1.31"/>
       </geometry>
     </visual>
     <visual>
       <!-- back -->
       <origin rpy="0 0 0" xyz="-.7 0 0"/>
       <geometry>
-        <box size=".05 1.2 1.4"/>
+        <box size=".05 1.2 1.31"/>
       </geometry>
     </visual>
 
@@ -76,28 +76,28 @@
       <!-- right -->
       <origin rpy="0 0 0" xyz="0 -.6 0"/>
       <geometry>
-        <box size="1.4 .05 1.4"/>
+        <box size="1.4 .05 1.31"/>
       </geometry>
     </collision>
     <collision>
       <!-- left -->
       <origin rpy="0 0 0" xyz="0 .6 0"/>
       <geometry>
-        <box size="1.4 .05 1.4"/>
+        <box size="1.4 .05 1.31"/>
       </geometry>
     </collision>
     <collision>
       <!-- front -->
       <origin rpy="0 0 0" xyz=".7 0 0"/>
       <geometry>
-        <box size=".05 1.2 1.4"/>
+        <box size=".05 1.2 1.31"/>
       </geometry>
     </collision>
     <collision>
       <!-- back -->
       <origin rpy="0 0 0" xyz="-.7 0 0"/>
       <geometry>
-        <box size=".05 1.2 1.4"/>
+        <box size=".05 1.2 1.31"/>
       </geometry>
     </collision>
   </link>
@@ -119,14 +119,14 @@
     <visual>
       <origin rpy="0 1.57 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.06" length="1.4"/>
+        <cylinder radius="0.06" length="1.31"/>
       </geometry>
       <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 1.57 0" xyz="0 0 0"/>
       <geometry>
-        <cylinder radius="0.06" length="1.4"/>
+        <cylinder radius="0.06" length="1.31"/>
       </geometry>
     </collision>
   </link>
@@ -210,21 +210,21 @@
       <!--Right-->
       <origin rpy="0 0 0" xyz="0 .65 0"/>
       <geometry>
-        <box size="1.5 .05 1.4"/>
+        <box size="1.5 .05 1.31"/>
       </geometry>
     </visual>
     <visual>
       <!--Front-->
       <origin rpy="0 0 0" xyz=".75 0 0"/>
       <geometry>
-        <box size=".05 1.3 1.4"/>
+        <box size=".05 1.3 1.31"/>
       </geometry>
     </visual>
     <visual>
       <!--Back-->
       <origin rpy="0 0 0" xyz="-.75 0 0"/>
       <geometry>
-        <box size=".05 1.3 1.4"/>
+        <box size=".05 1.3 1.31"/>
       </geometry>
     </visual>
 

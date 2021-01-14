@@ -90,8 +90,6 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         if done or agent_info['done']:
             break
         
-
-
     return traj, success, num_steps
 
 
