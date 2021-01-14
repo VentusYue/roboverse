@@ -64,7 +64,8 @@ if __name__ == "__main__":
     script_name = "scripted_collect.py"
     for i in range(args.num_parallel_threads):
         save_directory = get_data_save_directory(args)
-        save_directory = osp.join(__file__, "../..", save_directory, f"p{i}")
+        # save_directory = osp.join(__file__, "../..", save_directory, f"p{i}")
+        save_directory = os.path.join(os.environ['DATA_DIR'], 'roboverse',save_directory, f"p{i}")
         print(f"saving to: {save_directory}")
         command = ['python',
                 'scripts/{}'.format(script_name),
