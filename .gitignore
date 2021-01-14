@@ -1,5 +1,7 @@
 # Custom
 
+*.DS_Store
+
 .idea/
 data/
 .history/
