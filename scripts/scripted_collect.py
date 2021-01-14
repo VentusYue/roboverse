@@ -67,6 +67,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         action = np.clip(action, -1 + EPSILON, 1 - EPSILON)
         observation = env.get_observation()
         next_observation, reward, done, info = env.step(action)
+        # import pdb; pdb.set_trace()
         add_transition(traj, observation,  action, reward, info, agent_info,
                        done, next_observation, img_dim, image_rendered)
         
@@ -135,8 +136,9 @@ def main(args):
     if osp.exists(NFS_PATH):
         data_save_path = osp.join(NFS_PATH, args.save_directory)
     else:
-        data_save_path = os.path.join(os.environ['DATA_DIR'], 'roboverse',args.save_directory)
-        # data_save_path = osp.join(__file__, "../..", "data", args.save_directory)
+        # data_save_path = os.path.join(os.environ['DATA_DIR'], 'roboverse',args.save_directory)
+        data_save_path = osp.join(__file__, "../..", "data", args.save_directory)
+    
     data_save_path = osp.abspath(data_save_path)
     if not osp.exists(data_save_path):
         os.makedirs(data_save_path)

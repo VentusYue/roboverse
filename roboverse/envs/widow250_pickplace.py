@@ -5,6 +5,7 @@ from roboverse.envs import objects
 from roboverse.envs.multi_object import MultiObjectEnv, MultiObjectMultiContainerEnv
 from roboverse.assets.shapenet_object_lists import CONTAINER_CONFIGS
 import os.path as osp
+import numpy as np
 
 OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
                 'assets/bullet-objects/bullet_saved_states/objects_in_gripper/')
@@ -36,6 +37,8 @@ class Widow250PickPlaceEnv(Widow250Env):
         self.place_success_height_threshold = container_config['place_success_height_threshold']
         self.place_success_radius_threshold = container_config['place_success_radius_threshold']
         self.start_object_in_gripper = start_object_in_gripper
+        self.container_position = np.random.uniform(
+                low=self.container_position_low, high=self.container_position_high)
         super(Widow250PickPlaceEnv, self).__init__(**kwargs)
 
     def _load_meshes(self):

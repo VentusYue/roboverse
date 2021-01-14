@@ -130,7 +130,6 @@ class Widow250Env(gym.Env, Serializable):
             self.object_scales[object_name] = object_scale
 
         self.in_vr_replay = in_vr_replay
-
         self._load_meshes()
         self.movable_joints = bullet.get_movable_joints(self.robot_id)
         self.end_effector_index = END_EFFECTOR_INDEX

@@ -2,6 +2,7 @@ from roboverse.envs.widow250 import Widow250Env
 from roboverse.envs.widow250_drawer import Widow250DrawerEnv
 from roboverse.envs.widow250_pickplace import Widow250PickPlaceEnv, Widow250PickPlaceMultiObjectEnv
 from roboverse.bullet import object_utils
+from roboverse.bullet import tableclean_utils 
 import roboverse.bullet as bullet
 from roboverse.envs import objects
 from roboverse.envs.multi_object import MultiObjectEnv, MultiObjectMultiContainerEnv
@@ -72,10 +73,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.drawer_closed_success_thresh = 0.1     
         self.possible_objects = np.asarray(possible_objects) 
         self.random_shuffle_object = random_shuffle_object
+        self.num_objects = num_objects
+        self.object_position_high = list(object_position_high)
+        self.object_position_low = list(object_position_low)
 
         if self.random_shuffle_object:
             self.object_names = random.sample(object_names, len(object_names))
-
             self.object_targets = object_targets
             # print(self.object_names)
             # print(self.object_targets)
@@ -84,8 +87,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.object_targets = object_targets
 
 
-
-        self.num_objects = num_objects
         self.xyz_action_scale = xyz_action_scale
         assert self.num_objects == len(object_names) == len(self.object_targets)
 
@@ -104,10 +105,58 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             container_name=container_name,
             **kwargs,
         )
+        
+        self.subtasks = self.generate_tasks()
+        self.current_task = self.subtasks.pop(0)
+        
+    def generate_tasks(self):
+        """ generate the subtasks of the env """
 
-        self.reward_type = reward_type
-        self.num_objects = num_objects
-    
+        subtasks = [] # a queue consisting of dictionaries for each subtask
+        for object_name, object_target, object_position in zip(self.object_names, self.object_targets, self.original_object_positions):
+            target_position = self.get_target_position(object_target)
+            if object_target == 'drawer_inside':
+                subtask = DrawerOpenClosePickPlaceTask(object_name, object_target, object_position, target_position)
+                subtasks.append(subtask)
+            else:
+                subtask = PickPlaceTask(object_name, object_target, object_position, target_position)
+                subtasks.append(subtask)
+        import pdb; pdb.set_trace()
+        return subtasks
+
+    def get_target_position(self, object_target):
+        if object_target == 'container':
+            return self.container_position
+        elif object_target == 'tray':
+            return self.tray_position
+        elif object_target == 'drawer_top':
+            return list(self.top_drawer_position) 
+        elif object_target == 'drawer_inside':
+            return list(self.inside_drawer_position) 
+        else:
+            raise NotImplementedError
+
+    def generate_objects_positions(self):
+        if self.num_objects == 1:
+            container_position, object_positions = \
+                object_utils.generate_object_positions_single(
+                    self.object_position_low, self.object_position_high,
+                    self.container_position_low, self.container_position_high,
+                    min_distance_large_obj=self.min_distance_from_object,
+                )
+        else: 
+            container_position, object_positions = \
+                object_utils.generate_multiple_object_positions(
+                    self.object_position_low, self.object_position_high,
+                    self.container_position_low, self.container_position_high,
+                    drawer_pos=self.drawer_pos,
+                    num_objects=self.num_objects,
+                    min_distance_drawer = self.min_distance_drawer,
+                    min_distance_container=self.min_distance_container,
+                    min_distance_obj=self.min_distance_obj
+                )
+        return container_position, object_positions
+
     def _load_meshes(self):
         # super(Widow250TableEnv, self)._load_meshes()
 
@@ -138,24 +187,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.start_opened:
             object_utils.open_drawer(self.objects['drawer'])
 
-        if self.num_objects == 1:
-            self.container_position, self.original_object_positions = \
-                object_utils.generate_object_positions_single(
-                    self.object_position_low, self.object_position_high,
-                    self.container_position_low, self.container_position_high,
-                    min_distance_large_obj=self.min_distance_from_object,
-                )
-        else: 
-            self.container_position, self.original_object_positions = \
-                object_utils.generate_multiple_object_positions(
-                    self.object_position_low, self.object_position_high,
-                    self.container_position_low, self.container_position_high,
-                    drawer_pos=self.drawer_pos,
-                    num_objects=self.num_objects,
-                    min_distance_drawer = self.min_distance_drawer,
-                    min_distance_container=self.min_distance_container,
-                    min_distance_obj=self.min_distance_obj
-                )
+        self.container_position, self.original_object_positions = self.generate_objects_positions()
+
+
         self.container_position[-1] = self.container_position_z
         self.container_id = object_utils.load_object(self.container_name,
                                                      self.container_position,
@@ -186,6 +220,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.random_tray:
             self.tray_position = np.random.uniform(
                 low=self.tray_position_low, high=self.tray_position_high)
+        
+        # self.container_position, self.original_object_positions = self.generate_objects_positions()
 
         bullet.reset()
         bullet.setup_headless()
@@ -195,6 +231,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.reset_joint_indices,
             self.reset_joint_values)
         self.is_gripper_open = True  # TODO(avi): Clean this up
+
+        self.subtasks = self.generate_tasks()
+        self.current_task = self.subtasks.pop(0)
 
         return self.get_observation()
 
