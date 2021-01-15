@@ -75,6 +75,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 random_shuffle_object = True,
                 random_shuffle_target = True,
                 random_tray = False,
+
+                observation_img_dim=256,
+                camera_distance=0.55,
                 **kwargs):
         
         self.load_tray = load_tray
@@ -123,6 +126,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             object_orientations=object_orientations,
             object_scales=object_scales,
             container_name=container_name,
+            observation_img_dim=observation_img_dim,
+            camera_distance=camera_distance,
             **kwargs,
         )
 

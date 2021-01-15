@@ -16,7 +16,8 @@ def render(height, width, view_matrix, projection_matrix,
     # import ipdb; ipdb.set_trace()
     # Here, if I do len(img), I get 9216.
     # img = np.reshape(np.array(img), (48, 48, 4))
-    img = np.reshape(np.array(img), (48, 48, 4))
+    img_res = int(np.sqrt(np.array(img).size / 4))
+    img = np.reshape(np.array(img), (img_res, img_res, 4))
     
     img = img[:, :, :-1]
     return img, depth, segmentation
