@@ -1335,7 +1335,7 @@ ENVIRONMENT_SPECS = (
                     'start_opened': False,
                     'num_objects': 3,
                     'object_names': ('gatorade', 'shed', 'pepsi_bottle',  ),
-                    'object_targets': ('drawer_inside', 'container', 'tray'),
+                    'object_targets': ('container', 'tray', 'drawer_inside'),
                     'object_scales': (0.75, 0.75, 0.75),
                     'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
 

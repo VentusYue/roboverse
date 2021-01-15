@@ -140,10 +140,11 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             if object_target == 'drawer_inside':
                 subtasks += [DrawerOpenTask(),
                              PickPlaceTask(object_name, object_target, object_position, target_position),
-                             DrawerClosedTask]
+                             DrawerClosedTask()]
             else:
                 subtasks.append(PickPlaceTask(object_name, object_target, object_position, target_position))
 
+        print(subtasks)
         return subtasks
 
     def reset(self):
@@ -192,21 +193,15 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         return info
 
     def get_reward(self, info):
-        reward, done = 0., False
-        while self.current_subtask.done(info):
+        reward = 0.
+        if self.current_subtask.done(info):
             reward += self.current_subtask.REWARD
-            if self.subtasks:
-                # still subtasks remaining --> switch to the next subtask
-                self.subtasks.pop(0)
-            else:
-                # all subtasks solved --> terminate episode
-                done = True
-                break
-        return reward, done
+            self.subtasks.pop(0)        # switch to the next subtask
+        return reward
     
     def step(self, action):
-        obs, reward, done, info = super().step(action)
-        reward, done = reward   # this is slightly hacky since get_reward() outputs both for this class
+        obs, reward, _, info = super().step(action)
+        done = not self.subtasks
         return self.get_observation(), reward, done, info
 
     def get_target_position(self, object_target):
@@ -311,7 +306,7 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
     def is_drawer_closed(self):
         info = self.get_info()
-        return info['drawer_closed_success']
+        return info['drawer_closed']
 
     @property
     def current_subtask(self):
