@@ -327,7 +327,6 @@ class PickPlaceTarget:
 
             # first lift arm keep xy unchanged
             if np.abs(gripper_drop_point_dist_z) < 0.01:
-                # print(gripper_drop_point_dist_z)
                 # print("lifted")
                 action_xyz = [0., 0., gripper_drop_point_dist_z * self.xyz_action_scale] 
                 action_angles = [0., 0., 0.]

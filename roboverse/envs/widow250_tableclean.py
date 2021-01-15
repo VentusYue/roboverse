@@ -99,8 +99,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.random_shuffle_object:
             self.object_names = random.sample(object_names, len(object_names))
             self.object_targets = object_targets
-            # print(self.object_names)
-            # print(self.object_targets)
         else:
             self.object_names = object_names
             self.object_targets = object_targets
@@ -215,10 +213,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         return container_position, object_positions
 
     def _load_meshes(self):
-        # super(Widow250TableEnv, self)._load_meshes()
-
-        # TODO temporal defaults, need to change later
-
         self.table_id = objects.table()
         self.robot_id = objects.widow250()
         self.objects = {}
@@ -278,8 +272,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.tray_position = np.random.uniform(
                 low=self.tray_position_low, high=self.tray_position_high)
         
-        # self.container_position, self.original_object_positions = self.generate_objects_positions()
-
         bullet.reset()
         bullet.setup_headless()
         self._load_meshes()
@@ -370,14 +362,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                     self.current_task.info.done = True
         else:
             target_position = self.current_task.info.target_position
-            # info['place_success'] = False
-            # place_success = object_utils.check_in_container(
-            #     object_name, self.objects, target_position,
-            #     self.place_success_height_threshold,
-            #     self.place_success_radius_threshold)
-            # if place_success:
-            #     info['place_success'] = place_success
-
             info['place_success_target'] = object_utils.check_in_container(
                 object_name, self.objects, target_position,
                 self.place_success_height_threshold,
@@ -474,15 +458,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                     RESET_JOINT_VALUES_GRIPPER_CLOSED)
 
         info = self.get_info()
-        # print(self.current_task)
-        # print(info)
-        
         if self.current_task.info.done:
             self.complete_tasks += 1
             if self.complete_tasks < 5:
                 self.current_task = self.subtasks.pop(0)
         info["complete_tasks"] = self.complete_tasks
-        print(f"complete tasks{self.complete_tasks}")
+        # print(f"complete tasks{self.complete_tasks}")
 
         reward = self.complete_tasks
         done = False
