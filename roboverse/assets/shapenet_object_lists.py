@@ -35,7 +35,7 @@ CONTAINER_CONFIGS = {
         'container_orientation': (0, 0, 0.707107, 0.707107),
         'container_scale': 0.6, #0.46
         'container_position_z': -0.37,
-        'place_success_height_threshold': -0.32,
+        'place_success_height_threshold': -0.3, #-0.32
         'place_success_radius_threshold': 0.04,
         'min_distance_from_object': 0.11,
     },
@@ -48,7 +48,7 @@ CONTAINER_CONFIGS = {
         'container_scale': 0.06,
         'container_position_z': -0.35,
         'place_success_height_threshold': -0.23,
-        'place_success_radius_threshold': 0.04,
+        'place_success_radius_threshold': 0.06, #0.04
         'min_distance_from_object': 0.11,
     },
     'table_top': {
@@ -81,8 +81,8 @@ CONTAINER_CONFIGS = {
         'container_orientation': (0, 0, 0.707107, 0.707107),
         'container_scale': 0.18,
         'container_position_z': -0.37,
-        'place_success_height_threshold': -0.32,
-        'place_success_radius_threshold': 0.04,
+        'place_success_height_threshold': -0.3, #-0.32
+        'place_success_radius_threshold': 0.06, #0.04
         'min_distance_from_object': 0.11,
     },
     # 'tray': {

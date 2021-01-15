@@ -28,11 +28,11 @@ def check_in_container(object_name,
     object_xy = object_pos[:2]
     container_center_xy = container_pos[:2]
     success = False
+    object_container_distance = np.linalg.norm(object_xy - container_center_xy)
     if object_height < place_success_height_threshold:
-        object_container_distance = np.linalg.norm(object_xy - container_center_xy)
         if object_container_distance < place_success_radius_threshold:
             success = True
-
+    # print(f"object_height: {object_height}, object_distance: {object_container_distance}, height thresh: {place_success_height_threshold}, radius thresh {place_success_radius_threshold}")
     return success
 
 
@@ -85,7 +85,8 @@ def distance_xy(object1, object2):
 
 def sort_x_positions(object_positions):
     n = len(object_positions)
-    ind = np.argsort(object_positions, axis=0)[::-1][:, 0]
+    # ind = np.argsort(object_positions, axis=0)[::-1][:, 0]
+    ind = np.argsort(object_positions, axis=0)[:, 0]
     ordered_positions = [object_positions[i] for i in ind]
     return ordered_positions
 

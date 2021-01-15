@@ -130,8 +130,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.current_task = self.subtasks.pop(0)
         
     def generate_pickplace_task(self,object_name="tray", object_target="container", 
-                    target_position = np.array([0.9, 0., -0.37]), 
-                    object_position = np.array([0.5, 0.2, -0.3])):
+                    object_position = np.array([0.5, 0.2, -0.3]),
+                    target_position = np.array([0.9, 0., -0.37]) 
+                    ):
         task = AttrDict()
         task["type"] = "pickplace"
         task["info"] = AttrDict()
@@ -304,8 +305,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
     def is_drawer_open(self):
         # refers to bottom drawer in the double drawer case
-        info = self.get_info()
-        return info['drawer_opened_success']
+        open_percentage = self.get_drawer_opened_percentage()
+        
+        return open_percentage > self.drawer_opened_success_thresh
 
     def get_drawer_opened_percentage(self, drawer_key="drawer"):
         # compatible with either drawer or upper_drawer
@@ -335,7 +337,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         
         info = AttrDict()
         info["reward"] = False
-
         info['grasp_success'] = False
         grasp_success = object_utils.check_grasp(
             object_name, self.objects, self.robot_id,
@@ -343,14 +344,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.grasp_success_object_gripper_threshold)
         if grasp_success:
             info['grasp_success'] = True
-            
         info['grasp_success_target'] = object_utils.check_grasp(
             object_name, self.objects, self.robot_id,
             self.end_effector_index, self.grasp_success_height_threshold,
             self.grasp_success_object_gripper_threshold)
 
         if self.current_task.type == "drawer_open" or self.current_task.type == "drawer_close":
-        # info = super(Widow250TableEnv, self).get_info()
             info['drawer_x_pos'] = self.get_drawer_pos()[0]
             info['drawer_opened_percentage'] = \
                 self.get_drawer_opened_percentage()
@@ -384,8 +383,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 self.place_success_height_threshold,
                 self.place_success_radius_threshold)
             
-            if self.current_task.type == "pick_place":
-                if info['place_success']:
+            if self.current_task.type == "pickplace":
+                if info['place_success_target']:
                     info.reward = True
                     self.current_task.info.done = True
             
@@ -475,11 +474,14 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                     RESET_JOINT_VALUES_GRIPPER_CLOSED)
 
         info = self.get_info()
+        # print(self.current_task)
+        # print(info)
         reward = info.reward
         if self.current_task.info.done:
             self.current_task = self.subtasks.pop(0)
             self.complete_tasks += 1
         info["complete_tasks"] = self.complete_tasks
+        print(f"complete tasks{self.complete_tasks}")
         done = False
         return self.get_observation(), reward, done, info
 
