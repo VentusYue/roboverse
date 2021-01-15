@@ -334,7 +334,7 @@ class PickPlaceTarget:
                 action_gripper = [0.7]
             else:
                 if np.linalg.norm(origin_dist) > self.return_origin_thresh:
-                    print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
+                    # print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
                     action_xyz = origin_dist 
                     action_angles = [0., 0., 0.]
                     action_gripper = [0.]

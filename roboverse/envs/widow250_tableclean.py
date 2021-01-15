@@ -476,12 +476,15 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         info = self.get_info()
         # print(self.current_task)
         # print(info)
-        reward = info.reward
+        
         if self.current_task.info.done:
-            self.current_task = self.subtasks.pop(0)
             self.complete_tasks += 1
+            if self.complete_tasks < 5:
+                self.current_task = self.subtasks.pop(0)
         info["complete_tasks"] = self.complete_tasks
         print(f"complete tasks{self.complete_tasks}")
+
+        reward = self.complete_tasks
         done = False
         return self.get_observation(), reward, done, info
 
