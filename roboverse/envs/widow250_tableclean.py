@@ -78,6 +78,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
                 observation_img_dim=256,
                 camera_distance=0.55,
+
+                fixed_init_pos=None,
                 **kwargs):
         
         self.load_tray = load_tray
@@ -117,6 +119,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.min_distance_drawer = min_distance_drawer
         self.min_distance_obj = min_distance_obj
         self.min_distance_container = min_distance_container
+
+        self.fixed_init_pos = fixed_init_pos
 
         self.subtasks = None
 
@@ -217,6 +221,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             raise NotImplementedError
 
     def generate_objects_positions(self):
+        if self.fixed_init_pos is not None:
+            return self.fixed_init_pos
+
         if self.num_objects == 1:
             container_position, object_positions = \
                 object_utils.generate_object_positions_single(
@@ -314,7 +321,10 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
 
 if __name__ == "__main__":
-    env = Widow250TableEnv(gui=True)
+    from roboverse.envs.registration import ENVIRONMENT_SPECS
+
+    kwargs = ENVIRONMENT_SPECS[-2]['kwargs']
+    env = Widow250TableEnv(gui=True, **kwargs)
     env.reset()
     done = False
     while not done:
