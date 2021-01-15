@@ -148,7 +148,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             else:
                 subtasks.append(PickPlaceTask(object_name, object_target, object_position, target_position))
 
-        print(subtasks)
         return subtasks
 
     def reset(self):
