@@ -10,6 +10,7 @@ from roboverse.utils.general_utils import AttrDict
 import os.path as osp
 import numpy as np
 import random
+from roboverse.envs.tasks import PickPlaceTask, DrawerOpenTask, DrawerClosedTask
 
 
 OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
@@ -114,6 +115,8 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.min_distance_obj = min_distance_obj
         self.min_distance_container = min_distance_container
 
+        self.subtasks = None
+
         super(Widow250TableEnv, self).__init__(
             object_names=object_names,
             target_object=target_object,
@@ -122,62 +125,84 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             container_name=container_name,
             **kwargs,
         )
-        
-        self.complete_tasks = 0
-        self.subtasks = self.generate_tasks()
-        self.current_task = self.subtasks.pop(0)
-        
-    def generate_pickplace_task(self,object_name="tray", object_target="container", 
-                    object_position = np.array([0.5, 0.2, -0.3]),
-                    target_position = np.array([0.9, 0., -0.37]) 
-                    ):
-        task = AttrDict()
-        task["type"] = "pickplace"
-        task["info"] = AttrDict()
-        task.info.object_name = object_name
-        task.info.object_target = object_target
-        task.info.target_position = target_position
-        task.info.object_position = object_position
-        task.info.object_current_position = object_position
-        task.info.done = False
-        return task
-
-    def generate_drawer_open_task(self):
-        task = AttrDict()
-        task["type"] = "drawer_open"
-        task["info"] = AttrDict()
-        task.info.object_name = "drawer"
-        task.info.object_target = "drawer"
-        task.info.done = False
-        return task
-
-    def generate_drawer_close_task(self):
-        task = AttrDict()
-        task["type"] = "drawer_close"
-        task["info"] = AttrDict()
-        task.info.object_name = "drawer"
-        task.info.object_target = "drawer"
-        task.info.done = False
-        return task
 
     def generate_tasks(self):
-        """ generate the subtasks of the env """
-
-        subtasks = [] # a queue consisting of dictionaries for each subtask
-        for object_name, object_target, object_position in zip(self.object_names, self.object_targets, self.original_object_positions):
+        """Generate subtask list."""
+        subtasks = []
+        for object_name, object_target, object_position in \
+                zip(self.object_names, self.object_targets, self.original_object_positions):
             target_position = self.get_target_position(object_target)
             if object_target == 'drawer_inside':
-                drawer_open_task = self.generate_drawer_open_task()
-                pickplace_task = self.generate_pickplace_task(object_name, object_target, object_position, target_position)
-                drawer_close_task = self.generate_drawer_close_task()
-                subtasks.append(drawer_open_task)
-                subtasks.append(pickplace_task)               
-                subtasks.append(drawer_close_task)
+                subtasks += [DrawerOpenTask(),
+                             PickPlaceTask(object_name, object_target, object_position, target_position),
+                             DrawerClosedTask]
             else:
-                pickplace_task = self.generate_pickplace_task(object_name, object_target, object_position, target_position)
-                subtasks.append(pickplace_task) 
-        
+                subtasks.append(PickPlaceTask(object_name, object_target, object_position, target_position))
+
         return subtasks
+
+    def reset(self):
+        if self.random_shuffle_object:
+            self.object_names = random.sample(self.object_names, len(self.object_names))
+            # print(f"reset: {self.object_names}")
+        if self.random_tray:
+            self.tray_position = np.random.uniform(
+                low=self.tray_position_low, high=self.tray_position_high)
+        
+        bullet.reset()
+        bullet.setup_headless()
+        self._load_meshes()
+        bullet.reset_robot(
+            self.robot_id,
+            self.reset_joint_indices,
+            self.reset_joint_values)
+        self.is_gripper_open = True  # TODO(avi): Clean this up
+
+        self.subtasks = self.generate_tasks()
+
+        return self.get_observation()
+
+    def get_info(self):
+        info = AttrDict()
+
+        # check whether target object is grasped
+        if hasattr(self.current_subtask, "object"):
+            info.grasp_success = object_utils.check_grasp(self.current_subtask.object,
+                                                          self.objects, self.robot_id,
+                                                          self.end_effector_index, self.grasp_success_height_threshold,
+                                                          self.grasp_success_object_gripper_threshold)
+
+        # check whether target object is placed in target container
+        if hasattr(self.current_subtask, "target_pos"):
+            info.place_success = object_utils.check_in_container(self.current_subtask.object,
+                                                                 self.objects, self.current_subtask.target_pos,
+                                                                 self.place_success_height_threshold,
+                                                                 self.place_success_radius_threshold)
+
+        # check whether drawer is opened
+        info.drawer_opened_percentage = self.get_drawer_opened_percentage()
+        info.drawer_opened = info.drawer_opened_percentage > self.drawer_opened_success_thresh
+        info.drawer_closed = info.drawer_opened_percentage < self.drawer_closed_success_thresh
+
+        return info
+
+    def get_reward(self, info):
+        reward, done = 0., False
+        while self.current_subtask.done(info):
+            reward += self.current_subtask.REWARD
+            if self.subtasks:
+                # still subtasks remaining --> switch to the next subtask
+                self.subtasks.pop(0)
+            else:
+                # all subtasks solved --> terminate episode
+                done = True
+                break
+        return reward, done
+    
+    def step(self, action):
+        obs, reward, done, info = super().step(action)
+        reward, done = reward   # this is slightly hacky since get_reward() outputs both for this class
+        return self.get_observation(), reward, done, info
 
     def get_target_position(self, object_target):
         if object_target == 'container':
@@ -185,9 +210,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         elif object_target == 'tray':
             return self.tray_position
         elif object_target == 'drawer_top':
-            return list(self.top_drawer_position) 
+            return list(self.top_drawer_position)
         elif object_target == 'drawer_inside':
-            return list(self.inside_drawer_position) 
+            return list(self.inside_drawer_position)
         else:
             raise NotImplementedError
 
@@ -199,14 +224,14 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                     self.container_position_low, self.container_position_high,
                     min_distance_large_obj=self.min_distance_from_object,
                 )
-        else: 
+        else:
             container_position, object_positions = \
                 object_utils.generate_multiple_object_positions(
                     self.object_position_low, self.object_position_high,
                     self.container_position_low, self.container_position_high,
                     drawer_pos=self.drawer_pos,
                     num_objects=self.num_objects,
-                    min_distance_drawer = self.min_distance_drawer,
+                    min_distance_drawer=self.min_distance_drawer,
                     min_distance_container=self.min_distance_container,
                     min_distance_obj=self.min_distance_obj
                 )
@@ -240,15 +265,14 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
         self.container_position, self.original_object_positions = self.generate_objects_positions()
 
-
         self.container_position[-1] = self.container_position_z
         self.container_id = object_utils.load_object(self.container_name,
                                                      self.container_position,
                                                      self.container_orientation,
-                                                     self.container_scale)  
-        
+                                                     self.container_scale)
+
         bullet.step_simulation(self.num_sim_steps_reset)
-        
+
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
             self.objects[object_name] = object_utils.load_object(
@@ -257,48 +281,15 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 object_quat=self.object_orientations[object_name],
                 scale=self.object_scales[object_name])
             bullet.step_simulation(self.num_sim_steps_reset)
-    
+
     def get_drawer_handle_pos(self):
         handle_pos = object_utils.get_drawer_handle_pos(
             self.objects["drawer"])
         return handle_pos
 
-
-    def reset(self):
-        if self.random_shuffle_object:
-            self.object_names = random.sample(self.object_names, len(self.object_names))
-            # print(f"reset: {self.object_names}")
-        if self.random_tray:
-            self.tray_position = np.random.uniform(
-                low=self.tray_position_low, high=self.tray_position_high)
-        
-        bullet.reset()
-        bullet.setup_headless()
-        self._load_meshes()
-        bullet.reset_robot(
-            self.robot_id,
-            self.reset_joint_indices,
-            self.reset_joint_values)
-        self.is_gripper_open = True  # TODO(avi): Clean this up
-
-        self.complete_tasks = 0
-        self.subtasks = self.generate_tasks()
-        self.current_task = self.subtasks.pop(0)
-
-        return self.get_observation()
-
-    # def get_inside_drawer_pos(self):
-    #     obj_pos_high = np.array(self.drawer_pos[:2] + (-.2,)) \
-    #                    + (1 - 2 * (not self.left_opening)) * np.array((0.12, 0, 0))
-    #     obj_pos_low = np.array(self.drawer_pos[:2] + (-.2,)) \
-    #         - (1 - 2 * (not self.left_opening)) * np.array((-0.12, 0, 0))
-       
-        return 0.5 * (obj_pos_high + obj_pos_low)
-
     def is_drawer_open(self):
         # refers to bottom drawer in the double drawer case
         open_percentage = self.get_drawer_opened_percentage()
-        
         return open_percentage > self.drawer_opened_success_thresh
 
     def get_drawer_opened_percentage(self, drawer_key="drawer"):
@@ -313,192 +304,19 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             self.objects[drawer_key])
         return drawer_pos
 
-    def get_reward(self, info):
-        # if current
-        if self.reward_type == 'pick_place':
-            reward = float(info['place_success_target'])
-        elif self.reward_type == 'grasp':
-            reward = float(info['grasp_success_target'])
-        else:
-            raise NotImplementedError
-        return reward
-
-    def get_info(self):
-        object_name = self.current_task.info.object_name
-        object_target = self.current_task.info.object_target
-        
-        info = AttrDict()
-        info["reward"] = False
-        info['grasp_success'] = False
-        grasp_success = object_utils.check_grasp(
-            object_name, self.objects, self.robot_id,
-            self.end_effector_index, self.grasp_success_height_threshold,
-            self.grasp_success_object_gripper_threshold)
-        if grasp_success:
-            info['grasp_success'] = True
-        info['grasp_success_target'] = object_utils.check_grasp(
-            object_name, self.objects, self.robot_id,
-            self.end_effector_index, self.grasp_success_height_threshold,
-            self.grasp_success_object_gripper_threshold)
-
-        if self.current_task.type == "drawer_open" or self.current_task.type == "drawer_close":
-            info['drawer_x_pos'] = self.get_drawer_pos()[0]
-            info['drawer_opened_percentage'] = \
-                self.get_drawer_opened_percentage()
-            info['drawer_closed_percentage'] = \
-                1 - self.get_drawer_opened_percentage()
-            info['drawer_opened_success'] = info["drawer_opened_percentage"] > \
-                self.drawer_opened_success_thresh
-            info['drawer_closed_success'] = info["drawer_opened_percentage"] < \
-                self.drawer_closed_success_thresh
-
-            if self.current_task.type == "drawer_open":
-                if info['drawer_opened_success']:
-                    info.reward = True
-                    self.current_task.info.done = True
-            elif self.current_task.type == "drawer_close":
-                if info['drawer_closed_success']:
-                    info.reward = True
-                    self.current_task.info.done = True
-        else:
-            target_position = self.current_task.info.target_position
-            info['place_success_target'] = object_utils.check_in_container(
-                object_name, self.objects, target_position,
-                self.place_success_height_threshold,
-                self.place_success_radius_threshold)
-            
-            if self.current_task.type == "pickplace":
-                if info['place_success_target']:
-                    info.reward = True
-                    self.current_task.info.done = True
-            
-        return info
-    
     def is_drawer_closed(self):
         info = self.get_info()
         return info['drawer_closed_success']
-    
-    def step(self, action):
 
-        # TODO Clean this up
-        if np.isnan(np.sum(action)):
-            print('action', action)
-            raise RuntimeError('Action has NaN entries')
+    @property
+    def current_subtask(self):
+        return self.subtasks[0]
 
-        action = np.clip(action, -1, +1)  # TODO Clean this up
-
-        xyz_action = action[:3]  # ee position actions
-        abc_action = action[3:6]  # ee orientation actions
-        gripper_action = action[6]
-        neutral_action = action[7]
-
-        ee_pos, ee_quat = bullet.get_link_state(
-            self.robot_id, self.end_effector_index)
-        joint_states, _ = bullet.get_joint_states(self.robot_id,
-                                                  self.movable_joints)
-        gripper_state = np.asarray([joint_states[-2], joint_states[-1]])
-
-        target_ee_pos = ee_pos + self.xyz_action_scale * xyz_action
-        ee_deg = bullet.quat_to_deg(ee_quat)
-        target_ee_deg = ee_deg + self.abc_action_scale * abc_action
-        target_ee_quat = bullet.deg_to_quat(target_ee_deg)
-
-        if self.control_mode == 'continuous':
-            num_sim_steps = self.num_sim_steps
-            target_gripper_state = gripper_state + \
-                                   [-self.gripper_action_scale * gripper_action,
-                                    self.gripper_action_scale * gripper_action]
-
-        elif self.control_mode == 'discrete_gripper':
-            if gripper_action > 0.5 and not self.is_gripper_open:
-                num_sim_steps = self.num_sim_steps_discrete_action
-                target_gripper_state = GRIPPER_OPEN_STATE
-                self.is_gripper_open = True  # TODO(avi): Clean this up
-
-            elif gripper_action < -0.5 and self.is_gripper_open:
-                num_sim_steps = self.num_sim_steps_discrete_action
-                target_gripper_state = GRIPPER_CLOSED_STATE
-                self.is_gripper_open = False  # TODO(avi): Clean this up
-            else:
-                num_sim_steps = self.num_sim_steps
-                if self.is_gripper_open:
-                    target_gripper_state = GRIPPER_OPEN_STATE
-                else:
-                    target_gripper_state = GRIPPER_CLOSED_STATE
-                # target_gripper_state = gripper_state
-        else:
-            raise NotImplementedError
-
-        target_ee_pos = np.clip(target_ee_pos, self.ee_pos_low,
-                                self.ee_pos_high)
-        target_gripper_state = np.clip(target_gripper_state, GRIPPER_LIMITS_LOW,
-                                       GRIPPER_LIMITS_HIGH)
-        # import pdb; pdb.set_trace()
-
-        bullet.apply_action_ik(
-            target_ee_pos, target_ee_quat, target_gripper_state,
-            self.robot_id,
-            self.end_effector_index, self.movable_joints,
-            lower_limit=JOINT_LIMIT_LOWER,
-            upper_limit=JOINT_LIMIT_UPPER,
-            rest_pose=RESET_JOINT_VALUES,
-            joint_range=JOINT_RANGE,
-            num_sim_steps=num_sim_steps)
-
-        if self.use_neutral_action and neutral_action > 0.5:
-            if self.neutral_gripper_open:
-                bullet.move_to_neutral(
-                    self.robot_id,
-                    self.reset_joint_indices,
-                    RESET_JOINT_VALUES)
-            else:
-                bullet.move_to_neutral(
-                    self.robot_id,
-                    self.reset_joint_indices,
-                    RESET_JOINT_VALUES_GRIPPER_CLOSED)
-
-        info = self.get_info()
-        if self.current_task.info.done:
-            self.complete_tasks += 1
-            if self.complete_tasks < 5:
-                self.current_task = self.subtasks.pop(0)
-        info["complete_tasks"] = self.complete_tasks
-        # print(f"complete tasks{self.complete_tasks}")
-
-        reward = self.complete_tasks
-        done = False
-        return self.get_observation(), reward, done, info
 
 if __name__ == "__main__":
-
-    # Fixed container position
-    env = Widow250TableEnv(
-        gui=True,
-    )
-
-    # env = Widow250PickPlaceEnv(
-    #     reward_type='pick_place',
-    #     control_mode='discrete_gripper',
-    #     object_names=('shed',),
-    #     object_scales=(0.7,),
-    #     target_object='shed',
-    #     load_tray=False,
-    #     object_position_low=(.5, .18, -.25),
-    #     object_position_high=(.7, .27, -.25),
-    #
-    #     container_name='bowl_small',
-    #     container_position_low=(.5, 0.26, -.25),
-    #     container_position_high=(.7, 0.26, -.25),
-    #     container_orientation=(0, 0, 0.707107, 0.707107),
-    #     container_scale=0.07,
-    #
-    #     camera_distance=0.29,
-    #     camera_target_pos=(0.6, 0.2, -0.28),
-    #     gui=True
-    # )
-    import time
-    for _ in range(10):
-        env.reset()
-        for _ in range(5):
-            env.step(env.action_space.sample()*0.1)
-            time.sleep(0.1)
+    env = Widow250TableEnv(gui=True)
+    env.reset()
+    done = False
+    while not done:
+        obs, reward, done, info = env.step(env.action_space.sample()*0.1)
+        print(info)
