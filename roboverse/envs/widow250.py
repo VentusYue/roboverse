@@ -17,12 +17,6 @@ JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
 
 JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
 
-# JOINT_LIMIT_LOWER = [-3.14, -3.14, -3.14, -3.14, -2.14, -3.14, -3.14, 0.015,
-#                      -0.037]
-
-# JOINT_LIMIT_UPPER = [3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 0.037, -0.015]
-
-
 JOINT_RANGE = []
 for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
     JOINT_RANGE.append(upper - lower)

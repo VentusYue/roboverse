@@ -14,3 +14,10 @@ class AttrDict(dict):
 
     def __setstate__(self, d):
         self = d
+
+
+a = AttrDict()
+a["type"] = AttrDict()
+a.type.name = "alpha"
+
+print(a.type["name"])
