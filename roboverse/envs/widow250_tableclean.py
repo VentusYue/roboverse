@@ -71,7 +71,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
                 tray_position_high=(0.9, 0., -.35), # (.7, .27, -.35)
                 tray_position_low=(0.8, -0.2, -.35),
                 
-                xyz_action_scale = 0.3,
+                base_position_high=(0.6, 0.0, -0.4), # (.7, .27, -.35)
+                base_position_low=(0.6, -0.0, -0.4),
+                base_position=(0.6, -0.0, -0.4),
+                random_base = False,
+                
+                xyz_action_scale = 0.7,
                 random_shuffle_object = True,
                 random_shuffle_target = True,
                 random_tray = False,
@@ -90,6 +95,13 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.random_tray:
             self.tray_position = np.random.uniform(
                 low=self.tray_position_low, high=self.tray_position_high)
+        self.random_base = random_base
+        self.base_position = base_position
+        self.base_position_high = base_position_high
+        self.base_position_low = base_position_low
+        if self.random_base:
+            self.base_position = np.random.uniform(
+                low=self.base_position_low, high=self.base_position_low)
         self.drawer_pos = drawer_pos
         self.drawer_quat = drawer_quat
         self.left_opening = left_opening
@@ -120,10 +132,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.min_distance_obj = min_distance_obj
         self.min_distance_container = min_distance_container
 
+        self.xyz_action_scale = xyz_action_scale
         self.fixed_init_pos = fixed_init_pos
-
         self.subtasks = None
-
         super(Widow250TableEnv, self).__init__(
             object_names=object_names,
             target_object=target_object,
@@ -157,7 +168,9 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         if self.random_tray:
             self.tray_position = np.random.uniform(
                 low=self.tray_position_low, high=self.tray_position_high)
-        
+        if self.random_base:
+            self.base_position = np.random.uniform(
+                low=self.base_position_low, high=self.base_position_low)
         bullet.reset()
         bullet.setup_headless()
         self._load_meshes()

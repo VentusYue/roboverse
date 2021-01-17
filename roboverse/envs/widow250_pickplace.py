@@ -20,7 +20,6 @@ class Widow250PickPlaceEnv(Widow250Env):
                  **kwargs
                  ):
         self.container_name = container_name
-
         container_config = CONTAINER_CONFIGS[self.container_name]
         self.fixed_container_position = fixed_container_position
         if self.fixed_container_position:

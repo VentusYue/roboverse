@@ -26,7 +26,7 @@ def table():
 
     table_id = p.loadURDF(table_path,
                         #   basePosition=[.75, -.2, -1],
-                          basePosition=[.65, -.2, -1],
+                          basePosition=[.63, -.23, -1],
 
                           baseOrientation=[0, 0, 0.707107, 0.707107],
                           globalScaling=1.0)
@@ -43,11 +43,14 @@ def tray(base_position=(.60, 0.3, -.37), scale=0.5):
     return tray_id
 
 
-def widow250():
+def widow250(basePosition=[0.6, 0.0, -0.4]):
     widow250_path = os.path.join(ASSET_PATH,
                                  'interbotix_descriptions/urdf/wx250s.urdf')
     widow250_id = p.loadURDF(widow250_path,
-                             basePosition=[0.6, 0, -0.4],
+                            #  basePosition=[0.6, 0, -0.4],
+                            #  basePosition=[0.6, 0, -0.4],
+                             basePosition=basePosition,
+
                              baseOrientation=bullet.deg_to_quat([0., 0., 0])
                              )
     return widow250_id

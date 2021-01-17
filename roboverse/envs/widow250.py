@@ -46,7 +46,6 @@ class Widow250Env(gym.Env, Serializable):
                  object_position_low=(.5, .18, -.35),
                  target_object='gatorade',
                  load_tray=True,
-
                  num_sim_steps=10,
                  num_sim_steps_reset=50,
                  num_sim_steps_discrete_action=75,

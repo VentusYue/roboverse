@@ -1469,8 +1469,11 @@ ENVIRONMENT_SPECS = (
                     'random_shuffle_object': True,
                     'random_shuffle_target': False,
 
-
-                   'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+                    'base_position_high': (0.63, 0.01, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.57, -0.01, -0.4),
+                    'base_position': (0.6, 0.0, -0.4),
+                    'random_base': True,
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
                    }
     },
