@@ -82,6 +82,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
             # if is_opened and is_closed:
             #     info['table_clean'] = True
             # print(f"closed? {info['drawer_closed_success']} open? {info['drawer_opened_success']}")
+            print(f"current finished tasks: {reward}")
             if reward > 4 and num_steps < 0:
                 num_steps = j
             if reward > 4 :

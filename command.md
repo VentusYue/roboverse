@@ -53,4 +53,4 @@ python scripts/scripted_collect_parallel.py -p 8 -n 16000 -t 30 -e Widow250PickP
 
 python scripts/scripted_collect_parallel.py -p 8 -n 16000 -t 50 -e Widow250DrawerOpen-v0 -pl drawer_open -a drawer_opened_success --noise=0.1 -d draweropen
 
-python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 
+python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 --gui
