@@ -72,17 +72,6 @@ def collect_one_traj(env, policy, num_timesteps, noise,
                        done, next_observation, img_dim, image_rendered)
         
         if accept_trajectory_key == 'table_clean':
-            # import pdb; pdb.set_trace()
-            # info['table_clean'] = info.reward
-            # if info['drawer_opened_success']:
-            #     is_opened = True
-            # if is_opened:
-            #     if info['drawer_closed_success']:
-            #         is_closed = True
-            # if is_opened and is_closed:
-            #     info['table_clean'] = True
-            # print(f"closed? {info['drawer_closed_success']} open? {info['drawer_opened_success']}")
-            print(f"current finished tasks: {reward}")
             if reward > 4 and num_steps < 0:
                 num_steps = j
             if reward > 4 :
