@@ -72,7 +72,8 @@ def collect_one_traj(env, policy, num_timesteps, noise,
                        done, next_observation, img_dim, image_rendered)
         
         if accept_trajectory_key == 'table_clean':
-            info['table_clean'] = info.reward
+            # import pdb; pdb.set_trace()
+            # info['table_clean'] = info.reward
             # if info['drawer_opened_success']:
             #     is_opened = True
             # if is_opened:
@@ -81,11 +82,15 @@ def collect_one_traj(env, policy, num_timesteps, noise,
             # if is_opened and is_closed:
             #     info['table_clean'] = True
             # print(f"closed? {info['drawer_closed_success']} open? {info['drawer_opened_success']}")
-
-        if info[accept_trajectory_key] and num_steps < 0:
-            num_steps = j
-        if info[accept_trajectory_key]:
-            success = True
+            if reward > 4 and num_steps < 0:
+                num_steps = j
+            if reward > 4 :
+                success = True
+        else:
+            if info[accept_trajectory_key] and num_steps < 0:
+                num_steps = j
+            if info[accept_trajectory_key]:
+                success = True
 
         rewards.append(reward)
         if done or agent_info['done']:
@@ -203,7 +208,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--target-object", type=str)
     parser.add_argument("-d", "--save-directory", type=str, default=""),
     parser.add_argument("--noise", type=float, default=0.1)
-    parser.add_argument("-r", "--image-rendered", type=int, default=1)
+    parser.add_argument("-r", "--image-rendered", type=int, default=0)
     
     args = parser.parse_args()
 

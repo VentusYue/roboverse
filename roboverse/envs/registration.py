@@ -25,8 +25,8 @@ ENVIRONMENT_SPECS = (
                    'object_scales': (0.7,),
                    'load_tray': False,
                    'xyz_action_scale': 0.2,
-                   'object_position_high': (.6, .2, -.30),
-                   'object_position_low': (.6, .2, -.30),
+                   'object_position_high': (.7, .3, -.30),
+                   'object_position_low': (.7, .3, -.30),
                    }
     },
     {
@@ -163,7 +163,7 @@ ENVIRONMENT_SPECS = (
                    'object_position_low': (.49, .18, -.30),
                    'object_position_high': (.59, .27, -.30),
 
-                   'container_name': 'bowl_small',
+                   'container_name': 'plate',
 
 
                    }
@@ -833,6 +833,8 @@ ENVIRONMENT_SPECS = (
                    'object_scales': (0.75,),
                    'target_object': 'ball',
                    'load_tray': False,
+                   'start_opened': False,
+
                    }
     },
     {
