@@ -51,7 +51,7 @@ class Widow250Env(gym.Env, Serializable):
                  num_sim_steps_discrete_action=75,
 
                  reward_type='grasping',
-                 grasp_success_height_threshold=-0.25,
+                 grasp_success_height_threshold=-0.3,
                  grasp_success_object_gripper_threshold=0.1,
 
                  use_neutral_action=False,

@@ -54,7 +54,7 @@ def check_grasp(object_name,
         if object_gripper_distance < \
                 grasp_success_object_gripper_threshold:
             success = True
-
+    # print(f"object_height: {object_height}, height_thresh: {grasp_success_height_threshold}, gripper_distance: {object_gripper_distance}, gripper_thresh: {grasp_success_object_gripper_threshold}")
     return success
 
 

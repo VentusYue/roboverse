@@ -10,7 +10,7 @@ from roboverse.utils.general_utils import AttrDict
 import os.path as osp
 import numpy as np
 import random
-from roboverse.envs.tasks import PickPlaceTask, DrawerOpenTask, DrawerClosedTask
+from roboverse.envs.tasks import PickPlaceTask, DrawerOpenTask, DrawerClosedTask, PickTask, PlaceTask
 
 
 OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
@@ -154,10 +154,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
             target_position = self.get_target_position(object_target)
             if object_target == 'drawer_inside':
                 subtasks += [DrawerOpenTask(),
-                             PickPlaceTask(object_name, object_target, object_position, target_position),
+                             PickTask(object_name, object_target, object_position, target_position),
+                             PlaceTask(object_name, object_target, object_position, target_position),
                              DrawerClosedTask()]
             else:
-                subtasks.append(PickPlaceTask(object_name, object_target, object_position, target_position))
+                subtasks += [PickTask(object_name, object_target, object_position, target_position),
+                             PlaceTask(object_name, object_target, object_position, target_position)]
 
         return subtasks
 
@@ -204,7 +206,7 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         info.drawer_opened_percentage = self.get_drawer_opened_percentage()
         info.drawer_opened = info.drawer_opened_percentage > self.drawer_opened_success_thresh
         info.drawer_closed = info.drawer_opened_percentage < self.drawer_closed_success_thresh
-
+        
         return info
 
     def get_reward(self, info):

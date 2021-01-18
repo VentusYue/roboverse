@@ -35,15 +35,11 @@ class PickTask(Task):
         self._target_pos = target_pos
 
     def done(self, info):
-        return info['pick_success']
+        return info['grasp_success']
 
     @property
     def object(self):
         return self._object
-
-    @property
-    def target_pos(self):
-        return self._target_pos
 
 class PlaceTask(Task):
     def __init__(self, object, target_object, pos, target_pos):

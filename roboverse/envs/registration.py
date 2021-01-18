@@ -1513,10 +1513,10 @@ ENVIRONMENT_SPECS = (
                     'random_shuffle_target': False,
 
                     'fixed_init_pos': (
-                        np.array([0.8, 0.2150884, -0.3]),       # container position
-                        [np.array([0.50155886, 0.18911798, -0.35]),     # object positions
-                         np.array([0.58142767, 0.26530258, -0.35]),
-                         np.array([0.6662941, 0.18618271, -0.35])]
+                        np.array([0.8, 0.23837455, -0.3]),       # container position
+                        [np.array([0.5096847 ,  0.19509713, -0.35]),     # object positions
+                         np.array([0.60079058,  0.2650282 , -0.35]),
+                         np.array([0.69213048,  0.18794259, -0.35])]
                     ),
 
 
