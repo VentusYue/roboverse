@@ -181,7 +181,6 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.is_gripper_open = True  # TODO(avi): Clean this up
 
         self.subtasks = self.generate_tasks()
-        self.reward = 0
         return self.get_observation()
 
     def get_info(self):
@@ -209,10 +208,11 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         return info
 
     def get_reward(self, info):
+        reward = 0.
         if self.current_subtask.done(info):
-            self.reward += self.current_subtask.REWARD
+            reward += self.current_subtask.REWARD
             self.subtasks.pop(0)        # switch to the next subtask
-        return self.reward
+        return reward
     
     def step(self, action):
         obs, reward, _, info = super().step(action)

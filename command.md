@@ -39,6 +39,10 @@ python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3Ra
 
 <!-- # table clean 4 objects random, take too much time to generate
 python scripts/scripted_collect.py -n 100 -t 400 -e Widow250TableCleanObjects4Random-v0 -pl tableclean -a table_clean --noise=0.1 --gui -->
+python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 --gui
+
+python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3FixedNoimage-v0 -pl tableclean -a table_clean --noise=0.1 --gui
+
 
 # table clean 3 objects random parallel, render image
 python scripts/scripted_collect_parallel.py -p 32 -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 -d data 
