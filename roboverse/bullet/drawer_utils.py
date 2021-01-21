@@ -52,7 +52,6 @@ def slide_drawer(drawer, direction, half_slide=False):
     drawer_frame_joint_idx = get_drawer_base_joint(drawer)
 
     num_ts = np.random.randint(low=57, high=61)
-
     if half_slide:
         num_ts = int(num_ts / 2)
 
@@ -81,6 +80,5 @@ def slide_drawer(drawer, direction, half_slide=False):
         targetVelocity=0,
         force=5
     )
-
     control.step_simulation(num_ts)
     return drawer_pos

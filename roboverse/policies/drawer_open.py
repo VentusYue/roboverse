@@ -26,12 +26,14 @@ class DrawerOpen:
         self.handle_offset = np.array([offset_coeff * 0.01, 0.0, -0.0]) #-0.01
 
     def get_action(self):
+
         ee_pos, _ = bullet.get_link_state(
             self.env.robot_id, self.env.end_effector_index)
         handle_pos = self.env.get_drawer_handle_pos() + self.handle_offset
         gripper_handle_dist = np.linalg.norm(handle_pos - ee_pos)
         gripper_handle_xy_dist = np.linalg.norm(handle_pos[:2] - ee_pos[:2])
         done = False
+        # print(f"gripper_handle_xy_dist: {gripper_handle_xy_dist}")
         if (gripper_handle_xy_dist > self.gripper_xy_dist_thresh
                 and not self.env.is_drawer_open()):
             # print('xy - approaching handle')
@@ -54,6 +56,9 @@ class DrawerOpen:
             action_gripper = [0.0]
         elif (np.abs(ee_pos[2] - self.ending_height_thresh) >
                 self.gripper_dist_thresh):
+            
+            # print("return")
+            
             if (np.abs(ee_pos[2] - self.ending_height_thresh) < self.return_base_thresh):
                 action_xyz = [0., 0., 0.]
                 action_angles = [0., 0., 0.]
@@ -69,7 +74,7 @@ class DrawerOpen:
             action_xyz = [0., 0., 0.]
             action_angles = [0., 0., 0.]
             action_gripper = [0.0]
-
+        
         # if done:
         #     if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
         #         self.done = done

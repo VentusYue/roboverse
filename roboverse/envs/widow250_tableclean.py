@@ -272,14 +272,12 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
         opened_drawer_x_pos = object_utils.close_drawer(
             self.objects['drawer'])[0]
-
         if self.left_opening:
             self.drawer_min_x_pos = closed_drawer_x_pos
             self.drawer_max_x_pos = opened_drawer_x_pos
         else:
             self.drawer_min_x_pos = opened_drawer_x_pos
             self.drawer_max_x_pos = closed_drawer_x_pos
-
         if self.start_opened:
             object_utils.open_drawer(self.objects['drawer'])
 
