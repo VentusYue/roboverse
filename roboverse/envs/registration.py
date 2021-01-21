@@ -1580,8 +1580,8 @@ ENVIRONMENT_SPECS = (
                 #    'num_containers': 2,
                     'observation_mode': 'noimage',
 
-                    'drawer_pos': (0.3, 0.3, -.35),
-                    # 'drawer_pos': (0.35, 0.2, -.35),
+                    # 'drawer_pos': (0.3, 0.3, -.35),
+                    'drawer_pos': (0.3, 0.23, -.35),
                     'start_opened': False,
                     'num_objects': 3,
                     'object_names': ('gatorade', 'pepsi_bottle', 'shed',  ),
@@ -1604,7 +1604,7 @@ ENVIRONMENT_SPECS = (
 
                     'fixed_init_pos': (
                         np.array([0.8, 0.23837455, -0.3]),       # container position
-                        [np.array([0.3096847 ,  0.289713, -0.35]),     # object positions
+                        [np.array([0.5096847 ,  0.229713, -0.35]),     # object positions
                          np.array([0.60079058,  0.2650282 , -0.35]),
                          np.array([0.69213048,  0.18794259, -0.35])]
                     ),
@@ -1626,8 +1626,8 @@ ENVIRONMENT_SPECS = (
                 #    'num_containers': 2,
                     'observation_mode': 'noimage',
 
-                    'drawer_pos': (0.14, 0.1, -.35),
-                    # 'drawer_pos': (0.35, 0.2, -.35),
+                    # 'drawer_pos': (0.14, 0.1, -.35),
+                    'drawer_pos': (0.35, 0.2, -.35),
                     'start_opened': False,
                     'num_objects': 3,
                     'object_names': ('gatorade', 'shed', 'pepsi_bottle',  ),

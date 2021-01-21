@@ -37,6 +37,8 @@ python scripts/scripted_collect.py -n 100 -t 250 -e Widow250TableCleanObjects2Ra
 # table clean 3 objects random 
 python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3Random-v2 -pl tableclean -a table_clean --noise=0.1 
 
+python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanFixedTest-v0 -pl tableclean -a table_clean --noise=0.1 --gui
+
 <!-- # table clean 4 objects random, take too much time to generate
 python scripts/scripted_collect.py -n 100 -t 400 -e Widow250TableCleanObjects4Random-v0 -pl tableclean -a table_clean --noise=0.1 --gui -->
 python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3RandomNoimage-v0 -pl tableclean -a table_clean --noise=0.1 --gui
