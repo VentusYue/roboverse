@@ -37,8 +37,6 @@ def table():
 def tray(base_position=(.60, 0.3, -.37), scale=0.5):
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     tray_id = p.loadURDF(
-                        # 'spam/spam.urdf',
-
                         'tray/tray.urdf',
                          basePosition=base_position,
                          baseOrientation=[0, 0, 0.707107, 0.707107],

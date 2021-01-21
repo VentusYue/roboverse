@@ -259,7 +259,7 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
 
     def _load_meshes(self):
         self.table_id = objects.table()
-        self.robot_id = objects.widow250()
+        self.robot_id = objects.widow250(self.base_position)
         self.objects = {}
         if self.load_tray:
             self.tray_id = objects.tray(base_position=self.tray_position, scale=0.3)

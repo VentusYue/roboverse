@@ -1627,7 +1627,9 @@ ENVIRONMENT_SPECS = (
                     'observation_mode': 'noimage',
 
                     # 'drawer_pos': (0.14, 0.1, -.35),
-                    'drawer_pos': (0.35, 0.2, -.35),
+                    # 'drawer_pos': (0.35, 0.2, -.35),
+                    'drawer_pos': (0.3, 0.23, -.35),
+
                     'start_opened': False,
                     'num_objects': 3,
                     'object_names': ('gatorade', 'shed', 'pepsi_bottle',  ),
@@ -1654,10 +1656,10 @@ ENVIRONMENT_SPECS = (
                     'random_shuffle_object': True,
                     'random_shuffle_target': False,
 
-                    'base_position_high': (0.63, 0.01, -0.4), # (.7, .27, -.35)
-                    'base_position_low': (0.57, -0.01, -0.4),
+                    'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.57, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
-                    'random_base': False,
+                    'random_base': True,
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
                    }
