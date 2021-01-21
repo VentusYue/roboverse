@@ -55,6 +55,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
     )
     is_opened = False
     is_closed = False
+    total_reward = 0
     for j in range(num_timesteps):
 
         action, agent_info = policy.get_action()
@@ -70,11 +71,11 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         # import pdb; pdb.set_trace()
         add_transition(traj, observation,  action, reward, info, agent_info,
                        done, next_observation, img_dim, image_rendered)
-        
+        total_reward += reward
         if accept_trajectory_key == 'table_clean':
-            if reward > 4 and num_steps < 0:
+            if total_reward > 6 and num_steps < 0:
                 num_steps = j
-            if reward > 4 :
+            if total_reward > 6 :
                 success = True
         else:
             if info[accept_trajectory_key] and num_steps < 0:

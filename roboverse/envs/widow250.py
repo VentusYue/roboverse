@@ -52,7 +52,7 @@ class Widow250Env(gym.Env, Serializable):
 
                  reward_type='grasping',
                  grasp_success_height_threshold=-0.3,
-                 grasp_success_object_gripper_threshold=0.1,
+                 grasp_success_object_gripper_threshold=0.2,
 
                  use_neutral_action=False,
                  neutral_gripper_open=True,
