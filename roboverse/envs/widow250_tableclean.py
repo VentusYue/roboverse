@@ -258,8 +258,17 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         return container_position, object_positions
 
     def _load_meshes(self):
-        self.table_id = objects.table()
+        # self.table_id = objects.table()
+        self.officedesk_id = objects.officedesk()
+
         self.robot_id = objects.widow250(self.base_position)
+
+        self.monitor_id = objects.monitor()
+        self.books_id = objects.books()
+        self.laptop_id = objects.laptop()
+        self.lamp_id = objects.lamp()
+
+
         self.objects = {}
         if self.load_tray:
             self.tray_id = objects.tray(base_position=self.tray_position, scale=0.3)
