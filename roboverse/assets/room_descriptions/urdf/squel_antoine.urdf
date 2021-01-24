@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="Human_model">
+   <link name="Pelvis">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="8.4552"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 0 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/Pelvis.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="PelvisSacrum_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="PelvisSacrum_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="Sacrum">
+      <inertial>
+         <origin rpy="0 0 0" xyz="-0.0255 0.028333 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="-0.0255 0.028333 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/Sacrum.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="SacrumL5_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="SacrumL5_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L5">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0.0075556 0.013222 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0.0075556 0.013222 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/L5.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="L5L4_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L5L4_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L4">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0.0056667 0.016056 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0.0056667 0.016056 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/L4.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="L4L3_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L4L3_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L3">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0.00094444 0.017 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0.00094444 0.017 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/L3.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="L3L2_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L3L2_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="-0.00094444 0.015111 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="-0.00094444 0.015111 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/L2.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="L2L1_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L2L1_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="-0.0028333 0.015111 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="-0.0028333 0.015111 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/L1.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="L1Thorax_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="L1Thorax_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="Thorax">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0.035889 0.14072 0"/>
+         <mass value="19.8372"/>
+         <inertia ixx="-0.16485" ixy="0.25777" ixz="0.0015499" iyy="0.20309" iyz="-0.0061998" izz="-0.18263"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0.035889 0.14072 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/Thorax.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="ThoraxSkull_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="ThoraxSkull_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="Skull">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="4.2276"/>
+         <inertia ixx="0.0071027" ixy="-0.00059867" ixz="-2.9564e-05" iyy="0.0046194" iyz="6.6519e-05" izz="0.0080488"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 0 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/Skull.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RHip_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RHip_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RThigh">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.18606 0.035889"/>
+         <mass value="7.3797"/>
+         <inertia ixx="0.11501" ixy="0.0067008" ixz="-0.000547" iyy="0.030769" iyz="-0.0067008" izz="0.12308"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.18606 0.035889"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RThigh.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RShank">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.18813 0"/>
+         <mass value="2.8801"/>
+         <inertia ixx="0.042617" ixy="-0.00086974" ixz="-0.00021743" iyy="0.0054359" iyz="0.001359" izz="0.042617"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.18813 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RShank.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RAnkle_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RFootInter">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RFoot">
+      <inertial>
+         <origin rpy="0 0 0" xyz="-0.025972 -0.065875 0.018889"/>
+         <mass value="0.72029"/>
+         <inertia ixx="0.0035454" ixy="0.00043767" ixz="0" iyy="0.00074844" iyz="-0.00016575" izz="0.0033563"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="-0.025972 -0.065875 0.018889"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RFoot.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LHip_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LHip_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LThigh">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.18606 -0.035889"/>
+         <mass value="7.3797"/>
+         <inertia ixx="0.11501" ixy="0.0067008" ixz="-0.000547" iyy="0.030769" iyz="-0.0067008" izz="0.12308"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.18606 -0.035889"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LThigh.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LShank">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.18813 0"/>
+         <mass value="2.8801"/>
+         <inertia ixx="0.042617" ixy="-0.00086974" ixz="-0.00021743" iyy="0.0054359" iyz="0.001359" izz="0.042617"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.18813 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LShank.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LAnkle_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LFootInter">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LFoot">
+      <inertial>
+         <origin rpy="0 0 0" xyz="-0.025972 -0.065875 -0.018889"/>
+         <mass value="0.72029"/>
+         <inertia ixx="0.0035454" ixy="0.00043767" ixz="0" iyy="0.00074844" iyz="-0.00016575" izz="0.0033563"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="-0.025972 -0.065875 -0.018889"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LFoot.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RShoulder_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RShoulder_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RHumerus">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.1581 0"/>
+         <mass value="1.4399"/>
+         <inertia ixx="-0.022156" ixy="0.00051827" ixz="0.00035991" iyy="0.0028217" iyz="5.7586e-05" izz="-0.021249"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.1581 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RHumerus.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RElbow_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RForearm_Virtual">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.11352 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RForearm">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.11352 0"/>
+         <mass value="1.02"/>
+         <inertia ixx="-0.0082187" ixy="5.6551e-05" ixz="2.5134e-05" iyy="0.0007603" iyz="-0.00040214" izz="-0.0085643"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.11352 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RForearm.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="RWrist_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="RHand">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.049867 0"/>
+         <mass value="0.36011"/>
+         <inertia ixx="0.0036215" ixy="0.00058753" ixz="0.00027313" iyy="0.0017529" iyz="-0.00048556" izz="0.0029113"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.049867 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/RHand.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LShoulder_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LShoulder_J2">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LHumerus">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.1581 0"/>
+         <mass value="1.4399"/>
+         <inertia ixx="-0.022156" ixy="0.00051827" ixz="0.00035991" iyy="0.0028217" iyz="5.7586e-05" izz="-0.021249"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.1581 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LHumerus.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LElbow_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LForearm_Virtual">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.11352 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LForearm">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.11352 0"/>
+         <mass value="1.02"/>
+         <inertia ixx="-0.0082187" ixy="5.6551e-05" ixz="2.5134e-05" iyy="0.0007603" iyz="-0.00040214" izz="-0.0085643"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.11352 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LForearm.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="LWrist_J1">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+         <mass value="0"/>
+         <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
+   </link>
+   <link name="LHand">
+      <inertial>
+         <origin rpy="0 0 0" xyz="0 -0.049867 0"/>
+         <mass value="0.36011"/>
+         <inertia ixx="0.0036215" ixy="0.00058753" ixz="0.00027313" iyy="0.0017529" iyz="-0.00048556" izz="0.0029113"/>
+      </inertial>
+      <visual>
+         <origin>
+            <xyz xyz="0 -0.049867 0"/>
+            <rpy rpy="0 0 0"/>
+         </origin>
+         <geometry>
+            <mesh filename="package://room_description/meshes/LHand.stl"/>
+         </geometry>
+      </visual>
+   </link>
+   <joint name="PelvisSacrum_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Pelvis"/>
+      <child link="PelvisSacrum_J1"/>
+      <origin rpy="0 0 0" xyz="-0.010389 0.018889 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="PelvisSacrum_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="PelvisSacrum_J1"/>
+      <child link="PelvisSacrum_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="Sacrumj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="PelvisSacrum_J2"/>
+      <child link="Sacrum"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="SacrumL5_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Sacrum"/>
+      <child link="SacrumL5_J1"/>
+      <origin rpy="0 0 0" xyz="0.015111 0.023611 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="SacrumL5_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="SacrumL5_J1"/>
+      <child link="SacrumL5_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="L5j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="SacrumL5_J2"/>
+      <child link="L5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="L5L4_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L5"/>
+      <child link="L5L4_J1"/>
+      <origin rpy="0 0 0" xyz="0.0066111 0.030222 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="L5L4_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L5L4_J1"/>
+      <child link="L5L4_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="L4j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L5L4_J2"/>
+      <child link="L4"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="L4L3_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L4"/>
+      <child link="L4L3_J1"/>
+      <origin rpy="0 0 0" xyz="0 0.032111 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="L4L3_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L4L3_J1"/>
+      <child link="L4L3_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="L3j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L4L3_J2"/>
+      <child link="L3"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="L3L2_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L3"/>
+      <child link="L3L2_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0056667 0.031167 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="L3L2_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L3L2_J1"/>
+      <child link="L3L2_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="L2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L3L2_J2"/>
+      <child link="L2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="L2L1_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L2"/>
+      <child link="L2L1_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0094444 0.027389 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="L2L1_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L2L1_J1"/>
+      <child link="L2L1_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="L1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L2L1_J2"/>
+      <child link="L1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="L1Thorax_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L1"/>
+      <child link="L1Thorax_J1"/>
+      <origin rpy="0 0 0" xyz="-0.011333 0.029278 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="L1Thorax_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L1Thorax_J1"/>
+      <child link="L1Thorax_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="Thoraxj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="L1Thorax_J2"/>
+      <child link="Thorax"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="ThoraxSkull_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Thorax"/>
+      <child link="ThoraxSkull_J1"/>
+      <origin rpy="0 0 0" xyz="0.0037778 0.42122 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="ThoraxSkull_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="ThoraxSkull_J1"/>
+      <child link="ThoraxSkull_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="Skullj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="ThoraxSkull_J2"/>
+      <child link="Skull"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RHip_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Pelvis"/>
+      <child link="RHip_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0075556 -0.047222 0.075556"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="RHip_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RHip_J1"/>
+      <child link="RHip_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="RThighj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RHip_J2"/>
+      <child link="RThigh"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RShankj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RThigh"/>
+      <child link="RShank"/>
+      <origin rpy="0 0 0" xyz="-0.023611 -0.42972 0.0094444"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RAnkle_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RShank"/>
+      <child link="RAnkle_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.43444 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RFootj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RAnkle_J1"/>
+      <child link="RFoot"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="RFootInterj" type="fixed">
+      <parent link="RFoot"/>
+      <child link="RFootInter"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis rpy="0 0 1.5708"/>
+   </joint>
+   <joint name="LHip_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Pelvis"/>
+      <child link="LHip_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0075556 -0.047222 -0.075556"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="LHip_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LHip_J1"/>
+      <child link="LHip_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="LThighj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LHip_J2"/>
+      <child link="LThigh"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LShankj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LThigh"/>
+      <child link="LShank"/>
+      <origin rpy="0 0 0" xyz="-0.023611 -0.42972 -0.0094444"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LAnkle_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LShank"/>
+      <child link="LAnkle_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.43444 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LFootj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LAnkle_J1"/>
+      <child link="LFoot"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="LFootInterj" type="fixed">
+      <parent link="LFoot"/>
+      <child link="LFootInter"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis rpy="0 0 1.5708"/>
+   </joint>
+   <joint name="RShoulder_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Thorax"/>
+      <child link="RShoulder_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0026444 0.24452 0.18218"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="RShoulder_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RShoulder_J1"/>
+      <child link="RShoulder_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="RHumerusj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RShoulder_J2"/>
+      <child link="RHumerus"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RElbow_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RHumerus"/>
+      <child link="RElbow_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.3162 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RForearm_Virtualj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RHumerus"/>
+      <child link="RForearm_Virtual"/>
+      <origin rpy="0 0 0" xyz="0 -0.3162 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RForearmj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RElbow_J1"/>
+      <child link="RForearm"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="RWrist_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RForearm"/>
+      <child link="RWrist_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.2482 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="RHandj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="RWrist_J1"/>
+      <child link="RHand"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="LShoulder_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="Thorax"/>
+      <child link="LShoulder_J1"/>
+      <origin rpy="0 0 0" xyz="-0.0026444 0.24452 -0.18218"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+   <joint name="LShoulder_J2j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LShoulder_J1"/>
+      <child link="LShoulder_J2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="LHumerusj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LShoulder_J2"/>
+      <child link="LHumerus"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LElbow_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LHumerus"/>
+      <child link="LElbow_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.3162 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LForearm_Virtualj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LHumerus"/>
+      <child link="LForearm_Virtual"/>
+      <origin rpy="0 0 0" xyz="0 -0.3162 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LForearmj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LElbow_J1"/>
+      <child link="LForearm"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="0 1 0"/>
+   </joint>
+   <joint name="LWrist_J1j" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LForearm"/>
+      <child link="LWrist_J1"/>
+      <origin rpy="0 0 0" xyz="0 -0.2482 0"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+   <joint name="LHandj" type="revolute">
+      <limit effort="10" lower="-10" upper="10" velocity="10"/>
+      <parent link="LWrist_J1"/>
+      <child link="LHand"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <axis xyz="1 0 0"/>
+   </joint>
+</robot>

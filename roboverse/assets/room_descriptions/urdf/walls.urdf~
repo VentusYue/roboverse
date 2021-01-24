@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<robot name="walls">
+  <material name="White">
+    <color rgba="0.9 0.9 0.9 1"/>
+  </material>
+  <material name="Blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+  <material name="Red">
+    <color rgba="1 0 0 1"/>
+  </material>
+  <material name="Green">
+    <color rgba="0 1 0 1"/>
+  </material>
+  <material name="Gray">
+    <color rgba="0.6 0.6 0.6 1"/>
+  </material>
+  <material name="Black">
+    <color rgba="0.2 0.1 0.1 1"/>
+  </material>
+     
+  <link name="wall_base">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+      <geometry>
+        <box size="6 6 0.01"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="6 6 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="j_wall_one" type="fixed">
+    <parent link="wall_base"/>
+    <child link="l_wall_one"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_wall_one">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="3 0 1.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+      <material name="Blue"/>
+    </visual>
+    <collision>
+      <origin xyz="3 0 1.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+    </collision>
+  </link>
+  
+
+  <joint name="j_wall_two" type="fixed">
+    <parent link="wall_base"/>
+    <child link="l_wall_two"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_wall_two">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="-3 0 1.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+      <material name="White"/>
+    </visual>
+    <collision>
+      <origin xyz="-3 0 1.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_wall_three" type="fixed">
+    <parent link="wall_base"/>
+    <child link="l_wall_three"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_wall_three">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 3 1.5" rpy="0 0 1.57"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="0 3 1.5" rpy="0 0 1.57"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_wall_four" type="fixed">
+    <parent link="wall_base"/>
+    <child link="l_wall_four"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_wall_four">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -3 1.5" rpy="0 0 1.57"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+      <material name="Red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -3 1.5" rpy="0 0 1.57"/>
+      <geometry>
+        <box size=".01 6 3"/>
+      </geometry>
+    </collision>
+  </link>-
+</robot>

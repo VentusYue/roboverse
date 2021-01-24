@@ -160,13 +160,24 @@ class Widow250Env(gym.Env, Serializable):
 
     def _load_meshes(self):
         # self.table_id = objects.table()
-        self.officedesk_id = objects.officedesk()
+        # self.officedesk_id = objects.officedesk()
+        # self.officedesk_id = objects.officedesk_v1()
+
 
         self.robot_id = objects.widow250()
         self.monitor_id = objects.monitor()
+        # self.monitor_id = objects.monitor_v2()
+
         self.books_id = objects.books()
         self.laptop_id = objects.laptop()
         self.lamp_id = objects.lamp()
+        # self.lamp_id = objects.lamp_v1()
+
+        # new shapnet objects
+        # self.trashcan = objects.load_shapenet_trashcan()
+
+        # room
+        self.room = objects.room()
 
 
 
@@ -396,21 +407,20 @@ class Widow250MultiObjectEnv(MultiObjectEnv, Widow250Env):
 if __name__ == "__main__":
     env = Widow250Env(gui=True)
     import time
-
     env.reset()
     # import IPython; IPython.embed()
 
-    for i in range(20):
-        print(i)
+    for i in range(200):
+        # print(i)
         obs, rew, done, info = env.step(
-            np.asarray([-0.05, 0., 0., 0., 0., 0.5, 0., 0.]))
-        print("reward", rew, "info", info)
+            np.asarray([0., 0., 0., 0., 0., 0.5, 0., 0.]))
+        # print("reward", rew, "info", info)
         time.sleep(0.1)
 
-    env.reset()
-    time.sleep(1)
-    for _ in range(25):
-        env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
-        time.sleep(0.1)
+    # env.reset()
+    # time.sleep(1)
+    # for _ in range(25):
+    #     env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
+    #     time.sleep(0.1)
 
-    env.reset()
+    # env.reset()

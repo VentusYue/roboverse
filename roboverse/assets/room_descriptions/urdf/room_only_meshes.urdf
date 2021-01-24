@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<robot name="room">
+  <material name="White">
+    <color rgba="0.9 0.9 0.9 1"/>
+  </material>
+  <material name="Blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+  <material name="Red">
+    <color rgba="1 0 0 1"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.1 0.8 0.1 1"/>
+  </material>
+  <material name="Gray">
+    <color rgba="0.6 0.6 0.6 1"/>
+  </material>
+  <material name="Black">
+    <color rgba="0.1 0.1 0.1 1"/>
+  </material>
+     
+  <link name="room_base">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="Red"/>
+    </visual>
+  </link>
+  
+  <joint name="j_desk" type="fixed">
+    <parent link="room_base"/>
+    <child link="desk_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="desk_base">
+    <visual>
+      <origin xyz="2.3 -2.22 0" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <!--<mesh filename="package://room_description/meshes/bureauAngulaire_sized.dae"/>-->
+        <mesh filename="package://room_description/meshes/bureau_angulaire.dae"/>
+        <!-- <mesh filename="../meshes/bureau_angulaire.dae"/> -->
+      </geometry>
+      <material name="Blue"/>
+    </visual>
+    <collision>
+      <origin xyz="2.3 -2.22 0" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/bureau_angulaire.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+
+  <joint name="j_pc" type="fixed">
+    <parent link="room_base"/>
+    <child link="pc_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="pc_base">
+    <visual>
+      <origin xyz="2.3 -1.7 1.04" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/pc_portable_sized2.dae"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <origin xyz="2.3 -1.7 1.04" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/pc_portable_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_lamp" type="fixed">
+    <parent link="room_base"/>
+    <child link="lamp_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="lamp_base">
+    <visual>
+      <origin xyz="-0.4 -2.3 0.04" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/lampe_a_pied_sized2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.4 -2.3 0.04" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/lampe_a_pied_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_armchair" type="fixed">
+    <parent link="room_base"/>
+    <child link="armchair_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="armchair_base">
+    <visual>
+      <origin xyz="1.3 1.3 0" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/fauteuil_sized2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="1.3 1.3 0" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/fauteuil_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <joint name="j_chair" type="fixed">
+    <parent link="room_base"/>
+    <child link="chair_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="chair_base">
+    <visual>
+      <!-- <origin xyz="1.33 -1.78 0" rpy="0 0 1.570796327"/> -->
+      <origin xyz="0.13 -1.78 0.04" rpy="0 0 1.570796327"/> <!-- barckward -->
+      <geometry>
+        <mesh filename="package://room_description/meshes/chaise_bureau2_sized2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <!-- <origin xyz="1.33 -1.78 0" rpy="0 0 1.570796327"/> -->
+      <origin xyz="0.13 -1.78 0.04" rpy="0 0 1.570796327"/> <!-- barckward -->
+      <geometry>
+        <mesh filename="package://room_description/meshes/chaise_bureau2_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_table" type="fixed">
+    <parent link="room_base"/>
+    <child link="table_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="table_base">
+    <visual>
+      <origin xyz="0 1.3 0.06" rpy="0 0 1.57"/>
+      <geometry>
+        <!--<mesh filename="package://room_description/meshes/table_basse.dae"/>-->
+        <mesh filename="package://room_description/meshes/table_basse_truquee.dae"/>
+        <!--<box size="0.9 1.5 0.3" />-->
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 1.3 0.06" rpy="0 0 1.57"/>
+      <geometry>
+       <mesh filename="package://room_description/meshes/table_basse_truquee.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_commode" type="fixed">
+    <parent link="room_base"/>
+    <child link="commode_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="commode_base">
+    <visual>
+      <origin xyz="-2.65 -1.1 0" rpy="0 0 1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/commode_sized2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-2.65 -1.1 0" rpy="0 0 1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/commode_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_books" type="fixed">
+    <parent link="room_base"/>
+    <child link="books_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="books_base">
+    <visual>
+      <origin xyz="-2.5 -1.52 1" rpy="0 0 1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/vieux_livres_sized.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-2.5 -1.52 1" rpy="0 0 1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/vieux_livres_sized.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_deskLamp" type="fixed">
+    <parent link="room_base"/>
+    <child link="deskLamp_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="deskLamp_base">
+    <visual>
+      <origin xyz="2.6 -2.1 1.05" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/desklamp_sized2.dae"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+      <origin xyz="2.6 -2.1 1.05" rpy="0 0 -1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/desklamp_sized2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_beer" type="fixed">
+    <parent link="room_base"/>
+    <child link="beer_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="beer_base">
+    <visual>
+      <origin xyz="0 1.3 0.8" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/beer_sized2.dae"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="0 1.3 0.8" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/beer_sized2.dae"/>
+        <!--<mesh filename="package://room_description/meshes/beer_bottle.dae"/>-->
+      </geometry>
+    </collision>
+  </link>
+  
+  
+  <joint name="j_stuff" type="fixed">
+    <parent link="room_base"/>
+    <child link="stuff_base"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="stuff_base">
+    <visual>
+      <origin xyz="1.1 -2.6 1.2" rpy="0 0 1.570796327"/>
+      <geometry>
+        <!--<mesh filename="package://room_description/meshes/etagere_bois_sized2.dae"/>-->
+        <mesh filename="package://room_description/meshes/etagere_bois2.dae"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="1.1 -2.6 1.2" rpy="0 0 1.570796327"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/etagere_bois2.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j_carpet" type="fixed">
+    <parent link="room_base"/>
+    <child link="l_carpet"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_carpet">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/carpet.dae"/>
+      </geometry>
+      <material name="Green"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/carpet.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j_carpet_wall_one" type="fixed">
+    <parent link="room_base"/>
+    <child link="l_carpet_wall_one"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_carpet_wall_one">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -3 1.25" rpy="-1.57 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/wall_carpet.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 -3 1.25" rpy="-1.57 0 0"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/wall_carpet.dae"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j_carpet_wall_two" type="fixed">
+    <parent link="room_base"/>
+    <child link="l_carpet_wall_two"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="l_carpet_wall_two">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="3 0 1.25" rpy="-1.57 0 1.57"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/wall_carpet.dae"/>
+      </geometry>
+      <material name="Blue"/>
+    </visual>
+    <collision>
+      <origin xyz="3 0 1.25" rpy="-1.57 0 1.57"/>
+      <geometry>
+        <mesh filename="package://room_description/meshes/wall_carpet.dae"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

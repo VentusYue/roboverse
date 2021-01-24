@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot name="Human_model">
+
+<!-- Disable collision pairs of inner links -->
+		      
+</robot>
