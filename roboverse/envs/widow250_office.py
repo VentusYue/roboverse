@@ -161,13 +161,13 @@ class Widow250Env(gym.Env, Serializable):
     def _load_meshes(self):
         # self.table_id = objects.table()
         # self.officedesk_id = objects.officedesk()
-        self.officedesk_id = objects.officedesk_v1()
+        # self.officedesk_id = objects.officedesk_v1()
 
 
         self.robot_id = objects.widow250()
-        self.monitor_id = objects.monitor()
-        self.keyboard = objects.keyboard()     
-        self.desktop = objects.desktop()   
+        # self.monitor_id = objects.monitor()
+        # self.keyboard = objects.keyboard()     
+        # self.desktop = objects.desktop()   
         
         
         # self.books_id = objects.books()

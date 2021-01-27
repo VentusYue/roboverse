@@ -374,4 +374,34 @@
   </link>
 
 
+  <joint name="officedesk" type="fixed">
+    <parent link="room_base"/>
+    <child link="officedesk"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+        
+  <link name="officedesk">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin xyz="1.8 -1.8 0.15" rpy="1.57 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/obj/officedesk.obj" scale="4 4 4"/>
+      </geometry>
+      <!-- <material name="Blue"/> -->
+    </visual>
+    <collision>
+      <origin xyz="2 -2 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/obj/wall.obj" scale="3 3 3"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+
+
 </robot>

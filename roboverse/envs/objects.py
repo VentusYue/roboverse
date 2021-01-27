@@ -210,7 +210,7 @@ def room(basePosition=(-0.4, 0,-1.4 ), scale=0.8):
     return room_id
 
 
-def room_v1(basePosition=(2.1, 1.95,-0.9), scale=0.8):
+def room_v1(basePosition=(1.5, 0.6,-0.5), scale=0.6):
     room_path = os.path.join(ASSET_PATH,
                                  'room_descriptions/urdf/room_v1.urdf')
     room_id = p.loadURDF(room_path,
