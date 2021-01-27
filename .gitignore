@@ -14,6 +14,13 @@ roboverse/assets/bullet-objects/*
 !roboverse/assets/bullet-objects/ShapeNetCore
 !roboverse/assets/bullet-objects/tray
 !roboverse/assets/bullet-objects/bullet3
+!roboverse/assets/bullet-objects/keyboard
+!roboverse/assets/bullet-objects/desktop
+!roboverse/assets/bullet-objects/laptop
+!roboverse/assets/bullet-objects/monitor
+!roboverse/assets/bullet-objects/officedesk
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

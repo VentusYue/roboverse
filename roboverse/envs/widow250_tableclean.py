@@ -262,12 +262,13 @@ class Widow250TableEnv(Widow250PickPlaceEnv):
         self.officedesk_id = objects.officedesk()
 
         self.robot_id = objects.widow250(self.base_position)
-
+      
         self.monitor_id = objects.monitor()
-        self.books_id = objects.books()
-        self.laptop_id = objects.laptop()
-        self.lamp_id = objects.lamp()
-
+        self.keyboard = objects.keyboard()     
+        self.desktop = objects.desktop()   
+        # self.books_id = objects.books()
+        # self.laptop_id = objects.laptop()
+        self.room = objects.room_v1()
 
         self.objects = {}
         if self.load_tray:

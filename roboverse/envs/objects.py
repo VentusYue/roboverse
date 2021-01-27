@@ -63,7 +63,8 @@ def widow250(basePosition=[0.6, 0.0, -0.4]):
                              )
     return widow250_id
 
-def monitor(basePosition=(0.5, -0.3, -0.385), scale=32):
+#(0.5, -0.3, -0.385)
+def monitor(basePosition=(1.6, -0.1, -0.42), scale=32):
     monitor_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/monitor/monitor.urdf')
     monitor_id = p.loadURDF(monitor_path,
@@ -72,6 +73,19 @@ def monitor(basePosition=(0.5, -0.3, -0.385), scale=32):
                              globalScaling=scale
                              )
     return monitor_id
+
+def monitor_v1(basePosition=(0.3, -0.3, 0.), scale=1.5):
+    monitor_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/monitor_v1/monitor.urdf')
+    monitor_id = p.loadURDF(monitor_path,
+                             basePosition=basePosition,
+                             baseOrientation=bullet.deg_to_quat([90, 0., 180.0 ]),
+                             globalScaling=scale,
+                            #  flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+
+                             )
+    return monitor_id
+
 
 def monitor_v2(basePosition=(0.5, -0.3, 0.), scale=3):
     monitor_path = os.path.join(ASSET_PATH,
@@ -102,7 +116,7 @@ def laptop(basePosition=(1.2, 0.2, -0.38), scale=1.0):
                              basePosition=basePosition,
                              baseOrientation=bullet.deg_to_quat([90.0, 0., 180]),
                              globalScaling=scale,
-                             flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+                            #  flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
                              )
     return laptop_id
 
@@ -129,7 +143,7 @@ def lamp_v1(basePosition=(-0.2, -0.2, -0.37), scale=0.07):
                              )
     return lamp_id
 
-def officedesk(basePosition=(-0.2, 0, -1.58), scale=0.003):
+def officedesk(basePosition=(0.6, 0.25, -1.34), scale=0.0024):
     officedesk_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/officedesk/desk.urdf')
     officedesk_id = p.loadURDF(officedesk_path,
@@ -141,27 +155,17 @@ def officedesk(basePosition=(-0.2, 0, -1.58), scale=0.003):
                              )
     return officedesk_id
 
-
-def officedesk_v1(basePosition=(-0.2, 0, -1.58), scale=5):
+def officedesk_v1(basePosition=(0.6, 0.25, -1.34), scale=4):
     officedesk_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/desk_v1/desk.urdf')
-    # officedesk_id = p.loadSDF(officedesk_path,
-    #                         #  basePosition=basePosition,
-    #                         #  baseOrientation=bullet.deg_to_quat([90, 0., 0.]),
-    #                          globalScaling=scale,
-    #                         #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
-    #                         # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
-    #                          )
-
+                                 'bullet-objects/officedesk_v1/desk.urdf')
     officedesk_id = p.loadURDF(officedesk_path,
-                         basePosition=basePosition,
-                         baseOrientation=bullet.deg_to_quat([90, 0., 0.]),
-                            globalScaling=scale,
-                        #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
-                            flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
-                            )
+                             basePosition=basePosition,
+                             baseOrientation=bullet.deg_to_quat([90, 0., 0.]),
+                             globalScaling=scale,
+                            #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
+                            # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+                             )
     return officedesk_id
-
 
 def load_shapenet_trashcan(object_position=(-0.2, 0, -1.58),
                          object_quat=(1, -1, 0, 0),  scale=1.0):
@@ -195,7 +199,7 @@ def load_shapenet_trashcan(object_position=(-0.2, 0, -1.58),
 
 
 
-def room(basePosition=(-0.4, 0,-1.16 ), scale=1):
+def room(basePosition=(-0.4, 0,-1.4 ), scale=0.8):
     room_path = os.path.join(ASSET_PATH,
                                  'room_descriptions/urdf/room_v0.urdf')
     room_id = p.loadURDF(room_path,
@@ -205,11 +209,35 @@ def room(basePosition=(-0.4, 0,-1.16 ), scale=1):
                             )
     return room_id
 
-def widow250(basePosition=[0.6, 0.0, -0.4]):
-    widow250_path = os.path.join(ASSET_PATH,
-                                 'interbotix_descriptions/urdf/wx250s.urdf')
-    widow250_id = p.loadURDF(widow250_path,
-                             basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([0., 0., 0])
-                             )
-    return widow250_id
+
+def room_v1(basePosition=(2.1, 1.95,-0.9), scale=0.8):
+    room_path = os.path.join(ASSET_PATH,
+                                 'room_descriptions/urdf/room_v1.urdf')
+    room_id = p.loadURDF(room_path,
+                        globalScaling=scale,
+                         basePosition=basePosition,
+                         baseOrientation=bullet.deg_to_quat([0, 0., -90]),
+                            )
+    return room_id
+
+
+def keyboard(basePosition=(1.6, 0.1, -0.375), scale=1.2):
+    keyboard_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/keyboard/keyboard.urdf')
+    keyboard_id = p.loadURDF(keyboard_path,
+                        globalScaling=scale,
+                         basePosition=basePosition,
+                         baseOrientation=bullet.deg_to_quat([0, 0., 0]),
+                            )
+    return keyboard_id
+
+
+def desktop(basePosition=(0.75, -0.1, -1.29), scale=0.028):
+    keyboard_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/desktop/desktop.urdf')
+    keyboard_id = p.loadURDF(keyboard_path,
+                        globalScaling=scale,
+                         basePosition=basePosition,
+                         baseOrientation=bullet.deg_to_quat([0, 0., 0]),
+                            )
+    return keyboard_id
