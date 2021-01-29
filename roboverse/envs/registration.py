@@ -1658,7 +1658,7 @@ ENVIRONMENT_SPECS = (
                     'random_tray': True,
                     'tray_position_high': (0.9, 0., -.35), # (.7, .27, -.35)
                     'tray_position_low': (0.8, -0.15, -.35),
-                    'random_shuffle_object': True,
+                    'random_shuffle_object': False,
                     'random_shuffle_target': False,
 
                     'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)

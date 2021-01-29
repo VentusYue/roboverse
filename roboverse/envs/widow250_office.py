@@ -141,6 +141,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.drawer_closed_success_thresh = 0.1     
         self.possible_objects = np.asarray(possible_objects) 
         self.random_shuffle_object = random_shuffle_object
+        if not self.random_shuffle_object:
+            self.task_object_names = self.object_names[:self.num_objects]
         self.num_objects = num_objects
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
