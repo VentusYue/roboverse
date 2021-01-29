@@ -1708,10 +1708,10 @@ ENVIRONMENT_SPECS = (
                     'random_shuffle_object': True,
                     'random_shuffle_target': False,
 
-                    'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)
-                    'base_position_low': (0.57, -0.02, -0.4),
+                    'base_position_high': (0.62, 0.02, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.58, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
-                    'random_base': False,
+                    'random_base': True,
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
                     'random_drawer': False,
                    }
@@ -1781,10 +1781,10 @@ ENVIRONMENT_SPECS = (
                     'random_shuffle_object': True,
                     'random_shuffle_target': False,
 
-                    'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)
-                    'base_position_low': (0.57, -0.02, -0.4),
+                    'base_position_high': (0.62, 0.02, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.58, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
-                    'random_base': False,
+                    'random_base': True,
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
                    }
