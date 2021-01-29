@@ -26,7 +26,6 @@ class DrawerOpen:
         self.handle_offset = np.array([offset_coeff * 0.01, 0.0, -0.0]) #-0.01
 
     def get_action(self):
-
         ee_pos, _ = bullet.get_link_state(
             self.env.robot_id, self.env.end_effector_index)
         handle_pos = self.env.get_drawer_handle_pos() + self.handle_offset
@@ -107,7 +106,7 @@ class DrawerClose:
     def reset(self):
         self.drawer_never_opened = True
         offset_coeff = (-1) ** (1 - self.env.left_opening)
-        self.handle_offset = np.array([offset_coeff * 0.01, 0.0, -0.01])
+        self.handle_offset = np.array([offset_coeff * 0.2, 0.0, -0.01])
         self.reached_pushing_region = False
         self.neutral_taken = False
         self.begin_closing = False
@@ -125,7 +124,7 @@ class DrawerClose:
         #     top_drawer_pos + np.array([0.15, 0., 0.05]))
 
         top_drawer_push_target_pos = (
-            top_drawer_pos + np.array([0.17, 0.1, 0.1]))
+            top_drawer_pos + np.array([0.17, 0.0, 0.1]))
         is_gripper_ready_to_push = (
             ee_pos[0] > top_drawer_push_target_pos[0] and
             ee_pos[2] < top_drawer_push_target_pos[2] 
@@ -137,7 +136,7 @@ class DrawerClose:
                 not self.reached_pushing_region and
                 not is_gripper_ready_to_push):
             # print("move up and left")
-            action_xyz = [0.15, -0.1, -0.15] #-0.15
+            action_xyz = [0., -0.1, -0.15] #-0.15
             # action_xyz = [0.05, -0.03, -0.1] #-0.15
 
             action_angles = [0., 0., 0.]
@@ -146,7 +145,9 @@ class DrawerClose:
             # print("close top drawer")
             self.reached_pushing_region = True
             action_xyz = (top_drawer_pos  - ee_pos) * self.xyz_action_scale
-            action_xyz[0] *= 3
+            # action_xyz[0] *= 3
+            action_xyz[0] *= 1
+
             action_xyz[1] *= 0.6
             action_angles = [0., 0., 0.]
             action_gripper = [-0.7] #0.
@@ -165,7 +166,6 @@ class DrawerClose:
                 action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
                 # print(ee_pos, self.env.ee_pos_init)
                 # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
-
         # print(ee_pos, top_drawer_push_target_pos)
         agent_info = dict(done=self.done)
         action = np.concatenate((action_xyz, action_angles, action_gripper, neutral_action))

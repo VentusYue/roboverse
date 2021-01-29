@@ -27,7 +27,7 @@ class PickPlace:
             self.pick_point += np.asarray(GRASP_OFFSETS[self.object_to_target])
         self.pick_point[2] = -0.32
         self.drop_point = self.env.container_position
-        self.drop_point[2] = -0.2
+        self.drop_point[2] = -0.32
         self.place_attempted = False
 
     def get_action(self):
@@ -276,6 +276,8 @@ class PickPlaceTarget:
             self.drop_point = list(self.env.top_drawer_position) 
         elif self.object_target == 'drawer_inside':
             self.drop_point = list(self.env.inside_drawer_position) 
+        elif self.object_target == 'trashcan':
+            self.drop_point = list(self.env.trashcan_position) 
         else:
             raise NotImplementedError
 
@@ -291,7 +293,7 @@ class PickPlaceTarget:
             self.env.objects[self.object_to_target])[0]
         if self.object_to_target in GRASP_OFFSETS.keys():
             self.pick_point += np.asarray(GRASP_OFFSETS[self.object_to_target])
-        self.pick_point[2] = -0.32
+        self.pick_point[2] = -0.34
         # self.drop_point = self.env.container_position
         if self.object_target == 'container':
             self.drop_point = list(self.env.container_position)
@@ -300,7 +302,9 @@ class PickPlaceTarget:
         elif self.object_target == 'drawer_top':
             self.drop_point = list(self.env.top_drawer_position) 
         elif self.object_target == 'drawer_inside':
-            self.drop_point = list(self.env.inside_drawer_position) 
+            self.drop_point = list(self.env.inside_drawer_position)
+        elif self.object_target == 'trashcan':
+            self.drop_point = list(self.env.trashcan_position) 
         else:
             raise NotImplementedError
         self.drop_point[2] = -0.15
@@ -318,7 +322,7 @@ class PickPlaceTarget:
         gripper_droppoint_dist = np.linalg.norm(self.drop_point - ee_pos)
         gripper_drop_point_dist_z = (self.drop_point - ee_pos)[2]
         origin_dist = self.env.ee_pos_init - ee_pos 
-        # import pdb; pdb.set_trace()
+        # print(f"ee_pos: {ee_pos}, pick_point: {self.pick_point}, drop_point: {self.drop_point}")
         done = False
         # print(origin_dist, np.linalg.norm(origin_dist))
 
@@ -343,7 +347,7 @@ class PickPlaceTarget:
                     action_gripper = [0.]
                     done = True
                     self.done = done
-        elif gripper_pickpoint_dist > 0.02 and self.env.is_gripper_open:
+        elif gripper_pickpoint_dist > 0.015 and self.env.is_gripper_open:
             # print("move near the object")
             action_xyz = (self.pick_point - ee_pos) * self.xyz_action_scale
             xy_diff = np.linalg.norm(action_xyz[:2] / self.xyz_action_scale)
@@ -355,7 +359,7 @@ class PickPlaceTarget:
             # print("near the object enough, performs grasping action")
             action_xyz = (self.pick_point  - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
-            action_gripper = [-0.7]
+            action_gripper = [-0.9]
         elif not object_lifted:
             # print("lifting objects above the height threshold for picking")
             action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
@@ -372,6 +376,8 @@ class PickPlaceTarget:
             action_angles = [0., 0., 0.]
             action_gripper = [0.7]
             self.place_attempted = True
+
+        # import pdb; pdb.set_trace()
         
         # if done and self.place_attempted:
         #     if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:

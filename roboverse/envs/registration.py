@@ -1128,8 +1128,9 @@ ENVIRONMENT_SPECS = (
     {
         'id': 'Widow250DrawerTestPos-v0',
         'entry_point': 'roboverse.envs.widow250_drawer:Widow250DrawerEnv',
-        'kwargs': {'drawer_pos': (0.3, 0.2, -.35),
-                    # 'drawer_pos': (0.25, 0.2, -.35)
+        'kwargs': {
+                    # 'drawer_pos': (0.3, 0.2, -.35),
+                    'drawer_pos': (0.1, 0.0, -.35),
                     # 'drawer_pos': (0.55, 0.3, -.35)
 
                    'reward_type': 'grasping',
@@ -1141,6 +1142,9 @@ ENVIRONMENT_SPECS = (
                    'load_tray': False,
                    }
     },
+
+
+
     {
         'id': 'Widow250TableCleanTest-v0',
         'entry_point': 'roboverse.envs.widow250_tableclean'
@@ -1451,6 +1455,7 @@ ENVIRONMENT_SPECS = (
                     'observation_mode': 'noimage',
 
                     'drawer_pos': (0.3, 0.23, -.35),
+
                     # 'drawer_pos': (0.35, 0.2, -.35),
                     'start_opened': False,
                     'num_objects': 3,
@@ -1660,6 +1665,126 @@ ENVIRONMENT_SPECS = (
                     'base_position_low': (0.57, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
                     'random_base': True,
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+
+                   }
+    },
+    {
+        'id': 'Widow250OfficePickPlaceFixed-v0',
+        'entry_point': 'roboverse.envs.widow250_office'
+                       ':Widow250OfficeEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+
+                   'load_tray': True,
+                #    'num_objects': 2,
+                #    'num_containers': 2,
+                    'observation_mode': 'noimage',
+
+                    'drawer_pos': (0.1, 0.0, -.35), # middle
+                    'drawer_pos_low': (0.1, 0.0, -.35), # (.7, .27, -.35)
+                    'drawer_pos_high': (.12, 0.1, -.35),
+
+                    'start_opened': False,
+                    'num_objects': 3, # 2 or 3, 
+                    'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    'object_targets': ('tray', 'container', 'drawer_inside'),
+                    'object_scales': (0.8, 0.8, 0.8, 0.8),
+                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
+                                   
+                    'random_object_position': False,
+                    'object_position_high': (0.75, .9, -.35), # (.7, .27, -.35)
+                    'object_position_low': (.3, .1, -.35),
+                    'xyz_action_scale': 0.7,
+                    'min_distance_drawer': 0.2,
+                    'min_distance_container': 0.11,
+                    'min_distance_obj': 0.11,
+                    'tray_position': (0.22,-0.22, -.39),
+                    # 'tray_position': (0.25,-0.25, -.39),
+
+                    'random_tray': False,
+                    'tray_position_high': (0.25,-0.22, -.39), # (.7, .27, -.35)
+                    'tray_position_low': (0.22,-0.25, -.39),
+                    'random_shuffle_object': True,
+                    'random_shuffle_target': False,
+
+                    'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.57, -0.02, -0.4),
+                    'base_position': (0.6, 0.0, -0.4),
+                    'random_base': False,
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+                    'random_drawer': False,
+                   }
+    },
+    {
+        'id': 'Widow250OfficePickPlaceRandom-v0',
+        'entry_point': 'roboverse.envs.widow250_office'
+                       ':Widow250OfficeEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+
+                   'load_tray': True,
+                #    'num_objects': 2,
+                #    'num_containers': 2,
+                    'observation_mode': 'noimage',
+
+                    # 'drawer_pos': (0.14, 0.1, -.35),
+                    # 'drawer_pos': (0.35, 0.2, -.35),
+                    # 'drawer_pos': (0.15, 0.23, -.35),
+                    # 'drawer_pos': (0.1, 0.0, -.35),
+                    # 'drawer_pos': (0.1, -0.2, -.35), # upper right
+                    # 'drawer_pos': (0.1, 0.0, -.35), # middle
+                    'random_drawer' : True,
+                    'drawer_pos': (0.1, 0.0, -.35), # middle
+                    'drawer_pos_low': (0.1, 0.0, -.35), # (.7, .27, -.35)
+                    'drawer_pos_high': (.12, 0.03, -.35),
+
+                    # 'drawer_pos': (0.15, 0.2, -.35),
+
+                    # 'drawer_pos': (0.6, -0.5, -.32),
+
+
+                    'start_opened': False,
+                    'num_objects': 3, # 2 or 3, 
+                    'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    'object_targets': ('tray', 'container', 'drawer_inside'),
+                    'object_scales': (0.8, 0.8, 0.8, 0.8),
+                    'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
+                                   
+                    # 'num_objects': 2,
+                    # 'object_names': ('shed','gatorade' ),
+                    # 'object_targets': ('container','drawer_inside',),
+                    # 'object_scales': (0.9, 0.9),
+                    # 'object_orientations': ((0, 0, 1, 0),(0, 0, 1, 0)),
+                   
+                   
+                   
+                   
+                    # 'object_orientations': ((0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0)),
+
+                    # 'object_position_high': (0.75, .9, -.35), # (.7, .27, -.35)
+                    # 'object_position_low': (.56, .1, -.35),
+                    'random_object_position' : True,
+                    'object_position_high': (0.75, .9, -.35), # (.7, .27, -.35)
+                    'object_position_low': (.3, .1, -.35),
+
+                    'xyz_action_scale': 0.7,
+                    'min_distance_drawer': 0.2,
+                    'min_distance_container': 0.11,
+                    'min_distance_obj': 0.11,
+                    'tray_position': (0.22,-0.22, -.39),
+                    # 'tray_position': (0.25,-0.25, -.39),
+
+                    'random_tray': False,
+                    'tray_position_high': (0.25,-0.22, -.39), # (.7, .27, -.35)
+                    'tray_position_low': (0.22,-0.25, -.39),
+                    'random_shuffle_object': True,
+                    'random_shuffle_target': False,
+
+                    'base_position_high': (0.63, 0.02, -0.4), # (.7, .27, -.35)
+                    'base_position_low': (0.57, -0.02, -0.4),
+                    'base_position': (0.6, 0.0, -0.4),
+                    'random_base': False,
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
                    }

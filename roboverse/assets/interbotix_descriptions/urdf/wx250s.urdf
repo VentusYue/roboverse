@@ -330,8 +330,8 @@
   </link>
   <joint name="ee_bar" type="fixed">
     <contact>
-      <rolling_friction value="1000.0"/>
-      <spinning_friction value="1000.0"/>
+      <rolling_friction value="10000.0"/>
+      <spinning_friction value="10000.0"/>
     </contact>
     <axis xyz="1 0 0"/>
     <origin rpy="0 0 0" xyz="0.023 0 0"/>
@@ -347,8 +347,8 @@
   <!-- If the default gripper fingers are being used, add those as well -->
   <joint name="left_finger" type="prismatic">
     <contact>
-      <rolling_friction value="1000.0"/>
-      <spinning_friction value="1000.0"/>
+      <rolling_friction value="10000.0"/>
+      <spinning_friction value="10000.0"/>
     </contact>
     <axis xyz="0 1 0"/>
     <limit effort="10" lower="0.015" upper="0.037" velocity="1"/>
@@ -367,8 +367,8 @@
   </transmission>
   <link name="/left_finger_link">
     <contact>
-      <rolling_friction value="1000.0"/>
-      <spinning_friction value="1000.0"/>
+      <rolling_friction value="10000.0"/>
+      <spinning_friction value="10000.0"/>
     </contact>
     <visual>
       <origin rpy="3.14159265359 3.14159265359 0" xyz="0 0.005 0"/>
@@ -391,8 +391,8 @@
   </link>
   <joint name="right_finger" type="prismatic">
     <contact>
-      <rolling_friction value="1000.0"/>
-      <spinning_friction value="1000.0"/>
+      <rolling_friction value="10000.0"/>
+      <spinning_friction value="10000.0"/>
     </contact>
     <axis xyz="0 1 0"/>
     <limit effort="10" lower="-0.037" upper="-0.015" velocity="1"/>
@@ -412,8 +412,8 @@
   </transmission>
   <link name="/right_finger_link">
     <contact>
-      <rolling_friction value="1000.0"/>
-      <spinning_friction value="1000.0"/>
+      <rolling_friction value="10000.0"/>
+      <spinning_friction value="10000.0"/>
     </contact>
     <visual>
       <origin rpy="0 3.14159265359 0" xyz="0 -0.005 0"/>

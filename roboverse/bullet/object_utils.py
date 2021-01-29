@@ -44,13 +44,14 @@ def check_grasp(object_name,
                 grasp_success_object_gripper_threshold,
                 ):
     object_pos, _ = get_object_position(object_id_map[object_name])
+
+    ee_pos, _ = get_link_state(
+            robot_id, end_effector_index)
+    object_gripper_distance = np.linalg.norm(
+                                object_pos - ee_pos)
     object_height = object_pos[2]
     success = False
     if object_height > grasp_success_height_threshold:
-        ee_pos, _ = get_link_state(
-            robot_id, end_effector_index)
-        object_gripper_distance = np.linalg.norm(
-            object_pos - ee_pos)
         if object_gripper_distance < \
                 grasp_success_object_gripper_threshold:
             success = True
@@ -152,7 +153,26 @@ def generate_multiple_object_positions(
 
     
 
+def generate_two_object_positions(
+        small_object_position_low, small_object_position_high,
+        min_distance_small_obj=0.07):
 
+    valid_1 = False
+    max_attempts = MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS
+    i = 0
+    while not valid_1:
+        small_object_positions = []
+        for _ in range(2):
+            small_object_position = np.random.uniform(
+                low=small_object_position_low, high=small_object_position_high)
+            small_object_positions.append(small_object_position)
+
+        valid_1 = np.linalg.norm(small_object_positions[0] - small_object_positions[1]) > min_distance_small_obj
+        
+        if i > max_attempts:
+            raise ValueError('Min distance could not be assured')
+
+    return small_object_positions
 
 def generate_object_positions_v2(
         small_object_position_low, small_object_position_high,
@@ -291,6 +311,12 @@ BULLET_OBJECT_SPECS = dict(
         baseOrientation=(0, 0, 0.707107, 0.707107),
         globalScaling=0.07,
     ),
+    eraser=dict(
+        fileName=os.path.join(BASE_ASSET_PATH, 'eraser/eraser.urdf'),
+        basePosition=(.72, 0.23, -.35),
+        baseOrientation=((0.707107, 0.0, 0.0, 0.707107)),
+        globalScaling=0.01,
+    ),
     # drawer=dict(
     #     fileName=os.path.join(
     #         BASE_ASSET_PATH, 'drawer/drawer_with_tray_inside.urdf'),
@@ -320,7 +346,7 @@ BULLET_OBJECT_SPECS = dict(
     ),
     open_box=dict(
         fileName=os.path.join(
-            BASE_ASSET_PATH, 'box_open_top/box_open_top.urdf'),
+            BASE_ASSET_PATH, 'box_open_top/box_open_colored.urdf'),
         basePosition=(.7, 0.2, -.35),
         baseOrientation=(0, 0, 0.707107, 0.707107),
         globalScaling=0.25,

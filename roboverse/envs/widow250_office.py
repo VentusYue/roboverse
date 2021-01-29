@@ -1,21 +1,33 @@
-import gym
-import numpy as np
-
-from roboverse.bullet.serializable import Serializable
+from roboverse.envs.widow250 import Widow250Env
+from roboverse.envs.widow250_drawer import Widow250DrawerEnv
+from roboverse.envs.widow250_pickplace import Widow250PickPlaceEnv, Widow250PickPlaceMultiObjectEnv
+from roboverse.bullet import object_utils
 import roboverse.bullet as bullet
 from roboverse.envs import objects
-from roboverse.bullet import object_utils
-from roboverse.envs.multi_object import MultiObjectEnv
+from roboverse.envs.multi_object import MultiObjectEnv, MultiObjectMultiContainerEnv
+from roboverse.assets.shapenet_object_lists import CONTAINER_CONFIGS, TRAIN_OBJECTS
+from roboverse.utils.general_utils import AttrDict
+import os.path as osp
+import numpy as np
+import random
+from roboverse.envs.tasks import PickPlaceTask, DrawerOpenTask, DrawerClosedTask, PickTask, PlaceTask
 
+
+OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
+                'assets/bullet-objects/bullet_saved_states/objects_in_gripper/')
 END_EFFECTOR_INDEX = 8
 RESET_JOINT_VALUES = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.036, -0.036]
 RESET_JOINT_VALUES_GRIPPER_CLOSED = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.015, -0.015]
 RESET_JOINT_INDICES = [0, 1, 2, 3, 4, 5, 7, 10, 11]
 GUESS = 3.14  # TODO(avi) This is a guess, need to verify what joint this is
-JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
+# JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
+#                      -0.037]
+# JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+JOINT_LIMIT_LOWER = [-3.14, -3.14, -3.14, -3.14, -3.14, -3.14, -GUESS, 0.015,
                      -0.037]
+JOINT_LIMIT_UPPER = [3.14, 3.14, 3.14, 3.14, 3.14, 3.14, GUESS, 0.037, -0.015]
 
-JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+
 
 JOINT_RANGE = []
 for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
@@ -28,186 +40,171 @@ GRIPPER_CLOSED_STATE = [0.015, -0.015]
 
 ACTION_DIM = 8
 
-
-class Widow250Env(gym.Env, Serializable):
-
+class Widow250OfficeEnv(Widow250PickPlaceEnv):
     def __init__(self,
-                 control_mode='continuous',
-                 observation_mode='pixels',
-                 observation_img_dim=48,
-                 transpose_image=True,
+                container_name='open_box',    
+                # num_objects=3, 
+                # object_names=('gatorade', 'pepsi_bottle', 'shed'),
+                # target_object='gatorade',
+                # object_scales=(0.75, 0.75, 0.75),
+                # object_orientations=((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
 
-                #  object_names=('bowl_small', 'gatorade'),
-                 object_names=('beer_bottle', 'gatorade'),
+                num_objects=4, 
+                object_names=('eraser', 'pepsi_bottle', 'shed', 'gatorade'),
+                object_targets=('container', 'container', 'container', 'container'),
+                target_object='gatorade',
+                object_scales=(0.75, 0.75, 0.75, 0.7),
+                object_orientations=((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
+                
+                object_position_high=(0.65, .9, -.35), # (.7, .27, -.35)
+                object_position_low=(.55, .1, -.35),
+                
+                possible_objects=TRAIN_OBJECTS[:10],            
+                drawer_pos=(0.35, 0.2, -.35),
+                random_drawer = False,
+                drawer_pos_low = (0.1, 0.0, -.35),
+                drawer_pos_high = (0.2, 0.2, -.35),
+                drawer_quat=(0, 0, 0.707107, 0.707107),
+                left_opening=True,  # False is not supported
+                start_opened=False,
+                reward_type='pick_place',
+                min_distance_from_object = 0.12,
+                min_distance_drawer=0.14,
+                min_distance_container=0.08,
+                min_distance_obj=0.08,
+                # tray_position = (.8, 0.0, -.37),
+                load_tray = True,
+                tray_position = (-0.1,-0.5, -.39),
+                
+                tray_position_high=(-0.1,-0.5, -.39), # (.7, .27, -.35)
+                tray_position_low=(-0.1,-0.5, -.39),
+                
+                base_position_high=(0.6, 0.0, -0.4), # (.7, .27, -.35)
+                base_position_low=(0.6, -0.0, -0.4),
+                base_position=(0.6, -0.0, -0.4),
+                random_base = False,
+                
+                xyz_action_scale = 0.7,
+                random_shuffle_object = True,
+                random_shuffle_target = True,
+                random_tray = False,
+                random_object_position = True,
+                observation_img_dim=256,
+                camera_distance=0.55,
 
-                 object_scales=(0.75, 0.75),
-                 object_orientations=((0, 0, 1, 0), (0, 0, 1, 0)),
-                 object_position_high=(.7, .27, -.35), # (.7, .27, -.35)
-                 object_position_low=(.5, .18, -.35),
-                 target_object='gatorade',
-                 load_tray=True,
-                 num_sim_steps=10,
-                 num_sim_steps_reset=50,
-                 num_sim_steps_discrete_action=75,
-
-                 reward_type='grasping',
-                 grasp_success_height_threshold=-0.3,
-                 grasp_success_object_gripper_threshold=0.2,
-
-                 use_neutral_action=False,
-                 neutral_gripper_open=True,
-
-                 xyz_action_scale=0.2,
-                 abc_action_scale=20.0,
-                 gripper_action_scale=20.0,
-
-                 ee_pos_high=(1.2, .5, -0.1),
-                 ee_pos_low=(.2, -.3, -.34),
-
-                # ee_pos_high=(1.2, .4, -0.1),
-                #  ee_pos_low=(.2, -.2, -.34),
-                 camera_target_pos=(0.6, 0.2, -0.28),
-                 camera_distance=0.29,
-                 camera_roll=0.0,
-                 camera_pitch=-40,
-                 camera_yaw=180,
-
-                 gui=False,
-                 in_vr_replay=False,
-                 ):
-
-        self.control_mode = control_mode
-        self.observation_mode = observation_mode
-        self.observation_img_dim = observation_img_dim
-        self.transpose_image = transpose_image
-
-        self.num_sim_steps = num_sim_steps
-        self.num_sim_steps_reset = num_sim_steps_reset
-        self.num_sim_steps_discrete_action = num_sim_steps_discrete_action
-
-        self.reward_type = reward_type
-        self.grasp_success_height_threshold = grasp_success_height_threshold
-        self.grasp_success_object_gripper_threshold = \
-            grasp_success_object_gripper_threshold
-
-        self.use_neutral_action = use_neutral_action
-        self.neutral_gripper_open = neutral_gripper_open
-
-        self.gui = gui
-        # TODO(avi): This hard-coding should be removed
-        self.fc_input_key = 'state'
-        self.cnn_input_key = 'image'
-        self.terminates = False
-        self.scripted_traj_len = 30
-
-        # TODO(avi): Add limits to ee orientation as well
-        self.ee_pos_high = ee_pos_high
-        self.ee_pos_low = ee_pos_low
-
-        bullet.connect_headless(self.gui)
-
-        # object stuff
-        assert target_object in object_names
-        assert len(object_names) == len(object_scales)
+                fixed_init_pos=None,
+                drawer_number = 2,
+                **kwargs):
+        
+        self.random_object_position = random_object_position
         self.load_tray = load_tray
-        self.num_objects = len(object_names)
+        self.tray_position = tray_position
+        self.random_tray = random_tray
+        self.tray_position_high = tray_position_high
+        self.tray_position_low = tray_position_low
+        if self.random_tray:
+            self.tray_position = np.random.uniform(
+                low=self.tray_position_low, high=self.tray_position_high)
+        
+        self.trashcan_position = (0.7, 0.3, -0.9)
+        
+        self.random_base = random_base
+        self.base_position = base_position
+        self.base_position_high = base_position_high
+        self.base_position_low = base_position_low
+        if self.random_base:
+            self.base_position = np.random.uniform(
+                low=self.base_position_low, high=self.base_position_low)
+        
+        self.drawer_number = drawer_number
+        self.random_drawer = random_drawer
+        self.drawer_pos_low = drawer_pos_low
+        self.drawer_pos_high = drawer_pos_high
+        # self.drawers = []
+        # 'drawer_pos': (0.3, 0.23, -.35),
+        # for i in range(self.drawer_number):
+        # self.drawer
+
+        self.drawer_pos = drawer_pos
+        self.drawer_quat = drawer_quat
+        self.left_opening = left_opening
+        self.start_opened = start_opened
+        
+        self.drawer_pos = drawer_pos
+        self.drawer_quat = drawer_quat
+        self.left_opening = left_opening
+        self.start_opened = start_opened
+
+
+
+        self.drawer_opened_success_thresh = 0.9
+        self.drawer_closed_success_thresh = 0.1     
+        self.possible_objects = np.asarray(possible_objects) 
+        self.random_shuffle_object = random_shuffle_object
+        self.num_objects = num_objects
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
-        self.object_names = object_names
-        self.target_object = target_object
-        self.object_scales = dict()
-        self.object_orientations = dict()
-        for orientation, object_scale, object_name in \
-                zip(object_orientations, object_scales, self.object_names):
-            self.object_orientations[object_name] = orientation
-            self.object_scales[object_name] = object_scale
 
-        self.in_vr_replay = in_vr_replay
-        self._load_meshes()
-        self.movable_joints = bullet.get_movable_joints(self.robot_id)
-        self.end_effector_index = END_EFFECTOR_INDEX
-        self.reset_joint_values = RESET_JOINT_VALUES
-        self.reset_joint_indices = RESET_JOINT_INDICES
+
+        self.object_names = object_names
+        self.object_targets = object_targets
+        self.task_object_names = random.sample(self.object_names, self.num_objects)
 
         self.xyz_action_scale = xyz_action_scale
-        self.abc_action_scale = abc_action_scale
-        self.gripper_action_scale = gripper_action_scale
 
-        self.camera_target_pos = camera_target_pos
-        self.camera_distance = camera_distance
-        self.camera_roll = camera_roll
-        self.camera_pitch = camera_pitch
-        self.camera_yaw = camera_yaw
-        view_matrix_args = dict(target_pos=self.camera_target_pos,
-                                distance=self.camera_distance,
-                                yaw=self.camera_yaw,
-                                pitch=self.camera_pitch,
-                                roll=self.camera_roll,
-                                up_axis_index=2)
-        self._view_matrix_obs = bullet.get_view_matrix(
-            **view_matrix_args)
-        self._projection_matrix_obs = bullet.get_projection_matrix(
-            self.observation_img_dim, self.observation_img_dim)
+        self.inside_drawer_position = np.array(self.drawer_pos[:2] + (-.2,)) + np.array((0.12, 0, 0))
+        self.top_drawer_position = np.array(self.drawer_pos[:2] + (0.1,))
 
-        self._set_action_space()
-        self._set_observation_space()
+        self.min_distance_drawer = min_distance_drawer
+        self.min_distance_obj = min_distance_obj
+        self.min_distance_container = min_distance_container
 
-        self.is_gripper_open = True  # TODO(avi): Clean this up
+        self.xyz_action_scale = xyz_action_scale
+        self.fixed_init_pos = fixed_init_pos
+        self.subtasks = None
+        super(Widow250OfficeEnv, self).__init__(
+            object_names=object_names,
+            target_object=target_object,
+            object_orientations=object_orientations,
+            object_scales=object_scales,
+            container_name=container_name,
+            observation_img_dim=observation_img_dim,
+            camera_distance=camera_distance,
+            **kwargs,
+        )
 
-        self.reset()
-        self.ee_pos_init, self.ee_quat_init = bullet.get_link_state(
-            self.robot_id, self.end_effector_index)
+    def generate_tasks(self):
+        """Generate subtask list."""
+        subtasks = []
+        for object_name, object_target in \
+                zip(self.task_object_names, self.object_targets):
+            object_position = self.object_name_pos_map[object_name]
+            target_position = self.get_target_position(object_target)
+            if object_target == 'drawer_inside':
+                subtasks += [DrawerOpenTask(),
+                             PickTask(object_name, object_target, object_position, target_position),
+                             PlaceTask(object_name, object_target, object_position, target_position),
+                             DrawerClosedTask()]
+            else:
+                subtasks += [PickTask(object_name, object_target, object_position, target_position),
+                             PlaceTask(object_name, object_target, object_position, target_position)]
 
-    def _load_meshes(self):
-        # self.table_id = objects.table()
-        # self.officedesk_id = objects.officedesk()
-        # self.officedesk_id = objects.officedesk_v1()
-
-
-        self.robot_id = objects.widow250()
-        # self.monitor_id = objects.monitor()
-        # self.keyboard = objects.keyboard()     
-        # self.desktop = objects.desktop()   
-        
-        
-        # self.books_id = objects.books()
-        # self.laptop_id = objects.laptop()
-        # self.lamp_id = objects.lamp()
-        # self.lamp_id = objects.lamp_v1()
-
-        # new shapnet objects
-        # self.trashcan = objects.load_shapenet_trashcan()
-
-        # room
-        self.room = objects.room_v1()
-        # self.room = objects.room()
-
-
-
-
-
-        if self.load_tray:
-            self.tray_id = objects.tray()
-
-        self.objects = {}
-        if self.in_vr_replay:
-            object_positions = self.original_object_positions
-        else:
-            object_positions = object_utils.generate_object_positions(
-                self.object_position_low, self.object_position_high,
-                self.num_objects,
-            )
-            self.original_object_positions = object_positions
-        for object_name, object_position in zip(self.object_names,
-                                                object_positions):
-            self.objects[object_name] = object_utils.load_object(
-                object_name,
-                object_position,
-                object_quat=self.object_orientations[object_name],
-                scale=self.object_scales[object_name])
-            bullet.step_simulation(self.num_sim_steps_reset)
+        return subtasks
 
     def reset(self):
+        if self.random_shuffle_object:
+            self.object_names = random.sample(self.object_names, len(self.object_names))
+            self.task_object_names = random.sample(self.object_names, self.num_objects)
+            # print(f"reset: {self.object_names}")
+        if self.random_drawer:
+            self.drawer_pos = np.random.uniform(
+                low=self.drawer_pos_low, high=self.drawer_pos_high)
+        if self.random_tray:
+            self.tray_position = np.random.uniform(
+                low=self.tray_position_low, high=self.tray_position_high)
+        if self.random_base:
+            self.base_position = np.random.uniform(
+                low=self.base_position_low, high=self.base_position_low)
         bullet.reset()
         bullet.setup_headless()
         self._load_meshes()
@@ -217,214 +214,227 @@ class Widow250Env(gym.Env, Serializable):
             self.reset_joint_values)
         self.is_gripper_open = True  # TODO(avi): Clean this up
 
+        self.subtasks = self.generate_tasks()
         return self.get_observation()
 
-    def step(self, action):
-
-        # TODO Clean this up
-        if np.isnan(np.sum(action)):
-            print('action', action)
-            raise RuntimeError('Action has NaN entries')
-
-        action = np.clip(action, -1, +1)  # TODO Clean this up
-
-        xyz_action = action[:3]  # ee position actions
-        abc_action = action[3:6]  # ee orientation actions
-        gripper_action = action[6]
-        neutral_action = action[7]
-
-        ee_pos, ee_quat = bullet.get_link_state(
-            self.robot_id, self.end_effector_index)
-        joint_states, _ = bullet.get_joint_states(self.robot_id,
-                                                  self.movable_joints)
-        gripper_state = np.asarray([joint_states[-2], joint_states[-1]])
-
-        target_ee_pos = ee_pos + self.xyz_action_scale * xyz_action
-        ee_deg = bullet.quat_to_deg(ee_quat)
-        target_ee_deg = ee_deg + self.abc_action_scale * abc_action
-        target_ee_quat = bullet.deg_to_quat(target_ee_deg)
-
-        if self.control_mode == 'continuous':
-            num_sim_steps = self.num_sim_steps
-            target_gripper_state = gripper_state + \
-                                   [-self.gripper_action_scale * gripper_action,
-                                    self.gripper_action_scale * gripper_action]
-
-        elif self.control_mode == 'discrete_gripper':
-            if gripper_action > 0.5 and not self.is_gripper_open:
-                num_sim_steps = self.num_sim_steps_discrete_action
-                target_gripper_state = GRIPPER_OPEN_STATE
-                self.is_gripper_open = True  # TODO(avi): Clean this up
-
-            elif gripper_action < -0.5 and self.is_gripper_open:
-                num_sim_steps = self.num_sim_steps_discrete_action
-                target_gripper_state = GRIPPER_CLOSED_STATE
-                self.is_gripper_open = False  # TODO(avi): Clean this up
-            else:
-                num_sim_steps = self.num_sim_steps
-                if self.is_gripper_open:
-                    target_gripper_state = GRIPPER_OPEN_STATE
-                else:
-                    target_gripper_state = GRIPPER_CLOSED_STATE
-                # target_gripper_state = gripper_state
-        else:
-            raise NotImplementedError
-
-        target_ee_pos = np.clip(target_ee_pos, self.ee_pos_low,
-                                self.ee_pos_high)
-        target_gripper_state = np.clip(target_gripper_state, GRIPPER_LIMITS_LOW,
-                                       GRIPPER_LIMITS_HIGH)
-        # import pdb; pdb.set_trace()
-
-        bullet.apply_action_ik(
-            target_ee_pos, target_ee_quat, target_gripper_state,
-            self.robot_id,
-            self.end_effector_index, self.movable_joints,
-            lower_limit=JOINT_LIMIT_LOWER,
-            upper_limit=JOINT_LIMIT_UPPER,
-            rest_pose=RESET_JOINT_VALUES,
-            joint_range=JOINT_RANGE,
-            num_sim_steps=num_sim_steps)
-
-        if self.use_neutral_action and neutral_action > 0.5:
-            if self.neutral_gripper_open:
-                bullet.move_to_neutral(
-                    self.robot_id,
-                    self.reset_joint_indices,
-                    RESET_JOINT_VALUES)
-            else:
-                bullet.move_to_neutral(
-                    self.robot_id,
-                    self.reset_joint_indices,
-                    RESET_JOINT_VALUES_GRIPPER_CLOSED)
-
-        info = self.get_info()
-        reward = self.get_reward(info)
-        done = False
-        return self.get_observation(), reward, done, info
-
-    def get_observation(self):
-        # print(f"observation mode: {self.observation_mode}")
-        gripper_state = self.get_gripper_state()
-        gripper_binary_state = [float(self.is_gripper_open)]
-        ee_pos, ee_quat = bullet.get_link_state(
-            self.robot_id, self.end_effector_index)
-        # import pdb;pdb.set_trace()
-        object_position, object_orientation = bullet.get_object_position(
-            self.objects[self.target_object])
-        if self.observation_mode == 'pixels':
-            image_observation = self.render_obs()
-            image_observation = np.float32(image_observation.flatten()) / 255.0
-            observation = {
-                'object_position': object_position,
-                'object_orientation': object_orientation,
-                'state': np.concatenate(
-                    (ee_pos, ee_quat, gripper_state, gripper_binary_state)),
-                'image': image_observation
-            }
-        else:
-            # raise NotImplementedError
-            observation = {
-                'object_position': object_position,
-                'object_orientation': object_orientation,
-                'state': np.concatenate(
-                    (ee_pos, ee_quat, gripper_state, gripper_binary_state)),
-            }
-
-        return observation
-
-    def get_reward(self, info):
-        if self.reward_type == 'grasping':
-            reward = float(info['grasp_success_target'])
-        else:
-            raise NotImplementedError
-        return reward
-
     def get_info(self):
+        info = AttrDict()
 
-        info = {'grasp_success': False}
-        for object_name in self.object_names:
-            grasp_success = object_utils.check_grasp(
-                object_name, self.objects, self.robot_id,
-                self.end_effector_index, self.grasp_success_height_threshold,
-                self.grasp_success_object_gripper_threshold)
-            if grasp_success:
-                info['grasp_success'] = True
+        # check whether target object is grasped
+        if hasattr(self.current_subtask, "object"):
+            info.grasp_success = object_utils.check_grasp(self.current_subtask.object,
+                                                          self.objects, self.robot_id,
+                                                          self.end_effector_index, self.grasp_success_height_threshold,
+                                                          self.grasp_success_object_gripper_threshold)
 
-        info['grasp_success_target'] = object_utils.check_grasp(
-            self.target_object, self.objects, self.robot_id,
-            self.end_effector_index, self.grasp_success_height_threshold,
-            self.grasp_success_object_gripper_threshold)
+        # check whether target object is placed in target container
+        if hasattr(self.current_subtask, "target_pos"):
+            info.place_success = object_utils.check_in_container(self.current_subtask.object,
+                                                                 self.objects, self.current_subtask.target_pos,
+                                                                 self.place_success_height_threshold,
+                                                                 self.place_success_radius_threshold)
+
+        # check whether drawer is opened
+        info.drawer_opened_percentage = self.get_drawer_opened_percentage()
+        info.drawer_opened = info.drawer_opened_percentage > self.drawer_opened_success_thresh
+        info.drawer_closed = info.drawer_opened_percentage < self.drawer_closed_success_thresh
+        
         return info
 
-    def render_obs(self):
-        img, depth, segmentation = bullet.render(
-            self.observation_img_dim, self.observation_img_dim,
-            self._view_matrix_obs, self._projection_matrix_obs, shadow=0)
-        if self.transpose_image:
-            img = np.transpose(img, (2, 0, 1))
-        return img
+    def get_reward(self, info):
+        reward = 0.
+        if self.current_subtask.done(info):
+            reward += self.current_subtask.REWARD
+            self.subtasks.pop(0)        # switch to the next subtask
+        return reward
+    
+    def step(self, action):
+        obs, reward, _, info = super().step(action)
+        done = not self.subtasks
+        return self.get_observation(), reward, done, info
 
-    def _set_action_space(self):
-        self.action_dim = ACTION_DIM
-        act_bound = 1
-        act_high = np.ones(self.action_dim) * act_bound
-        self.action_space = gym.spaces.Box(-act_high, act_high)
-
-    def _set_observation_space(self):
-        if self.observation_mode == 'pixels':
-            self.image_length = (self.observation_img_dim ** 2) * 3
-            img_space = gym.spaces.Box(0, 1, (self.image_length,),
-                                       dtype=np.float32)
-            robot_state_dim = 10  # XYZ + QUAT + GRIPPER_STATE
-            obs_bound = 100
-            obs_high = np.ones(robot_state_dim) * obs_bound
-            state_space = gym.spaces.Box(-obs_high, obs_high)
-            spaces = {'image': img_space, 'state': state_space}
-            self.observation_space = gym.spaces.Dict(spaces)
+    def get_target_position(self, object_target):
+        if object_target == 'container':
+            return self.container_position
+        elif object_target == 'tray':
+            return self.tray_position
+        elif object_target == 'drawer_top':
+            return list(self.top_drawer_position)
+        elif object_target == 'drawer_inside':
+            return list(self.inside_drawer_position)
+        elif object_target == 'trashcan':
+            return list(self.trashcan_position)
         else:
-            # self.image_length = (self.observation_img_dim ** 2) * 3
-            # img_space = gym.spaces.Box(0, 1, (self.image_length,),
-            #                            dtype=np.float32)
-            robot_state_dim = 10  # XYZ + QUAT + GRIPPER_STATE
-            obs_bound = 100
-            obs_high = np.ones(robot_state_dim) * obs_bound
-            state_space = gym.spaces.Box(-obs_high, obs_high)
-            spaces = {'state': state_space}
-            self.observation_space = gym.spaces.Dict(spaces)
-            # raise NotImplementedError
+            raise NotImplementedError
 
-    def get_gripper_state(self):
-        joint_states, _ = bullet.get_joint_states(self.robot_id,
-                                                  self.movable_joints)
-        gripper_state = np.asarray(joint_states[-2:])
-        return gripper_state
+    def generate_objects_positions(self):
+        if self.fixed_init_pos is not None:
+            return self.fixed_init_pos
 
-    def close(self):
-        bullet.disconnect()
+        if self.num_objects == 1:
+            container_position, object_positions = \
+                object_utils.generate_object_positions_single(
+                    self.object_position_low, self.object_position_high,
+                    self.container_position_low, self.container_position_high,
+                    min_distance_large_obj=self.min_distance_from_object,
+                )
+        else:
+            container_position, object_positions = \
+                object_utils.generate_multiple_object_positions(
+                    self.object_position_low, self.object_position_high,
+                    self.container_position_low, self.container_position_high,
+                    drawer_pos=self.drawer_pos,
+                    num_objects=self.num_objects,
+                    min_distance_drawer=self.min_distance_drawer,
+                    min_distance_container=self.min_distance_container,
+                    min_distance_obj=self.min_distance_obj
+                )
+        return container_position, object_positions
+
+    def _load_meshes(self):
+        # self.table_id = objects.table()
+        self.officedesk_id = objects.officedesk()
+        # self.officedesk_id = objects.officedesk_v1()
 
 
-class Widow250MultiObjectEnv(MultiObjectEnv, Widow250Env):
-    """Grasping Env but with a random object each time."""
+        self.robot_id = objects.widow250(self.base_position)
+      
+        self.monitor_id = objects.monitor()
+        self.keyboard = objects.keyboard()     
+        self.desktop = objects.desktop() 
+        # self.eraser = objects.eraser()  
+        # self.books_id = objects.books()
+        # self.laptop_id = objects.laptop()
+        # self.trashcan_id = objects.trashcan(self.trashcan_position)
+        self.room_id = objects.room_v1()
+
+        self.objects = {}
+        if self.load_tray:
+            # self.tray_position = (0.1,-0.5, -.39)
+            self.tray_id = objects.tray(base_position=self.tray_position, scale=0.3)
+
+        self.objects["drawer"] = object_utils.load_object(
+            "drawer", self.drawer_pos, self.drawer_quat, scale=0.1)
+        # Open and close testing.
+        closed_drawer_x_pos = object_utils.open_drawer(
+            self.objects['drawer'])[0]
+
+        opened_drawer_x_pos = object_utils.close_drawer(
+            self.objects['drawer'])[0]
+
+        # TODO: add second drawer
+        # drawer_2_pos = (0.15, 0.2, -0.35)
+        # self.objects["drawer2"] = object_utils.load_object(
+        #     "drawer", drawer_2_pos, bullet.deg_to_quat([0, 0., 90]), scale=0.1)
+        # # Open and close testing.
+        # closed_drawer_x_pos = object_utils.open_drawer(
+        #     self.objects['drawer2'])[0]
+
+        # opened_drawer_x_pos = object_utils.close_drawer(
+        #     self.objects['drawer2'])[0]
+
+
+        if self.left_opening:
+            self.drawer_min_x_pos = closed_drawer_x_pos
+            self.drawer_max_x_pos = opened_drawer_x_pos
+        else:
+            self.drawer_min_x_pos = opened_drawer_x_pos
+            self.drawer_max_x_pos = closed_drawer_x_pos
+        if self.start_opened:
+            object_utils.open_drawer(self.objects['drawer'])
+
+       
+        
+
+        self.container_position = (0.7, -0.3, -0.35)
+        self.container_id = object_utils.load_object(self.container_name,
+                                                     self.container_position,
+                                                     self.container_orientation,
+                                                     self.container_scale)
+        bullet.step_simulation(self.num_sim_steps_reset)
+
+        # TODO: wrap random position for container and objects
+        area_upper_left = np.random.uniform(
+                low=(0.8, -0.1, -0.35), high=(0.85, -0.15, -0.35))
+
+        area_upper_middle = object_utils.generate_two_object_positions(
+                    (0.38, -0.11, -0.35), (0.53, -0.24, -0.35),
+                    min_distance_small_obj=self.min_distance_obj,
+        )
+
+        area_lower_right = np.random.uniform(
+                low=(0.34, 0.15, -0.35), high=(0.4, 0.17, -0.35))
+        # import pdb; pdb.set_trace()
+        self.original_object_positions = [
+            # A:(0.9, -0.15, -0.35),
+            (0.34, 0.16, -0.35),
+            (0.8, -0.1, -0.35),
+            # B:(0.5, -0.2, -0.35),
+            (0.38, -0.11, -0.35),
+            (0.5, -0.24, -0.35),
+            # C:(0.4, 0.15, -0.35),
+            # D:(0.5, 0.3, -0.35),
+        ]
+
+        if self.random_object_position:
+            self.original_object_positions = [
+                area_upper_left,
+                area_upper_middle[0],
+                area_upper_middle[1],
+                area_lower_right
+            ]
+
+            self.original_object_positions = random.sample(self.original_object_positions,
+                                                            len(self.original_object_positions))
+
+        self.object_name_pos_map = {}
+        for object_name, object_position in zip(self.object_names,
+                                                self.original_object_positions):
+            self.objects[object_name] = object_utils.load_object(
+                object_name,
+                object_position,
+                object_quat=self.object_orientations[object_name],
+                scale=self.object_scales[object_name])
+            self.object_name_pos_map[object_name] = object_position
+            bullet.step_simulation(self.num_sim_steps_reset)
+
+    def get_drawer_handle_pos(self):
+        handle_pos = object_utils.get_drawer_handle_pos(
+            self.objects["drawer"])
+        return handle_pos
+
+    def is_drawer_open(self):
+        # refers to bottom drawer in the double drawer case
+        open_percentage = self.get_drawer_opened_percentage()
+        return open_percentage > self.drawer_opened_success_thresh
+
+    def get_drawer_opened_percentage(self, drawer_key="drawer"):
+        # compatible with either drawer or upper_drawer
+        drawer_x_pos = self.get_drawer_pos(drawer_key)[0]
+        return object_utils.get_drawer_opened_percentage(
+            self.left_opening, self.drawer_min_x_pos,
+            self.drawer_max_x_pos, drawer_x_pos)
+
+    def get_drawer_pos(self, drawer_key="drawer"):
+        drawer_pos = object_utils.get_drawer_pos(
+            self.objects[drawer_key])
+        return drawer_pos
+
+    def is_drawer_closed(self):
+        info = self.get_info()
+        return info['drawer_closed']
+
+    @property
+    def current_subtask(self):
+        return self.subtasks[0]
 
 
 if __name__ == "__main__":
-    env = Widow250Env(gui=True)
-    import time
+    from roboverse.envs.registration import ENVIRONMENT_SPECS
+    kwargs = ENVIRONMENT_SPECS[-1]['kwargs']
+    env = Widow250OfficeEnv(gui=True, **kwargs)
     env.reset()
-    # import IPython; IPython.embed()
-
-    for i in range(200):
-        # print(i)
-        obs, rew, done, info = env.step(
-            np.asarray([0., 0., 0., 0., 0., 0.5, 0., 0.]))
-        # print("reward", rew, "info", info)
-        time.sleep(0.1)
-
-    # env.reset()
-    # time.sleep(1)
-    # for _ in range(25):
-    #     env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
-    #     time.sleep(0.1)
-
-    # env.reset()
+    done = False
+    while not done:
+        obs, reward, done, info = env.step(env.action_space.sample()*0.1)
+        print(info)

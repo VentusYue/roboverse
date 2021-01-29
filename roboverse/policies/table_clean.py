@@ -11,7 +11,7 @@ class TableClean:
                  pick_point_noise=0.00, drop_point_noise=0.00, return_origin_thresh=0.2, return_origin_thresh_drawer=0.1):
         self.env = env
         self.done = False
-        self.object_names= env.object_names
+        self.object_names= env.task_object_names
         self.object_targets = env.object_targets
         self.num_objects = env.num_objects
         self.xyz_action_scale = self.env.xyz_action_scale
@@ -56,7 +56,7 @@ class TableClean:
         self.reset()
     
     def reset(self):
-        self.object_names= self.env.object_names
+        self.object_names= self.env.task_object_names
         self.object_targets = self.env.object_targets
         num_drawer_target = 0
         num_container_target = 0

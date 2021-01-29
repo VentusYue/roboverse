@@ -52,7 +52,7 @@ class Widow250Env(gym.Env, Serializable):
 
                  reward_type='grasping',
                  grasp_success_height_threshold=-0.3,
-                 grasp_success_object_gripper_threshold=0.2,
+                 grasp_success_object_gripper_threshold=0.25,
 
                  use_neutral_action=False,
                  neutral_gripper_open=True,
@@ -110,7 +110,6 @@ class Widow250Env(gym.Env, Serializable):
         assert target_object in object_names
         assert len(object_names) == len(object_scales)
         self.load_tray = load_tray
-        self.num_objects = len(object_names)
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
         self.object_names = object_names

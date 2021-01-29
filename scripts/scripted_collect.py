@@ -73,6 +73,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
                        done, next_observation, img_dim, image_rendered)
         total_reward += reward
         if accept_trajectory_key == 'table_clean':
+            # print(total_reward)
             if total_reward > 6 and num_steps < 0:
                 num_steps = j
             if total_reward > 6 :

@@ -27,7 +27,7 @@ def table():
 
     table_id = p.loadURDF(table_path,
                         #   basePosition=[.75, -.2, -1],
-                          basePosition=[.63, -.23, -1],
+                          basePosition=[.63, -.23, -1.2],
 
                           baseOrientation=[0, 0, 0.707107, 0.707107],
                           globalScaling=1.0)
@@ -54,48 +54,16 @@ def tray(base_position=(.60, 0.3, -.37), scale=0.5):
     return tray_id
 
 
-def widow250(basePosition=[0.6, 0.0, -0.4]):
+def widow250(basePosition=[0.6, -0.0, -0.4]):
     widow250_path = os.path.join(ASSET_PATH,
                                  'interbotix_descriptions/urdf/wx250s.urdf')
     widow250_id = p.loadURDF(widow250_path,
                              basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([0., 0., 0])
+                             baseOrientation=bullet.deg_to_quat([0., 0., -180])
                              )
     return widow250_id
 
 #(0.5, -0.3, -0.385)
-def monitor(basePosition=(1.6, -0.1, -0.42), scale=32):
-    monitor_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/monitor/monitor.urdf')
-    monitor_id = p.loadURDF(monitor_path,
-                             basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([0, 0., 180]),
-                             globalScaling=scale
-                             )
-    return monitor_id
-
-def monitor_v1(basePosition=(0.3, -0.3, 0.), scale=1.5):
-    monitor_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/monitor_v1/monitor.urdf')
-    monitor_id = p.loadURDF(monitor_path,
-                             basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([90, 0., 180.0 ]),
-                             globalScaling=scale,
-                            #  flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
-
-                             )
-    return monitor_id
-
-
-def monitor_v2(basePosition=(0.5, -0.3, 0.), scale=3):
-    monitor_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/monitor_v2/model.urdf')
-    monitor_id = p.loadURDF(monitor_path,
-                             basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([90, 0., 0. ]),
-                             globalScaling=scale
-                             )
-    return monitor_id
 
 def books(basePosition=(1.2, -0.35, -0.37), scale=1.8):
     books_path = os.path.join(ASSET_PATH,
@@ -143,24 +111,14 @@ def lamp_v1(basePosition=(-0.2, -0.2, -0.37), scale=0.07):
                              )
     return lamp_id
 
-def officedesk(basePosition=(0.6, 0.25, -1.34), scale=0.0024):
-    officedesk_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/officedesk/desk.urdf')
-    officedesk_id = p.loadURDF(officedesk_path,
-                             basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([90, 0., 0.]),
-                             globalScaling=scale,
-                            #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
-                            # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
-                             )
-    return officedesk_id
 
-def officedesk_v1(basePosition=(0.6, 0.25, -1.34), scale=4):
+
+def officedesk_v1(basePosition=(0.2, -0.9, -1.2), scale=2.0):
     officedesk_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/officedesk_v1/desk.urdf')
     officedesk_id = p.loadURDF(officedesk_path,
                              basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([90, 0., 0.]),
+                             baseOrientation=bullet.deg_to_quat([90, 0., -90]),
                              globalScaling=scale,
                             #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
                             # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
@@ -210,7 +168,7 @@ def room(basePosition=(-0.4, 0,-1.4 ), scale=0.8):
     return room_id
 
 
-def room_v1(basePosition=(1.5, 0.6,-0.5), scale=0.6):
+def room_v1(basePosition=(1.72, 1.15,-0.8), scale=0.6):
     room_path = os.path.join(ASSET_PATH,
                                  'room_descriptions/urdf/room_v1.urdf')
     room_id = p.loadURDF(room_path,
@@ -221,7 +179,7 @@ def room_v1(basePosition=(1.5, 0.6,-0.5), scale=0.6):
     return room_id
 
 
-def keyboard(basePosition=(1.6, 0.1, -0.375), scale=1.2):
+def keyboard(basePosition=(1.0, -0.55, -0.4), scale=1.2):
     keyboard_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/keyboard/keyboard.urdf')
     keyboard_id = p.loadURDF(keyboard_path,
@@ -232,7 +190,7 @@ def keyboard(basePosition=(1.6, 0.1, -0.375), scale=1.2):
     return keyboard_id
 
 
-def desktop(basePosition=(0.75, -0.1, -1.29), scale=0.028):
+def desktop(basePosition=(0.65, -0.25, -1.09), scale=0.018):
     keyboard_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/desktop/desktop.urdf')
     keyboard_id = p.loadURDF(keyboard_path,
@@ -241,3 +199,50 @@ def desktop(basePosition=(0.75, -0.1, -1.29), scale=0.028):
                          baseOrientation=bullet.deg_to_quat([0, 0., 0]),
                             )
     return keyboard_id
+
+# 0.3, 0.2, -0.8
+def trashcan(basePosition=(0.8, 0.4, -0.8), scale=0.6):
+    room_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/trashcan/trashcan.urdf')
+    room_id = p.loadURDF(room_path,
+                        globalScaling=scale,
+                         basePosition=basePosition,
+                         baseOrientation=bullet.deg_to_quat([0, 0., 0]),
+                            )
+    return room_id
+
+def monitor(basePosition=(0.4, -0.4, -0.42), scale=25):
+    monitor_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/monitor/monitor.urdf')
+    monitor_id = p.loadURDF(monitor_path,
+                             basePosition=basePosition,
+                             baseOrientation=bullet.deg_to_quat([0, 0., 180]),
+                             globalScaling=scale
+                             )
+    return monitor_id
+# (0.6, -0.1, -0.71)
+def officedesk(basePosition=(0.65, 0.05, -0.46), scale=2.4):
+    officedesk_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/officedesk/desk.urdf')
+    officedesk_id = p.loadURDF(officedesk_path,
+                             basePosition=basePosition,
+                             baseOrientation=bullet.deg_to_quat([90, 0., -90]),
+                             globalScaling=scale,
+                            #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
+                            # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+                             )
+    return officedesk_id
+
+
+def eraser(basePosition=(0.65, 0.05, 0), scale=0.01):
+    print(f"quad: {bullet.deg_to_quat([90, 0., 0])}")
+    officedesk_path = os.path.join(ASSET_PATH,
+                                 'bullet-objects/eraser/eraser.urdf')
+    officedesk_id = p.loadURDF(officedesk_path,
+                             basePosition=basePosition,
+                             baseOrientation=bullet.deg_to_quat([90, 0., 0]),
+                             globalScaling=scale,
+                            #  URDF_USE_MATERIAL_COLORS_FROM_MTL=True,
+                            # flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+                             )
+    return officedesk_id

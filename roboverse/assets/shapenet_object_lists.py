@@ -79,10 +79,10 @@ CONTAINER_CONFIGS = {
         'container_position_default': (1.0, 0.0, -.37),
         # (.5, 0.25, -.30),
         'container_orientation': (0, 0, 0.707107, 0.707107),
-        'container_scale': 0.18,
+        'container_scale': 0.15,
         'container_position_z': -0.37,
         'place_success_height_threshold': -0.3, #-0.32
-        'place_success_radius_threshold': 0.06, #0.04
+        'place_success_radius_threshold': 0.1, #0.04
         'min_distance_from_object': 0.11,
     },
     # 'tray': {
@@ -101,10 +101,10 @@ CONTAINER_CONFIGS = {
         'container_position_high': (.7, 0.23, -.30),
         'container_position_default': (.5, 0.23, -.30),
         'container_orientation': (0, 0, 0.707107, 0.707107),
-        'container_scale': 0.1,
+        'container_scale': 0.14,
         'container_position_z': -0.35,
-        'place_success_height_threshold': -0.32,
-        'place_success_radius_threshold': 0.04,
+        'place_success_height_threshold': -0.3, #-0.32
+        'place_success_radius_threshold': 0.1, #0.04
         'min_distance_from_object': 0.11,
     },
     'pan_tefal': {
