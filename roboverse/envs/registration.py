@@ -1687,7 +1687,9 @@ ENVIRONMENT_SPECS = (
 
                     'start_opened': False,
                     'num_objects': 3, # 2 or 3, 
-                    'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    # 'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    # 'object_targets': ('tray', 'container', 'drawer_inside'),        'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    'object_names': ('eraser', 'shed', 'pepsi_bottle', 'gatorade', ),
                     'object_targets': ('tray', 'container', 'drawer_inside'),
                     'object_scales': (0.8, 0.8, 0.8, 0.8),
                     'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
@@ -1705,7 +1707,7 @@ ENVIRONMENT_SPECS = (
                     'random_tray': False,
                     'tray_position_high': (0.25,-0.22, -.39), # (.7, .27, -.35)
                     'tray_position_low': (0.22,-0.25, -.39),
-                    'random_shuffle_object': True,
+                    'random_shuffle_object': False,
                     'random_shuffle_target': False,
 
                     'base_position_high': (0.62, 0.02, -0.4), # (.7, .27, -.35)
@@ -1775,11 +1777,11 @@ ENVIRONMENT_SPECS = (
                     'tray_position': (0.22,-0.22, -.39),
                     # 'tray_position': (0.25,-0.25, -.39),
 
-                    'random_tray': False,
+                    'random_tray': True,
                     'tray_position_high': (0.25,-0.22, -.39), # (.7, .27, -.35)
                     'tray_position_low': (0.22,-0.25, -.39),
                     'random_shuffle_object': True,
-                    'random_shuffle_target': False,
+                    'random_shuffle_target': True,
 
                     'base_position_high': (0.62, 0.02, -0.4), # (.7, .27, -.35)
                     'base_position_low': (0.58, -0.02, -0.4),

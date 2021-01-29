@@ -95,7 +95,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 fixed_init_pos=None,
                 drawer_number = 2,
                 **kwargs):
-        
+
         self.random_object_position = random_object_position
         self.load_tray = load_tray
         self.tray_position = tray_position
@@ -140,9 +140,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.drawer_opened_success_thresh = 0.9
         self.drawer_closed_success_thresh = 0.1     
         self.possible_objects = np.asarray(possible_objects) 
-        self.random_shuffle_object = random_shuffle_object
-        if not self.random_shuffle_object:
-            self.task_object_names = self.object_names[:self.num_objects]
         self.num_objects = num_objects
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
@@ -150,8 +147,11 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         self.object_names = object_names
         self.object_targets = object_targets
-        self.task_object_names = random.sample(self.object_names, self.num_objects)
-
+        self.random_shuffle_object = random_shuffle_object
+        if self.random_shuffle_object:
+            self.task_object_names = random.sample(self.object_names, self.num_objects)
+        else:
+            self.task_object_names = self.object_names[:3]
         self.xyz_action_scale = xyz_action_scale
 
         self.inside_drawer_position = np.array(self.drawer_pos[:2] + (-.2,)) + np.array((0.12, 0, 0))
@@ -369,10 +369,10 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         # import pdb; pdb.set_trace()
         self.original_object_positions = [
             # A:(0.9, -0.15, -0.35),
-            (0.34, 0.16, -0.35),
             (0.8, -0.1, -0.35),
+            (0.4, -0.13, -0.35),
+            (0.37, 0.16, -0.35),
             # B:(0.5, -0.2, -0.35),
-            (0.38, -0.11, -0.35),
             (0.5, -0.24, -0.35),
             # C:(0.4, 0.15, -0.35),
             # D:(0.5, 0.3, -0.35),
