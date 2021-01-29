@@ -70,5 +70,4 @@ python scripts/scripted_collect.py -n 100 -t 350 -e Widow250TableCleanObjects3Ra
 # office task
 python scripts/scripted_collect.py -n 100 -t 350 -e Widow250OfficePickPlaceRandom-v0 -pl tableclean -a table_clean --noise=0.1 --gui
 
-
 python scripts/scripted_collect.py -n 100 -t 350 -e Widow250OfficePickPlaceFixed-v0 -pl tableclean -a table_clean --noise=0.1 --gui
