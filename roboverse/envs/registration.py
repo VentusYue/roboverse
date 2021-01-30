@@ -1690,8 +1690,8 @@ ENVIRONMENT_SPECS = (
                     # 'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
                     # 'object_targets': ('tray', 'container', 'drawer_inside'),        'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
                     'object_names': ('eraser', 'shed', 'pepsi_bottle', 'gatorade', ),
-                    # 'object_targets': ('tray', 'container', 'drawer_inside'),
-                    'object_targets': ('container', 'tray', 'drawer_inside'),
+                    'object_targets': ('tray', 'container', 'drawer_inside'),
+                    # 'object_targets': ('container', 'tray', 'drawer_inside'),
                     
                     'object_scales': (0.8, 0.8, 0.8, 0.8),
                     'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
