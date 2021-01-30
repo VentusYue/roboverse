@@ -3,7 +3,7 @@ import roboverse.bullet as bullet
 
 from roboverse.assets.shapenet_object_lists import GRASP_OFFSETS
 from .drawer_open_transfer import DrawerOpenTransfer
-
+from roboverse.utils.general_utils import alpha_between_vec
 
 class PickPlace:
 
@@ -312,16 +312,23 @@ class PickPlaceTarget:
         self.done = False
 
     def get_action(self):
-        ee_pos, _ = bullet.get_link_state(
+        ee_pos, a = bullet.get_link_state(
             self.env.robot_id, self.env.end_effector_index)
         object_pos, _ = bullet.get_object_position(
             self.env.objects[self.object_to_target])
-        object_lifted = object_pos[2] > self.pick_height_thresh_noisy
+        # alpha_pick = alpha_between_vec(ee_pos[0:2] - self.env.base_position[0:2], 
+        #     self.pick_point[0:2] - self.env.base_position[0:2])
+        # alpha_drop = alpha_between_vec(ee_pos[0:2] - self.env.base_position[0:2], 
+        #     self.drop_point[0:2] - self.env.base_position[0:2])
         
+        object_lifted = object_pos[2] > self.pick_height_thresh_noisy
         gripper_pickpoint_dist = np.linalg.norm(self.pick_point - ee_pos)
         gripper_droppoint_dist = np.linalg.norm(self.drop_point - ee_pos)
         gripper_drop_point_dist_z = (self.drop_point - ee_pos)[2]
         origin_dist = self.env.ee_pos_init - ee_pos 
+
+
+
         # print(f"ee_pos: {ee_pos}, pick_point: {self.pick_point}, drop_point: {self.drop_point}")
         done = False
         # print(origin_dist, np.linalg.norm(origin_dist))
@@ -350,6 +357,7 @@ class PickPlaceTarget:
         elif gripper_pickpoint_dist > 0.015 and self.env.is_gripper_open:
             # print("move near the object")
             action_xyz = (self.pick_point - ee_pos) * self.xyz_action_scale
+            # print(f"distance: {self.pick_point - ee_pos}, ee_pos: {ee_pos}")
             xy_diff = np.linalg.norm(action_xyz[:2] / self.xyz_action_scale)
             if xy_diff > 0.03:
                 action_xyz[2] = 0.0
@@ -367,6 +375,8 @@ class PickPlaceTarget:
             action_gripper = [0.]
         elif gripper_droppoint_dist > 0.02:
             # print("lifted, now need to move towards the container")
+            # print(f"distance: {self.drop_point - ee_pos}, ee_pos: {ee_pos}")
+
             action_xyz = (self.drop_point - ee_pos) * self.xyz_action_scale
             action_angles = [0., 0., 0.]
             action_gripper = [0.]

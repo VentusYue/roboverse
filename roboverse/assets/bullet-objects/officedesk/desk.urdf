@@ -1,8 +1,8 @@
 <robot name="tray">
   <link name="tray_base_link">
     <contact>
-      <lateral_friction value="10.0"/>
-      <rolling_friction value="10.0"/>
+      <lateral_friction value="0.5"/>
+      <rolling_friction value="0.0"/>
       <contact_cfm value="0.0"/>
       <contact_erp value="1.0"/>
     </contact>

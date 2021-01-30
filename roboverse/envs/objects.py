@@ -89,14 +89,14 @@ def laptop(basePosition=(1.2, 0.2, -0.38), scale=1.0):
     return laptop_id
 
 
-def lamp(basePosition=(-0.2, -0.2, -0.37), scale=0.07):
+def lamp(basePosition=(0.07, -0.37, -0.4), scale=0.6):
     lamp_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/lamp/lamp.urdf')
     lamp_id = p.loadURDF(lamp_path,
                              basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([90.0, 0., 180]),
+                             baseOrientation=bullet.deg_to_quat([0.0, 0., 150]),
                              globalScaling=scale,
-                             flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
+                            #  flags = p.URDF_USE_MATERIAL_COLORS_FROM_MTL,
                              )
     return lamp_id
 
@@ -211,7 +211,7 @@ def trashcan(basePosition=(0.8, 0.4, -0.8), scale=0.6):
                             )
     return room_id
 
-def monitor(basePosition=(0.4, -0.4, -0.42), scale=25):
+def monitor(basePosition=(0.42, -0.4, -0.42), scale=25):
     monitor_path = os.path.join(ASSET_PATH,
                                  'bullet-objects/monitor/monitor.urdf')
     monitor_id = p.loadURDF(monitor_path,

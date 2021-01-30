@@ -100,7 +100,6 @@ def dump2h5(traj, path, image_rendered):
     actions = np.array(traj['actions'])
     rewards = np.array(traj['rewards'])
     terminals = np.array(traj['terminals'])
-
     # create HDF5 file
     f = h5py.File(path, "w")
     f.create_dataset("traj_per_file", data=1)
