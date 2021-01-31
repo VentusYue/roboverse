@@ -432,7 +432,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 low=(0.8, -0.1, -0.35), high=(0.85, -0.15, -0.35))
 
         area_upper_middle = object_utils.generate_two_object_positions(
-                    (0.38, -0.13, -0.35), (0.53, -0.24, -0.35),
+                    (0.38, -0.13, -0.35), (0.56, -0.27, -0.35),
                     min_distance_small_obj=self.min_distance_obj,
         )
         area_lower_right = np.random.uniform(
@@ -451,11 +451,13 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         self.original_object_positions = [
             # A:(0.9, -0.15, -0.35),
-            (0.37, 0.16, -0.35),
-            (0.8, -0.1, -0.35),
-            (0.4, -0.13, -0.35),
+            (0.35, 0.16, -0.35),
+            (0.41, -0.14, -0.35),
             # B:(0.5, -0.2, -0.35),
-            (0.5, -0.24, -0.35),
+            # (0.53, -0.24, -0.35),
+            (0.53, -0.24, -0.35),
+
+            (0.8, -0.1, -0.35),
             # C:(0.4, 0.15, -0.35),
             # D:(0.5, 0.3, -0.35),
         ]
