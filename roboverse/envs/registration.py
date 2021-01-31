@@ -1682,7 +1682,7 @@ ENVIRONMENT_SPECS = (
                     'observation_mode': 'noimage',
 
                     'drawer_pos': (0.1, 0.0, -.35), # middle
-                    'drawer_pos_low': (0.1, 0.0, -.35), # (.7, .27, -.35)
+                    'drawer_pos_low': (0.8, 0.0, -.35), # (.7, .27, -.35)
                     'drawer_pos_high': (.12, 0.1, -.35),
 
                     'start_opened': False,
@@ -1745,7 +1745,7 @@ ENVIRONMENT_SPECS = (
                     # 'drawer_pos': (0.1, 0.0, -.35), # middle
                     'random_drawer' : True,
                     'drawer_pos': (0.1, 0.0, -.35), # middle
-                    'drawer_pos_low': (0.1, 0.0, -.35), # (.7, .27, -.35)
+                    'drawer_pos_low': (0.08, -0.01, -.35), # (.7, .27, -.35)
                     'drawer_pos_high': (.12, 0.03, -.35),
 
                     # 'drawer_pos': (0.15, 0.2, -.35),
