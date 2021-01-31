@@ -216,7 +216,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         if self.random_joint_values:
             bias = np.random.uniform(-0.05, 0.05)
             self.reset_joint_values[1:5] = [-0.6-bias, -0.6-bias, 0, -1.57-bias]
-            print(self.reset_joint_values)
         bullet.reset()
         bullet.setup_headless()
         self._load_meshes()
