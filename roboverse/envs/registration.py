@@ -1690,7 +1690,7 @@ ENVIRONMENT_SPECS = (
                     # 'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
                     # 'object_targets': ('tray', 'container', 'drawer_inside'),        'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
                     # 'object_names': ('eraser', 'shed', 'pepsi_bottle', 'gatorade', ),
-                    'object_names': ('eraser', 'gatorade', 'pepsi_bottle', 'shed', ),
+                    'object_names': ('eraser', 'shed', 'pepsi_bottle', 'gatorade', ),
 
                     'object_targets': ('tray', 'container', 'drawer_inside'),
                     # 'object_targets': ('container', 'tray', 'drawer_inside'),
@@ -1783,7 +1783,7 @@ ENVIRONMENT_SPECS = (
                     'min_distance_drawer': 0.2,
                     'min_distance_container': 0.11,
                     'min_distance_obj': 0.13,
-                    'tray_position': (0.26,-0.22, -.39),
+                    'tray_position': (0.26,-0.2, -.39),
                     # 'tray_position': (0.25,-0.25, -.39),
 
                     'random_tray': True,
