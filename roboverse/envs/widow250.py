@@ -402,16 +402,17 @@ if __name__ == "__main__":
     # import IPython; IPython.embed()
 
     for i in range(200):
-        print(i)
+        ee_pos, ee_orientation = bullet.get_link_state(
+            env.robot_id, env.end_effector_index)
+        print(f"ee_pos: {ee_pos}, ee_deg: {bullet.quat_to_deg(ee_orientation)}")
         obs, rew, done, info = env.step(
-            np.asarray([0.0, 0., 0., 0., 0., 0.0, 0., 0.]))
-        print("reward", rew, "info", info)
+            np.asarray([0.0, 0., 0.0, 0.0, 0.0, 0.0, 0., 0.]))
         time.sleep(0.1)
 
     env.reset()
     time.sleep(1)
     for _ in range(100):
-        env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
+        env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.0, 0.]))
         time.sleep(0.1)
 
     env.reset()

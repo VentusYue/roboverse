@@ -256,12 +256,14 @@ class PickPlaceTarget:
     def __init__(self, env, pick_height_thresh=-0.31, xyz_action_scale=7.0,
                  pick_point_noise=0.00, drop_point_noise=0.00, 
                  return_origin_thresh=0.1,
+                 angle_action_scale = 0.1,
                  object_target = 'container',
                  object_name='shed'):
         self.env = env
         self.pick_height_thresh_noisy = (
             pick_height_thresh + np.random.normal(scale=0.01))
         self.xyz_action_scale = xyz_action_scale
+        self.angle_action_scale = angle_action_scale
         self.pick_point_noise = pick_point_noise
         self.drop_point_noise = drop_point_noise
         self.done = False
@@ -308,12 +310,20 @@ class PickPlaceTarget:
         else:
             raise NotImplementedError
         self.drop_point[2] = -0.15
+
+        self.pick_angle = [90.0, 0.0, 0.0]
+        self.drop_angle = [90.0, 0.0, 0.0]
+
         self.place_attempted = False
         self.done = False
 
     def get_action(self):
-        ee_pos, a = bullet.get_link_state(
+        ee_pos, ee_orientation = bullet.get_link_state(
             self.env.robot_id, self.env.end_effector_index)
+        ee_deg = bullet.quat_to_deg(ee_orientation)
+        # print(f"ee_pos: {ee_pos}, ee_deg: {ee_deg}")
+        
+
         object_pos, _ = bullet.get_object_position(
             self.env.objects[self.object_to_target])
         # alpha_pick = alpha_between_vec(ee_pos[0:2] - self.env.base_position[0:2], 
@@ -340,13 +350,14 @@ class PickPlaceTarget:
             if np.abs(gripper_drop_point_dist_z) < 0.01:
                 # print("lifted")
                 action_xyz = [0., 0., gripper_drop_point_dist_z * self.xyz_action_scale] 
-                action_angles = [0., 0., 0.]
-                action_gripper = [0.7]
+                action_angles = (self.drop_angle - ee_deg) * self.angle_action_scale
+                action_gripper = [0.0]
             else:
                 if np.linalg.norm(origin_dist) > self.return_origin_thresh:
                     # print(f"ee_pos: {ee_pos}, origin_dist: {origin_dist}, thresh: {self.return_origin_thresh}")
                     action_xyz = origin_dist 
-                    action_angles = [0., 0., 0.]
+                    action_angles = (self.drop_angle - ee_deg) * self.angle_action_scale
+                    # action_angles = [0., 0., 0.]
                     action_gripper = [0.]
                 else:
                     action_xyz = [0., 0., 0.]
@@ -361,34 +372,37 @@ class PickPlaceTarget:
             xy_diff = np.linalg.norm(action_xyz[:2] / self.xyz_action_scale)
             if xy_diff > 0.03:
                 action_xyz[2] = 0.0
-            action_angles = [0., 0., 0.]
+            # action_angles = [0., 0., 0.]
+            action_angles = (self.pick_angle - ee_deg) * self.angle_action_scale
             action_gripper = [0.0]
         elif self.env.is_gripper_open:
             # print("near the object enough, performs grasping action")
             action_xyz = (self.pick_point  - ee_pos) * self.xyz_action_scale
-            action_angles = [0., 0., 0.]
+            # action_angles = [0., 0., 0.]
+            action_angles = (self.pick_angle - ee_deg) * self.angle_action_scale
             action_gripper = [-0.9]
         elif not object_lifted:
             # print("lifting objects above the height threshold for picking")
             action_xyz = (self.env.ee_pos_init - ee_pos) * self.xyz_action_scale
-            action_angles = [0., 0., 0.]
+            # action_angles = [0., 0., 0.]
+            action_angles = (self.pick_angle - ee_deg) * self.angle_action_scale
             action_gripper = [0.]
         elif gripper_droppoint_dist > 0.02:
             # print("lifted, now need to move towards the container")
             # print(f"distance: {self.drop_point - ee_pos}, ee_pos: {ee_pos}")
-
             action_xyz = (self.drop_point - ee_pos) * self.xyz_action_scale
-            action_angles = [0., 0., 0.]
+            # action_angles = [0., 0., 0.]
+            action_angles = (self.drop_angle - ee_deg) * self.angle_action_scale
             action_gripper = [0.]
         else:
             # print("already moved above the container; drop object")
             action_xyz = (0., 0., 0.)
             action_angles = [0., 0., 0.]
-            action_gripper = [0.7]
+            action_gripper = [0.9]
             self.place_attempted = True
 
-        # import pdb; pdb.set_trace()
-        
+        # print(f"ee_pos: {ee_pos}, ee_deg: {ee_deg}, action_angles: {action_angles}")
+
         # if done and self.place_attempted:
         #     if np.linalg.norm(ee_pos - self.env.ee_pos_init) < self.return_origin_thresh:
         #         self.done = done
