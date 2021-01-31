@@ -27,8 +27,6 @@ JOINT_LIMIT_LOWER = [-3.14, -3.14, -3.14, -3.14, -3.14, -3.14, -GUESS, 0.015,
                      -0.037]
 JOINT_LIMIT_UPPER = [3.14, 3.14, 3.14, 3.14, 3.14, 3.14, GUESS, 0.037, -0.015]
 
-
-
 JOINT_RANGE = []
 for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
     JOINT_RANGE.append(upper - lower)
@@ -82,8 +80,12 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 base_position_high=(0.6, 0.0, -0.4), # (.7, .27, -.35)
                 base_position_low=(0.6, -0.0, -0.4),
                 base_position=(0.6, -0.0, -0.4),
+                base_orientation = (0, 0, -150),
+                base_orientation_high =(0, 0, -170),
+                base_orientation_low = (0, 0, -190),
                 random_base = False,
-                
+                random_base_orientation = False,
+                random_joint_values = False,
                 xyz_action_scale = 0.7,
                 random_shuffle_object = True,
                 random_shuffle_target = True,
@@ -102,20 +104,16 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.random_tray = random_tray
         self.tray_position_high = tray_position_high
         self.tray_position_low = tray_position_low
-        if self.random_tray:
-            self.tray_position = np.random.uniform(
-                low=self.tray_position_low, high=self.tray_position_high)
-        
-        self.trashcan_position = (0.7, 0.3, -0.9)
-        
+
         self.random_base = random_base
         self.base_position = base_position
         self.base_position_high = base_position_high
         self.base_position_low = base_position_low
-        if self.random_base:
-            self.base_position = np.random.uniform(
-                low=self.base_position_low, high=self.base_position_low)
-        
+        self.random_base_orientation = random_base_orientation
+        self.base_orientation = base_orientation
+        self.base_orientation_high = base_orientation_high
+        self.base_orientation_low = base_orientation_low
+        self.random_joint_values = random_joint_values
         self.drawer_number = drawer_number
         self.random_drawer = random_drawer
         self.drawer_pos_low = drawer_pos_low
@@ -134,8 +132,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.drawer_quat = drawer_quat
         self.left_opening = left_opening
         self.start_opened = start_opened
-
-
 
         self.drawer_opened_success_thresh = 0.9
         self.drawer_closed_success_thresh = 0.1     
@@ -213,6 +209,14 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         if self.random_base:
             self.base_position = np.random.uniform(
                 low=self.base_position_low, high=self.base_position_low)
+        if self.random_base_orientation:
+            self.base_orientation = np.random.uniform(
+                low=self.base_orientation_low, high=self.base_orientation_high
+            )
+        if self.random_joint_values:
+            bias = np.random.uniform(-0.05, 0.05)
+            self.reset_joint_values[1:5] = [-0.6-bias, -0.6-bias, 0, -1.57-bias]
+            print(self.reset_joint_values)
         bullet.reset()
         bullet.setup_headless()
         self._load_meshes()
@@ -366,7 +370,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.officedesk_id = objects.officedesk()
         # self.officedesk_id = objects.officedesk_v1()
 
-        self.robot_id = objects.widow250(self.base_position)
+        self.robot_id = objects.widow250(self.base_position, self.base_orientation)
         self.monitor_id = objects.monitor()
         self.keyboard_id = objects.keyboard()     
         self.desktop_id = objects.desktop()
@@ -375,7 +379,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         # self.books_id = objects.books()
         # self.laptop_id = objects.laptop()
         # self.trashcan_id = objects.trashcan(self.trashcan_position)
-        # self.room_id = objects.room_v1()
+        self.room_id = objects.room_v1()
         self.desk_objects = {}
         self.desk_objects['monitor'] = self.monitor_id
         self.desk_objects['lamp'] = self.lamp_id

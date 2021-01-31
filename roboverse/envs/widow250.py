@@ -8,14 +8,24 @@ from roboverse.bullet import object_utils
 from roboverse.envs.multi_object import MultiObjectEnv
 
 END_EFFECTOR_INDEX = 8
+# RESET_JOINT_VALUES = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.036, -0.036]
 RESET_JOINT_VALUES = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.036, -0.036]
+# RESET_JOINT_VALUES = [0, 0.0, 0.0, 0.0, -1.57, 0., 0., 0.036, -0.036]
+# [z, ]
 RESET_JOINT_VALUES_GRIPPER_CLOSED = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.015, -0.015]
 RESET_JOINT_INDICES = [0, 1, 2, 3, 4, 5, 7, 10, 11]
 GUESS = 3.14  # TODO(avi) This is a guess, need to verify what joint this is
-JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
+# JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
+#                      -0.037]
+
+# JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+
+JOINT_LIMIT_LOWER = [-3.14, -1.6, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
                      -0.037]
 
-JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+JOINT_LIMIT_UPPER = [3.14, 1.6, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
+
+
 
 JOINT_RANGE = []
 for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
@@ -56,7 +66,7 @@ class Widow250Env(gym.Env, Serializable):
 
                  use_neutral_action=False,
                  neutral_gripper_open=True,
-
+                 num_objects = 3,
                  xyz_action_scale=0.2,
                  abc_action_scale=20.0,
                  gripper_action_scale=20.0,
@@ -109,6 +119,7 @@ class Widow250Env(gym.Env, Serializable):
         # object stuff
         assert target_object in object_names
         assert len(object_names) == len(object_scales)
+        self.num_objects = num_objects
         self.load_tray = load_tray
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
@@ -390,16 +401,16 @@ if __name__ == "__main__":
     env.reset()
     # import IPython; IPython.embed()
 
-    for i in range(20):
+    for i in range(200):
         print(i)
         obs, rew, done, info = env.step(
-            np.asarray([-0.05, 0., 0., 0., 0., 0.5, 0., 0.]))
+            np.asarray([0.0, 0., 0., 0., 0., 0.0, 0., 0.]))
         print("reward", rew, "info", info)
         time.sleep(0.1)
 
     env.reset()
     time.sleep(1)
-    for _ in range(25):
+    for _ in range(100):
         env.step(np.asarray([0., 0., 0., 0., 0., 0., 0.6, 0.]))
         time.sleep(0.1)
 

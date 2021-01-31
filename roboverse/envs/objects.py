@@ -54,12 +54,15 @@ def tray(base_position=(.60, 0.3, -.37), scale=0.5):
     return tray_id
 
 
-def widow250(basePosition=[0.6, -0.0, -0.4]):
+def widow250(basePosition=[0.6, -0.0, -0.4], baseOrientation=[0.0, 0.0, -180]):
+    baseOrientation_quad = bullet.deg_to_quat(baseOrientation)
+    
+    # import pdb; pdb.set_trace()
     widow250_path = os.path.join(ASSET_PATH,
                                  'interbotix_descriptions/urdf/wx250s.urdf')
     widow250_id = p.loadURDF(widow250_path,
                              basePosition=basePosition,
-                             baseOrientation=bullet.deg_to_quat([0., 0., -180])
+                             baseOrientation=baseOrientation_quad
                              )
     return widow250_id
 

@@ -1715,7 +1715,12 @@ ENVIRONMENT_SPECS = (
                     'base_position_high': (0.62, 0.02, -0.4), # (.7, .27, -.35)
                     'base_position_low': (0.58, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
+                    'random_joint_values': False,
                     'random_base': True,
+                    'random_base_orientation': False,
+                    'base_orientation' : (0, 0, -180),
+                    'base_orientation_high':(0, 0, -170),
+                    'base_orientation_low' : (0, 0, -190),
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
                     'random_drawer': False,
                    }
@@ -1789,6 +1794,11 @@ ENVIRONMENT_SPECS = (
                     'base_position_low': (0.58, -0.02, -0.4),
                     'base_position': (0.6, 0.0, -0.4),
                     'random_base': True,
+                    'random_base_orientation': False,
+                    'random_joint_values': True,
+                    'base_orientation' : (0, 0, -180),
+                    'base_orientation_high':(0, 0, -182),
+                    'base_orientation_low' : (0, 0, -188),
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
 
                    }
