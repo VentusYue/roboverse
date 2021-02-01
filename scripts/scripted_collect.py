@@ -72,6 +72,8 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         add_transition(traj, observation,  action, reward, info, agent_info,
                        done, next_observation, img_dim, image_rendered)
         total_reward += reward
+        # print(total_reward)
+
         if accept_trajectory_key == 'table_clean':
             # print(total_reward)
             if total_reward > 6 and num_steps < 0:
@@ -155,6 +157,12 @@ def main(args):
     accept_trajectory_key = args.accept_trajectory_key
 
     progress_bar = tqdm(total=args.num_trajectories)
+    
+    total_area_occurance = [0, 0, 0]
+    total_object_occurance = {}
+    for object_name in env.object_names:
+        total_object_occurance[object_name] = 0
+
     while num_saved < args.num_trajectories:
         num_attempts += 1
         traj, success, num_steps = collect_one_traj(
@@ -164,11 +172,24 @@ def main(args):
         if success:
             if args.gui:
                 print("num_timesteps: ", num_steps)
+            
             data.append(traj)
             dump2h5(traj, os.path.join(data_save_path, 'rollout_{}.h5'.format(num_saved)),
                         args.image_rendered)
             num_success += 1
             num_saved += 1
+            area_occurance, object_occurance = env.get_occurance()
+            for i in range(len(area_occurance)):
+                total_area_occurance[i] += area_occurance[i]
+            for object_name in env.object_names:
+                total_object_occurance[object_name] += object_occurance[object_name]
+            # print(total_area_occurance, total_object_occurance)
+            fo = open(os.path.join(data_save_path, 'occurance.txt'), "w")
+            str_area = f"area_occurance: {total_area_occurance}\n"
+            str_object = f"object_occurance: {total_object_occurance}\n"
+            fo.write(str_area)
+            fo.write(str_object)
+            fo.close()
             progress_bar.update(1)
         elif args.save_all:
             data.append(traj)
@@ -180,6 +201,7 @@ def main(args):
 
     progress_bar.close()
     print("success rate: {}".format(num_success / (num_attempts)))
+    print(total_area_occurance, total_object_occurance)
     path = osp.join(data_save_path, "scripted_{}_{}.npy".format(
         args.env_name, timestamp))
     print(path)

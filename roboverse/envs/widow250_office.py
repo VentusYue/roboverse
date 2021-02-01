@@ -56,6 +56,13 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 
                 object_position_high=(0.65, .9, -.35), # (.7, .27, -.35)
                 object_position_low=(.55, .1, -.35),
+
+                area_upper_left_low = (0.8, -0.1, -0.35),
+                area_upper_left_high = (0.85, -0.15, -0.35),
+                area_upper_middle_low = (0.4, -0.27, -0.35),
+                area_upper_middle_high = (0.56, -0.13, -0.35),
+                area_lower_right_low = (0.34, 0.15, -0.35),
+                area_lower_right_high = (0.4, 0.17, -0.35),
                 
                 possible_objects=TRAIN_OBJECTS[:10],            
                 drawer_pos=(0.35, 0.2, -.35),
@@ -99,6 +106,13 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 **kwargs):
 
         self.random_object_position = random_object_position
+        self.area_upper_left_low = area_upper_left_low
+        self.area_upper_left_high = area_upper_left_high
+        self.area_upper_middle_low = area_upper_middle_low
+        self.area_upper_middle_high = area_upper_middle_high
+        self.area_lower_right_low = area_lower_right_low
+        self.area_lower_right_high = area_lower_right_high
+
         self.load_tray = load_tray
         self.tray_position = tray_position
         self.random_tray = random_tray
@@ -165,6 +179,10 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.xyz_action_scale = xyz_action_scale
         self.fixed_init_pos = fixed_init_pos
         self.subtasks = None
+
+
+
+
         super(Widow250OfficeEnv, self).__init__(
             object_names=object_names,
             target_object=target_object,
@@ -281,6 +299,29 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         return observation
 
+    def get_occurance(self):
+        area_occurance = [0, 0, 0]
+        object_occurance = {}
+        for object_name in self.object_names:
+            object_occurance[object_name] = 0
+
+        for task_object_name in self.task_object_names:
+            object_occurance[task_object_name] += 1
+            object_pos = [self.object_name_pos_map[task_object_name]]
+            if self.object_in_area(object_pos, self.area_upper_left_low, self.area_upper_left_high):
+                area_occurance[0] += 1
+            elif self.object_in_area(object_pos, self.area_upper_middle_low, self.area_upper_middle_high):
+                area_occurance[1] += 1
+            elif self.object_in_area(object_pos, self.area_lower_right_low, self.area_lower_right_high):
+                area_occurance[2] += 1
+        return area_occurance, object_occurance
+
+    def object_in_area(self, object_pos, area_low, area_high):
+        if np.all(np.greater_equal(object_pos, area_low)) and np.all(np.greater_equal(area_high, object_pos)):
+            return True
+        else:
+            return False
+
     def get_states(self, objects):
         object_states = np.zeros(7 * len(objects))
         for i, object_id in enumerate(objects):
@@ -390,21 +431,13 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         self.drawer_id = object_utils.load_object(
             "drawer", self.drawer_pos, self.drawer_quat, scale=0.1)
+        
         # Open and close testing.
         closed_drawer_x_pos = object_utils.open_drawer(
             self.drawer_id)[0]
 
         opened_drawer_x_pos = object_utils.close_drawer(
             self.drawer_id)[0]
-
-        # self.objects["drawer"] = object_utils.load_object(
-        #     "drawer", self.drawer_pos, self.drawer_quat, scale=0.1)
-        # # Open and close testing.
-        # closed_drawer_x_pos = object_utils.open_drawer(
-        #     self.objects["drawer"])[0]
-
-        # opened_drawer_x_pos = object_utils.close_drawer(
-        #     self.objects["drawer"])[0]
 
         if self.left_opening:
             self.drawer_min_x_pos = closed_drawer_x_pos
@@ -429,14 +462,14 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         # TODO: wrap random position for container and objects
         area_upper_left = np.random.uniform(
-                low=(0.8, -0.1, -0.35), high=(0.85, -0.15, -0.35))
+                low=self.area_upper_left_low, high=self.area_upper_left_high)
 
         area_upper_middle = object_utils.generate_two_object_positions(
-                    (0.38, -0.13, -0.35), (0.56, -0.27, -0.35),
+                    self.area_upper_middle_low, self.area_upper_middle_high,
                     min_distance_small_obj=self.min_distance_obj,
         )
         area_lower_right = np.random.uniform(
-                low=(0.34, 0.15, -0.35), high=(0.4, 0.17, -0.35))
+                low=self.area_lower_right_low, high=self.area_lower_right_high)
         # self.original_object_positions = [
         #     # A:(0.9, -0.15, -0.35),
         #     (0.8, -0.1, -0.35),
@@ -462,7 +495,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
             # D:(0.5, 0.3, -0.35),
         ]
 
-
         if self.random_object_position:
             self.original_object_positions = [
                 area_upper_left,
@@ -473,7 +505,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
             self.original_object_positions = random.sample(self.original_object_positions,
                                                             len(self.original_object_positions))
-
+        
         self.object_name_pos_map = {}
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
@@ -484,6 +516,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 scale=self.object_scales[object_name])
             self.object_name_pos_map[object_name] = object_position
             bullet.step_simulation(self.num_sim_steps_reset)
+
+
 
     def get_drawer_handle_pos(self):
         handle_pos = object_utils.get_drawer_handle_pos(
