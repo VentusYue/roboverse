@@ -1705,7 +1705,7 @@ ENVIRONMENT_SPECS = (
                     'min_distance_drawer': 0.2,
                     'min_distance_container': 0.11,
                     'min_distance_obj': 0.11,
-                    'tray_position': (0.25,-0.2, -.39),
+                    'tray_position': (0.25,-0.19, -.39),
                     # 'tray_position': (0.25,-0.25, -.39),
 
                     'random_tray': False,
@@ -1787,8 +1787,8 @@ ENVIRONMENT_SPECS = (
                     # 'tray_position': (0.25,-0.25, -.39),
 
                     'random_tray': True,
-                    'tray_position_high': (0.28,-0.2, -.39), # (.7, .27, -.35)
-                    'tray_position_low': (0.25,-0.23, -.39),
+                    'tray_position_high': (0.28,-0.18, -.39), # (.7, .27, -.35)
+                    'tray_position_low': (0.25,-0.2, -.39),
                     'random_shuffle_object': True,
                     'random_shuffle_target': True,
 
