@@ -57,8 +57,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 object_position_high=(0.65, .9, -.35), # (.7, .27, -.35)
                 object_position_low=(.55, .1, -.35),
 
-                area_upper_left_low = (0.8, -0.1, -0.35),
-                area_upper_left_high = (0.85, -0.15, -0.35),
+                area_upper_left_low = (0.8, -0.15, -0.35),
+                area_upper_left_high = (0.85, -0.1, -0.35),
                 area_upper_middle_low = (0.4, -0.27, -0.35),
                 area_upper_middle_high = (0.56, -0.13, -0.35),
                 area_lower_right_low = (0.34, 0.15, -0.35),
@@ -308,6 +308,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         for task_object_name in self.task_object_names:
             object_occurance[task_object_name] += 1
             object_pos = [self.object_name_pos_map[task_object_name]]
+
             if self.object_in_area(object_pos, self.area_upper_left_low, self.area_upper_left_high):
                 area_occurance[0] += 1
             elif self.object_in_area(object_pos, self.area_upper_middle_low, self.area_upper_middle_high):
@@ -502,10 +503,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 area_upper_middle[1],
                 area_lower_right
             ]
-
             self.original_object_positions = random.sample(self.original_object_positions,
                                                             len(self.original_object_positions))
-        
         self.object_name_pos_map = {}
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
