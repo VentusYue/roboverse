@@ -24,7 +24,7 @@ def main(args):
             num = list(map(int, re.findall('\d+', str)))
             if len(num) == 3:
                 for i in range(len(num)):
-                    total_area_occurance[i] = num[i]
+                    total_area_occurance[i] += num[i]
             else:
                 for i, object_name in enumerate(object_names):
                     total_object_occurance[object_name] += num[i]
