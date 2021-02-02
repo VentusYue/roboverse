@@ -154,18 +154,19 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
 
-
         self.object_names = list(object_names)
         self.object_targets = list(object_targets)
         self.random_shuffle_object = random_shuffle_object
         if self.random_shuffle_object:
             self.task_object_names = random.sample(self.object_names, self.num_objects)
         else:
-            self.task_object_names = self.object_names[:3]
+            self.task_object_names = self.object_names[:self.num_objects]
 
         self.random_shuffle_target = random_shuffle_target
         if self.random_shuffle_target:
             self.object_targets[0:2] = random.sample(self.object_targets[0:2], 2)
+            if self.num_objects == 2:
+                self.object_targets = [self.object_targets[0], self.object_targets[-1]]
 
         self.xyz_action_scale = xyz_action_scale
 
@@ -218,6 +219,10 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
             self.task_object_names = random.sample(self.object_names, self.num_objects)
         if self.random_shuffle_target:
             self.object_targets[0:2] = random.sample(self.object_targets[0:2], 2)
+            if self.num_objects == 2:
+                self.object_targets = [self.object_targets[0], self.object_targets[-1]]
+
+       
         if self.random_drawer:
             self.drawer_pos = np.random.uniform(
                 low=self.drawer_pos_low, high=self.drawer_pos_high)

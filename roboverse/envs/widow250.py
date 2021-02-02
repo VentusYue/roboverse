@@ -119,7 +119,7 @@ class Widow250Env(gym.Env, Serializable):
         # object stuff
         assert target_object in object_names
         assert len(object_names) == len(object_scales)
-        self.num_objects = num_objects
+        # self.num_objects = num_objects
         self.load_tray = load_tray
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
