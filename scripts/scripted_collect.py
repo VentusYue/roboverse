@@ -87,7 +87,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         else:
             total_reward_thresh = num_tasks*2 
         if accept_trajectory_key == 'table_clean':
-            print(total_reward)
+            # print(total_reward)
             if total_reward > total_reward_thresh and num_steps < 0:
                 num_steps = j
             if total_reward > total_reward_thresh :

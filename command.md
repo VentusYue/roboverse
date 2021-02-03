@@ -31,3 +31,6 @@ python scripts/scripted_collect_parallel.py -p 8 -n 12000 -t 350 -e Widow250Offi
 python scripts/scripted_collect_parallel.py -p 12 -n 16000 -t 260 -e Widow250OfficePickPlaceRandom-v0 -pl tableclean -a table_clean --noise=0.1 -d office-v3 -f 1
 
 python scripts/scripted_collect_parallel.py -p 8 -n 12000 -t 260 -e Widow250OfficePickPlaceFixed-v0 -pl tableclean -a table_clean --noise=0.1 -d office-v3 -f 1
+
+
+python scripts/scripted_collect_parallel.py -p 12 -n 16000 -t 280 -e Widow250OfficePickPlaceRandom-v0 -pl tableclean -a table_clean --noise=0.1 -d office-v4 -f 1
