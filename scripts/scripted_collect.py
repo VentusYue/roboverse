@@ -58,13 +58,20 @@ def collect_one_traj(env, policy, num_timesteps, noise,
     total_reward = 0
     for j in range(num_timesteps):
 
-        action, agent_info = policy.get_action()
+        action, agent_info, add_noise = policy.get_action()
 
         # In case we need to pad actions by 1 for easier realNVP modelling
         env_action_dim = env.action_space.shape[0]
         if env_action_dim - action.shape[0] == 1:
             action = np.append(action, 0)
-        action += np.random.normal(scale=noise, size=(env_action_dim,))
+        
+        if add_noise:
+            action += np.random.normal(scale=noise, size=(env_action_dim,))
+        else:
+            action += np.random.normal(scale=noise*0.6, size=(env_action_dim,))
+
+        # action += np.random.normal(scale=noise, size=(env_action_dim,))
+
         action = np.clip(action, -1 + EPSILON, 1 - EPSILON)
         observation = env.get_observation()
         next_observation, reward, done, info = env.step(action)
@@ -174,7 +181,8 @@ def main(args):
         traj, success, num_steps = collect_one_traj(
             env, policy, args.num_timesteps, args.noise,
             accept_trajectory_key, args.image_rendered, args)
-
+        
+        # print("num_timesteps: ", num_steps)
         if success:
             if args.gui:
                 print("num_timesteps: ", num_steps)

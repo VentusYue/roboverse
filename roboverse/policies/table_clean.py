@@ -102,11 +102,11 @@ class TableClean:
             if pick_policy.done:
                 continue
             else:
-                action, agent_info = pick_policy.get_action()
+                action, agent_info, noise = pick_policy.get_action()
                 agent_info['done'] = self.done
                 # print(f"current policy: {pick_policy.object_name}, is agent done? {agent_info['done']}")
 
-                return action, agent_info
+                return action, agent_info, noise
         
         for pick_drawer_policy in self.pick_drawer_policies:
             pick_policy = pick_drawer_policy['pick_policy']
@@ -116,14 +116,14 @@ class TableClean:
                 continue
             else:
                 if not drawer_open_policy.done:
-                    action, agent_info = drawer_open_policy.get_action()
+                    action, agent_info, noise = drawer_open_policy.get_action()
                     agent_info['done'] = self.done
                 else:
                     if not pick_policy.done:
-                        action, agent_info = pick_policy.get_action()
+                        action, agent_info, noise = pick_policy.get_action()
                         agent_info['done'] = self.done
                     else:
-                        action, agent_info = drawer_close_policy.get_action()
+                        action, agent_info, noise = drawer_close_policy.get_action()
                         agent_info['done'] = self.done
                         
                         all_done = True
@@ -140,7 +140,7 @@ class TableClean:
                             self.done = True
                             agent_info['done'] = True
 
-                return action, agent_info
+                return action, agent_info, noise
 
 
         
