@@ -98,17 +98,17 @@ class DrawerOpen:
 
 class DrawerClose:
 
-    def __init__(self, env, xyz_action_scale=3.0, return_origin_thresh=0.1):
+    def __init__(self, env, xyz_action_scale=3.0, return_origin_thresh=0.1,angle_action_scale = 0.1):
         self.env = env
         self.xyz_action_scale = xyz_action_scale
         self.gripper_dist_thresh = 0.06
         self.gripper_xy_dist_thresh = 0.03
         self.ending_z = -0.25
         self.top_drawer_offset = np.array([0, 0, 0.02])
-
+        self.push_angle = [90.0, 5.0, 0.0]
         self.done = False
         self.begin_closing = False
-
+        self.angle_action_scale = angle_action_scale
         self.return_origin_thresh = return_origin_thresh
         self.reset()
 
@@ -123,8 +123,9 @@ class DrawerClose:
 
 
     def get_action(self):
-        ee_pos, _ = bullet.get_link_state(
+        ee_pos, ee_orientation = bullet.get_link_state(
             self.env.robot_id, self.env.end_effector_index)
+        ee_deg = bullet.quat_to_deg(ee_orientation)
         handle_pos = self.env.get_drawer_handle_pos() + self.handle_offset
         gripper_handle_dist = np.linalg.norm(handle_pos - ee_pos)
         gripper_handle_xy_dist = np.linalg.norm(handle_pos[:2] - ee_pos[:2])
@@ -161,12 +162,13 @@ class DrawerClose:
             action_xyz = [0,0,0]
             action_xyz[0] = (drawer_pos  - ee_pos)[0] * 3
             action_xyz[2] = (drawer_pos  - ee_pos)[2] * 3
-
+            # action_angles = (self.push_angle - ee_deg) * 0.5
+            # print(f"ee_deg: {ee_deg}")
             # action_xyz[0] *= 3
             # action_xyz[0] *= 1
             # action_xyz[1] *= 0.6
             action_angles = [0., 0., 0.]
-            action_gripper = [-0.0] #0.
+            action_gripper = [-0.7] #0.
             self.begin_closing = True
             # import pdb; pdb.set_trace()
         if self.env.is_drawer_closed() and self.begin_closing:
@@ -184,6 +186,7 @@ class DrawerClose:
                 # print(ee_pos, self.env.ee_pos_init)
                 # print(np.linalg.norm(ee_pos - self.env.ee_pos_init)) 
         # print(ee_pos, drawer_push_target_pos)
+        # import pdb; pdb.set_trace()
         agent_info = dict(done=self.done)
         action = np.concatenate((action_xyz, action_angles, action_gripper, neutral_action))
         return action, agent_info, noise
