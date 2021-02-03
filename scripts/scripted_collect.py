@@ -36,7 +36,7 @@ def add_transition(traj, observation, action, reward, info, agent_info, done,
 
 
 def collect_one_traj(env, policy, num_timesteps, noise,
-                     accept_trajectory_key, image_rendered):
+                     accept_trajectory_key, image_rendered, args):
     num_steps = -1
     rewards = []
     success = False
@@ -75,11 +75,15 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         num_tasks = len(env.task_object_names)
         # print(total_reward, num_tasks)
 
+        if args.full_reward == 1:
+            total_reward_thresh = num_tasks*2 + 1
+        else:
+            total_reward_thresh = num_tasks*2 
         if accept_trajectory_key == 'table_clean':
             # print(total_reward)
-            if total_reward > num_tasks*2 and num_steps < 0:
+            if total_reward > total_reward_thresh and num_steps < 0:
                 num_steps = j
-            if total_reward > num_tasks*2 :
+            if total_reward > total_reward_thresh :
                 success = True
                 # print(f"time {j}")
         else:
@@ -169,7 +173,7 @@ def main(args):
         num_attempts += 1
         traj, success, num_steps = collect_one_traj(
             env, policy, args.num_timesteps, args.noise,
-            accept_trajectory_key, args.image_rendered)
+            accept_trajectory_key, args.image_rendered, args)
 
         if success:
             if args.gui:
@@ -225,6 +229,7 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--save-directory", type=str, default=""),
     parser.add_argument("--noise", type=float, default=0.1)
     parser.add_argument("-r", "--image-rendered", type=int, default=0)
+    parser.add_argument("-f", "--full-reward", type=int, default=0)
     
     args = parser.parse_args()
 
