@@ -296,7 +296,7 @@ class PickPlaceTarget:
         if self.object_to_target in GRASP_OFFSETS.keys():
             self.pick_point += np.asarray(GRASP_OFFSETS[self.object_to_target])
         self.pick_point[2] = -0.34
-        self.pick_point[0] += 0.005
+        # self.pick_point[0] += 0.005
         # if object_name == 'shed':
         #     self.pick_point[0] += 0.01
 
@@ -337,7 +337,10 @@ class PickPlaceTarget:
         #     self.drop_point[0:2] - self.env.base_position[0:2])
         
         object_lifted = object_pos[2] > self.pick_height_thresh_noisy
-        gripper_pickpoint_dist = np.linalg.norm((self.pick_point - ee_pos)[:1] + (self.pick_point - ee_pos)[2:])
+        # gripper_pickpoint_dist = np.linalg.norm((self.pick_point - ee_pos)[:1] + (self.pick_point - ee_pos)[2:])
+        
+        gripper_pickpoint_dist = np.linalg.norm(self.pick_point - ee_pos)
+        
         gripper_droppoint_dist = np.linalg.norm((self.drop_point - ee_pos)[:2])
         gripper_drop_point_dist_z = (self.drop_point - ee_pos)[2]
         origin_dist = self.env.ee_pos_init - ee_pos 
@@ -348,7 +351,7 @@ class PickPlaceTarget:
         # print(f"ee_pos: {ee_pos}, pick_point: {self.pick_point}, drop_point: {self.drop_point}")
         done = False
         # print(origin_dist, np.linalg.norm(origin_dist))
-        noise = False
+        noise = True
         noise_thresh = 0.015
         if self.place_attempted:
             # Avoid pick and place the object again after one attempt
@@ -367,12 +370,12 @@ class PickPlaceTarget:
                 self.done = done
 
 
-        elif gripper_pickpoint_dist > 0.01 and self.env.is_gripper_open:
+        elif gripper_pickpoint_dist > 0.015 and self.env.is_gripper_open:
             # print("move near the object")
             action_xyz = (self.pick_point - ee_pos) * self.xyz_action_scale
             # print(f"distance: {self.pick_point - ee_pos}, ee_pos: {ee_pos}, abs: {pickpoint_dist} ")
-            if pickpoint_dist > noise_thresh:
-                noise = True
+            # if pickpoint_dist > noise_thresh:
+            #     noise = True
             xy_diff = np.linalg.norm(action_xyz[:2] / self.xyz_action_scale)
             if xy_diff > 0.03:
                 action_xyz[2] = 0.0
@@ -381,6 +384,7 @@ class PickPlaceTarget:
             action_gripper = [0.0]
         elif self.env.is_gripper_open:
             # print("near the object enough, performs grasping action")
+            noise = False
             action_xyz = (self.pick_point  - ee_pos) * self.xyz_action_scale
             # action_angles = [0., 0., 0.]
             action_angles = (self.pick_angle - ee_deg) * self.angle_action_scale
@@ -392,8 +396,8 @@ class PickPlaceTarget:
             action_angles = (self.pick_angle - ee_deg) * self.angle_action_scale
             action_gripper = [0.]
         elif gripper_droppoint_dist > 0.02:
-            if droppoint_dist > noise_thresh:
-                noise = True
+            if droppoint_dist < noise_thresh:
+                noise = False
             # print("lifted, now need to move towards the container")
             # print(f"distance: {self.drop_point - ee_pos}, ee_pos: {ee_pos}, abs: {droppoint_dist}")
             action_xyz = (self.drop_point - ee_pos) * self.xyz_action_scale

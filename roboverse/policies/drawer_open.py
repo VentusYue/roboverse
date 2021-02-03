@@ -133,7 +133,7 @@ class DrawerClose:
         #     drawer_pos + np.array([0.15, 0., 0.05]))
         # print(f"handle_pos: {handle_pos}, drawer_pos: {drawer_pos} ")
         drawer_push_target_pos = (
-            self.env.get_drawer_handle_pos() + np.array([0.1, 0.0, 0.11]))
+            self.env.get_drawer_handle_pos() + np.array([0.1, 0.0, 0.12]))
         
         is_gripper_ready_to_push = (
             ee_pos[0] > drawer_push_target_pos[0] - 0.05 and
@@ -143,7 +143,7 @@ class DrawerClose:
         # import pdb;pdb.set_trace()
         done = False
         neutral_action = [0.0]
-        noise = True
+        noise = False
         # print(f"ee_pos{ee_pos}, drawer_push_target_pos: {drawer_push_target_pos}")
         if (not self.env.is_drawer_closed() and
                 not self.reached_pushing_region and
