@@ -297,8 +297,8 @@ class PickPlaceTarget:
             self.pick_point += np.asarray(GRASP_OFFSETS[self.object_to_target])
         self.pick_point[2] = -0.34
         # self.pick_point[0] += 0.005
-        # if object_name == 'shed':
-        #     self.pick_point[0] += 0.01
+        if object_name == 'shed':
+            self.pick_point[0] += 0.01
 
 
         # self.drop_point = self.env.container_position
