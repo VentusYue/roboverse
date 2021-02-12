@@ -36,7 +36,7 @@ def widow250(basePosition=[0.6, -0.0, -0.4], baseOrientation=[0.0, 0.0, -180]):
 
 def laptop(basePosition=(1.2, 0.2, -0.38), scale=1.0):
     laptop_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/laptop/laptop.urdf')
+                                 'room_descriptions/laptop/laptop.urdf')
     laptop_id = p.loadURDF(laptop_path,
                              basePosition=basePosition,
                              baseOrientation=bullet.deg_to_quat([90.0, 0., 180]),
@@ -47,7 +47,7 @@ def laptop(basePosition=(1.2, 0.2, -0.38), scale=1.0):
 
 def lamp(basePosition=(0.07, -0.37, -0.4), scale=0.6):
     lamp_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/lamp/lamp.urdf')
+                                 'room_descriptions/lamp/lamp.urdf')
     lamp_id = p.loadURDF(lamp_path,
                              basePosition=basePosition,
                              baseOrientation=bullet.deg_to_quat([0.0, 0., 150]),
@@ -68,7 +68,7 @@ def room(basePosition=(1.72, 1.15,-0.8), scale=0.6):
 
 def keyboard(basePosition=(1.0, -0.55, -0.4), scale=1.2):
     keyboard_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/keyboard/keyboard.urdf')
+                                 'room_descriptions/keyboard/keyboard.urdf')
     keyboard_id = p.loadURDF(keyboard_path,
                         globalScaling=scale,
                          basePosition=basePosition,
@@ -79,7 +79,7 @@ def keyboard(basePosition=(1.0, -0.55, -0.4), scale=1.2):
 
 def desktop(basePosition=(0.65, -0.25, -1.09), scale=0.018):
     keyboard_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/desktop/desktop.urdf')
+                                 'room_descriptions/desktop/desktop.urdf')
     keyboard_id = p.loadURDF(keyboard_path,
                         globalScaling=scale,
                          basePosition=basePosition,
@@ -99,7 +99,7 @@ def desktop(basePosition=(0.65, -0.25, -1.09), scale=0.018):
 
 def monitor(basePosition=(0.42, -0.4, -0.42), scale=25):
     monitor_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/monitor/monitor.urdf')
+                                 'room_descriptions/monitor/monitor.urdf')
     monitor_id = p.loadURDF(monitor_path,
                              basePosition=basePosition,
                              baseOrientation=bullet.deg_to_quat([0, 0., 180]),
@@ -109,7 +109,7 @@ def monitor(basePosition=(0.42, -0.4, -0.42), scale=25):
 
 def officedesk(basePosition=(0.65, 0.05, -0.46), scale=2.4):
     officedesk_path = os.path.join(ASSET_PATH,
-                                 'bullet-objects/officedesk/officedesk.urdf')
+                                 'room_descriptions/officedesk/officedesk.urdf')
     officedesk_id = p.loadURDF(officedesk_path,
                              basePosition=basePosition,
                              baseOrientation=bullet.deg_to_quat([90, 0., -90]),
