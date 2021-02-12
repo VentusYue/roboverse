@@ -12,41 +12,9 @@ import numpy as np
 import random
 from roboverse.envs.tasks import PickPlaceTask, DrawerOpenTask, DrawerClosedTask, PickTask, PlaceTask
 
-
-OBJECT_IN_GRIPPER_PATH = osp.join(osp.dirname(osp.dirname(osp.realpath(__file__))),
-                'assets/bullet-objects/bullet_saved_states/objects_in_gripper/')
-END_EFFECTOR_INDEX = 8
-RESET_JOINT_VALUES = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.036, -0.036]
-RESET_JOINT_VALUES_GRIPPER_CLOSED = [1.57, -0.6, -0.6, 0, -1.57, 0., 0., 0.015, -0.015]
-RESET_JOINT_INDICES = [0, 1, 2, 3, 4, 5, 7, 10, 11]
-GUESS = 3.14  # TODO(avi) This is a guess, need to verify what joint this is
-# JOINT_LIMIT_LOWER = [-3.14, -1.88, -1.60, -3.14, -2.14, -3.14, -GUESS, 0.015,
-#                      -0.037]
-# JOINT_LIMIT_UPPER = [3.14, 1.99, 2.14, 3.14, 1.74, 3.14, GUESS, 0.037, -0.015]
-JOINT_LIMIT_LOWER = [-3.14, -3.14, -3.14, -3.14, -3.14, -3.14, -GUESS, 0.015,
-                     -0.037]
-JOINT_LIMIT_UPPER = [3.14, 3.14, 3.14, 3.14, 3.14, 3.14, GUESS, 0.037, -0.015]
-
-JOINT_RANGE = []
-for upper, lower in zip(JOINT_LIMIT_LOWER, JOINT_LIMIT_UPPER):
-    JOINT_RANGE.append(upper - lower)
-
-GRIPPER_LIMITS_LOW = JOINT_LIMIT_LOWER[-2:]
-GRIPPER_LIMITS_HIGH = JOINT_LIMIT_UPPER[-2:]
-GRIPPER_OPEN_STATE = [0.036, -0.036]
-GRIPPER_CLOSED_STATE = [0.015, -0.015]
-
-ACTION_DIM = 8
-
 class Widow250OfficeEnv(Widow250PickPlaceEnv):
     def __init__(self,
                 container_name='open_box',    
-                # num_objects=3, 
-                # object_names=('gatorade', 'pepsi_bottle', 'shed'),
-                # target_object='gatorade',
-                # object_scales=(0.75, 0.75, 0.75),
-                # object_orientations=((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
-
                 num_objects=4, 
                 object_names=('eraser', 'pepsi_bottle', 'shed', 'gatorade'),
                 object_targets=('container', 'container', 'container', 'container'),
@@ -56,7 +24,11 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 
                 object_position_high=(0.65, .9, -.35), # (.7, .27, -.35)
                 object_position_low=(.55, .1, -.35),
-
+                original_object_positions = (
+                            (0.35, 0.16, -0.35),
+                            (0.4, -0.14, -0.35),
+                            (0.53, -0.24, -0.35),
+                            (0.8, -0.1, -0.35)),
                 area_upper_left_low = (0.8, -0.15, -0.35),
                 area_upper_left_high = (0.85, -0.1, -0.35),
                 area_upper_middle_low = (0.4, -0.27, -0.35),
@@ -77,7 +49,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 min_distance_drawer=0.14,
                 min_distance_container=0.08,
                 min_distance_obj=0.08,
-                # tray_position = (.8, 0.0, -.37),
                 load_tray = True,
                 tray_position = (-0.1,-0.5, -.39),
                 
@@ -132,10 +103,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.random_drawer = random_drawer
         self.drawer_pos_low = drawer_pos_low
         self.drawer_pos_high = drawer_pos_high
-        # self.drawers = []
-        # 'drawer_pos': (0.3, 0.23, -.35),
-        # for i in range(self.drawer_number):
-        # self.drawer
 
         self.drawer_pos = drawer_pos
         self.drawer_quat = drawer_quat
@@ -153,7 +120,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.num_objects = num_objects
         self.object_position_high = list(object_position_high)
         self.object_position_low = list(object_position_low)
-
+        self.original_object_positions = list(original_object_positions)
         self.object_names = list(object_names)
         self.object_targets = list(object_targets)
         self.random_shuffle_object = random_shuffle_object
@@ -180,9 +147,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.xyz_action_scale = xyz_action_scale
         self.fixed_init_pos = fixed_init_pos
         self.subtasks = None
-
-
-
 
         super(Widow250OfficeEnv, self).__init__(
             object_names=object_names,
@@ -252,7 +216,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         return self.get_observation()
 
     def get_observation(self):
-        # print(f"observation mode: {self.observation_mode}")
         gripper_state = self.get_gripper_state()
         gripper_binary_state = [float(self.is_gripper_open)]
         ee_pos, ee_quat = bullet.get_link_state(
@@ -263,7 +226,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         
         drawer_pos = self.get_drawer_pos()
         drawer_handle_pos = self.get_drawer_handle_pos()
-        # for object_name in self.objects:
 
         '''
         State: 
@@ -297,7 +259,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 'image': image_observation
             }
         else:
-            # raise NotImplementedError
             observation = {
                 'state': state
             }
@@ -412,27 +373,20 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         return container_position, object_positions
 
     def _load_meshes(self):
-        # self.table_id = objects.table()
-        self.officedesk_id = objects.officedesk()
-        # self.officedesk_id = objects.officedesk_v1()
-
         self.robot_id = objects.widow250(self.base_position, self.base_orientation)
+        self.room_id = objects.room()
+        self.officedesk_id = objects.officedesk()
         self.monitor_id = objects.monitor()
         self.keyboard_id = objects.keyboard()     
         self.desktop_id = objects.desktop()
         self.lamp_id = objects.lamp()
-        # self.eraser = objects.eraser()  
-        # self.books_id = objects.books()
-        # self.laptop_id = objects.laptop()
-        # self.trashcan_id = objects.trashcan(self.trashcan_position)
-        self.room_id = objects.room_v1()
+
         self.desk_objects = {}
         self.desk_objects['monitor'] = self.monitor_id
         self.desk_objects['lamp'] = self.lamp_id
 
         self.objects = {}
         if self.load_tray:
-            # self.tray_position = (0.1,-0.5, -.39)
             self.tray_id = objects.tray(base_position=self.tray_position, scale=0.3)
 
         self.drawer_id = object_utils.load_object(
@@ -476,30 +430,6 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         )
         area_lower_right = np.random.uniform(
                 low=self.area_lower_right_low, high=self.area_lower_right_high)
-        # self.original_object_positions = [
-        #     # A:(0.9, -0.15, -0.35),
-        #     (0.8, -0.1, -0.35),
-        #     (0.4, -0.13, -0.35),
-        #     (0.37, 0.16, -0.35),
-        #     # B:(0.5, -0.2, -0.35),
-        #     (0.5, -0.24, -0.35),
-        #     # C:(0.4, 0.15, -0.35),
-        #     # D:(0.5, 0.3, -0.35),
-        # ]
-
-
-        self.original_object_positions = [
-            # A:(0.9, -0.15, -0.35),
-            (0.35, 0.16, -0.35),
-            (0.4, -0.14, -0.35),
-            # B:(0.5, -0.2, -0.35),
-            # (0.53, -0.24, -0.35),
-            (0.53, -0.24, -0.35),
-
-            (0.8, -0.1, -0.35),
-            # C:(0.4, 0.15, -0.35),
-            # D:(0.5, 0.3, -0.35),
-        ]
 
         if self.random_object_position:
             self.original_object_positions = [
