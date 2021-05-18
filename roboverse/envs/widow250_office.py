@@ -72,6 +72,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
                 observation_img_dim=256,
                 camera_distance=0.55,
 
+                object_jitter=None,
+
                 fixed_init_pos=None,
                 drawer_number = 2,
                 **kwargs):
@@ -128,6 +130,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
             self.task_object_names = random.sample(self.object_names, self.num_objects)
         else:
             self.task_object_names = self.object_names[:self.num_objects]
+        self.object_jitter = object_jitter
 
         self.random_shuffle_target = random_shuffle_target
         if self.random_shuffle_target:
@@ -443,6 +446,8 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.object_name_pos_map = {}
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
+            if self.object_jitter is not None:
+                object_position[:2] += self.object_jitter * 2 * (np.random.rand(2) - 0.5)
             self.objects[object_name] = object_utils.load_object(
                 object_name,
                 object_position,
