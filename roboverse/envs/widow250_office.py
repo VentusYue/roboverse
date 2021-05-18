@@ -447,7 +447,9 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         for object_name, object_position in zip(self.object_names,
                                                 self.original_object_positions):
             if self.object_jitter is not None:
+                object_position = np.asarray(object_position)
                 object_position[:2] += self.object_jitter * 2 * (np.random.rand(2) - 0.5)
+                object_position = tuple(object_position)
             self.objects[object_name] = object_utils.load_object(
                 object_name,
                 object_position,
