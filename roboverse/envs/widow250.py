@@ -343,9 +343,10 @@ class Widow250Env(gym.Env, Serializable):
             self.grasp_success_object_gripper_threshold)
         return info
 
-    def render_obs(self):
+    def render_obs(self, res=None):
+        res = self.observation_img_dim if res is None else res
         img, depth, segmentation = bullet.render(
-            self.observation_img_dim, self.observation_img_dim,
+            res, res,
             self._view_matrix_obs, self._projection_matrix_obs, shadow=0)
         if self.transpose_image:
             img = np.transpose(img, (2, 0, 1))
