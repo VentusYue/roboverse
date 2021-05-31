@@ -168,11 +168,35 @@ def generate_two_object_positions(
             small_object_positions.append(small_object_position)
 
         valid_1 = np.linalg.norm(small_object_positions[0] - small_object_positions[1]) > min_distance_small_obj
-        
+
         if i > max_attempts:
             raise ValueError('Min distance could not be assured')
 
     return small_object_positions
+
+
+def generate_three_object_positions(
+        small_object_position_low, small_object_position_high,
+        min_distance_small_obj=0.07):
+    valid_1, valid_2, valid_3 = False, False, False
+    max_attempts = MAX_ATTEMPTS_TO_GENERATE_OBJECT_POSITIONS
+    i = 0
+    while not valid_1 or not valid_2 or not valid_3:
+        small_object_positions = []
+        for _ in range(3):
+            small_object_position = np.random.uniform(
+                low=small_object_position_low, high=small_object_position_high)
+            small_object_positions.append(small_object_position)
+
+        valid_1 = np.linalg.norm(small_object_positions[0] - small_object_positions[1]) > min_distance_small_obj
+        valid_2 = np.linalg.norm(small_object_positions[0] - small_object_positions[2]) > min_distance_small_obj
+        valid_3 = np.linalg.norm(small_object_positions[1] - small_object_positions[2]) > min_distance_small_obj
+
+        if i > max_attempts:
+            raise ValueError('Min distance could not be assured')
+
+    return small_object_positions
+
 
 def generate_object_positions_v2(
         small_object_position_low, small_object_position_high,

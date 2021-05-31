@@ -1806,6 +1806,27 @@ ENVIRONMENT_SPECS = (
                    }
     },
 
+{
+        'id': 'Widow250OfficeManyObjectsRandom-v0',
+        'entry_point': 'roboverse.envs.widow250_officeManyObjects'
+                       ':Widow250OfficeEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+                    'observation_mode': 'noimage',
+
+                    #'num_objects': 3,
+                    #'object_names': ('eraser', 'gatorade', 'shed', 'pepsi_bottle', ),
+                    'object_targets': ('tray', 'container', 'drawer_inside'),
+                    #'object_scales': (0.8, 0.8, 0.8, 0.8),
+                    #'object_orientations': ((0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0), (0, 0, 1, 0)),
+
+                    'random_shuffle_object': True,
+                    'random_shuffle_target': True,
+
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+                   }
+    },
+
     {
         'id': 'Widow250OfficePickPlaceSimpleFixed-v0',
         'entry_point': 'roboverse.envs.widow250_office'
