@@ -1806,7 +1806,7 @@ ENVIRONMENT_SPECS = (
                    }
     },
 
-{
+    {
         'id': 'Widow250OfficeManyObjectsRandom-v0',
         'entry_point': 'roboverse.envs.widow250_officeManyObjects'
                        ':Widow250OfficeEnv',
@@ -1822,6 +1822,60 @@ ENVIRONMENT_SPECS = (
 
                     'random_shuffle_object': True,
                     'random_shuffle_target': True,
+
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+                   }
+    },
+
+    {
+        'id': 'Widow250OfficeManyObjectsFixed-v0',
+        'entry_point': 'roboverse.envs.widow250_officeManyObjects'
+                       ':Widow250OfficeEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+                    'observation_mode': 'noimage',
+
+                    'object_targets': ('tray', 'container', 'drawer_inside'),
+                    'original_object_positions': (
+                        (0.33620103,  0.12358467, -0.35),
+                        (0.55123888, -0.17699107, -0.35),
+                        (0.84287004, -0.1479069 , -0.35),
+                        (0.75200037, -0.14383595, -0.35),
+                        (0.42755662, -0.13711447, -0.35),
+                        (0.39866522,  0.18929185, -0.35),
+                        (0.46422192, -0.23138137, -0.35),
+                    ),
+
+                    'random_shuffle_object': False,
+                    'random_shuffle_target': False,
+                    'random_object_position': False,
+
+                    'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
+                   }
+    },
+
+    {
+        'id': 'Widow250OfficeManyObjectsFixed5Obj-v0',
+        'entry_point': 'roboverse.envs.widow250_officeManyObjects'
+                       ':Widow250OfficeEnv',
+        'kwargs': {'reward_type': 'pick_place',
+                   'control_mode': 'discrete_gripper',
+                    'observation_mode': 'noimage',
+
+                    'object_targets': ('tray', 'container', 'drawer_inside', 'tray', 'container'),
+                    'original_object_positions': (
+                        (0.33620103,  0.12358467, -0.35),
+                        (0.55123888, -0.17699107, -0.35),
+                        (0.84287004, -0.1479069 , -0.35),
+                        (0.75200037, -0.14383595, -0.35),
+                        (0.42755662, -0.13711447, -0.35),
+                        (0.39866522,  0.18929185, -0.35),
+                        (0.46422192, -0.23138137, -0.35),
+                    ),
+
+                    'random_shuffle_object': False,
+                    'random_shuffle_target': False,
+                    'random_object_position': False,
 
                     'possible_objects': PICK_PLACE_TRAIN_OBJECTS,
                    }

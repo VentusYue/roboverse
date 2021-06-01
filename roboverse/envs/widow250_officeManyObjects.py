@@ -123,7 +123,7 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
         self.start_opened = start_opened
 
         self.drawer_opened_success_thresh = 0.75
-        self.drawer_closed_success_thresh = 0.25     
+        self.drawer_closed_success_thresh = 0.4
         self.possible_objects = np.asarray(possible_objects) 
         self.num_objects = num_objects
         self.object_position_high = list(object_position_high)
