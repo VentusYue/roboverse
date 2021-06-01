@@ -56,6 +56,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
     is_opened = False
     is_closed = False
     total_reward = 0
+    total_reward_thresh = sum([subtask.REWARD for subtask in env.subtasks])
     for j in range(num_timesteps):
 
         action, agent_info, add_noise = policy.get_action()
@@ -79,13 +80,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         add_transition(traj, observation,  action, reward, info, agent_info,
                        done, next_observation, img_dim, image_rendered)
         total_reward += reward
-        num_tasks = len(env.task_object_names)
-        # print(total_reward, num_tasks)
 
-        if args.full_reward == 1:
-            total_reward_thresh = num_tasks*2 + 1
-        else:
-            total_reward_thresh = num_tasks*2 
         if accept_trajectory_key == 'table_clean':
             # print(total_reward)
             if total_reward > total_reward_thresh and num_steps < 0:
@@ -102,7 +97,7 @@ def collect_one_traj(env, policy, num_timesteps, noise,
         rewards.append(reward)
         if done or agent_info['done']:
             break
-        
+
     return traj, success, num_steps
 
 

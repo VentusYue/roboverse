@@ -1862,7 +1862,7 @@ ENVIRONMENT_SPECS = (
                    'control_mode': 'discrete_gripper',
                     'observation_mode': 'noimage',
 
-                    'object_targets': ('tray', 'container', 'drawer_inside', 'tray', 'container'),
+                    'object_targets': ('tray', 'container', 'tray', 'container', 'drawer_inside'),
                     'original_object_positions': (
                         (0.33620103,  0.12358467, -0.35),
                         (0.55123888, -0.17699107, -0.35),
