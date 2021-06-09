@@ -140,9 +140,9 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
         self.random_shuffle_target = random_shuffle_target
         if self.random_shuffle_target:
-            self.object_targets[0:2] = random.sample(self.object_targets[0:2], 2)
-            if self.num_objects == 2:
-                self.object_targets = [self.object_targets[0], self.object_targets[-1]]
+            self.object_targets = random.sample(self.object_targets, len(self.object_targets))
+            #if self.num_objects == 2:
+            #    self.object_targets = [self.object_targets[0], self.object_targets[-1]]
 
         self.xyz_action_scale = xyz_action_scale
 
@@ -188,12 +188,12 @@ class Widow250OfficeEnv(Widow250PickPlaceEnv):
 
     def reset(self):
         if self.random_shuffle_object:
-            self.object_names = random.sample(self.object_names, len(self.object_names))
+            #self.object_names = random.sample(self.object_names, len(self.object_names))
             self.task_object_names = random.sample(self.object_names, self.num_objects)
         if self.random_shuffle_target:
-            self.object_targets[0:2] = random.sample(self.object_targets[0:2], 2)
-            if self.num_objects == 2:
-                self.object_targets = [self.object_targets[0], self.object_targets[-1]]
+            self.object_targets = random.sample(self.object_targets, len(self.object_targets))
+            #if self.num_objects == 2:
+            #    self.object_targets = [self.object_targets[0], self.object_targets[-1]]
 
        
         if self.random_drawer:
